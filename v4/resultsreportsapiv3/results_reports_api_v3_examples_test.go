@@ -27,6 +27,7 @@ import (
 
 	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/IBM/scc-go-sdk/v4/resultsreportsapiv3"
+	"github.com/joho/godotenv"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -50,6 +51,15 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 		resultsReportsApiService *resultsreportsapiv3.ResultsReportsApiV3
 		config                   map[string]string
 	)
+
+	err := godotenv.Load(externalConfigFile)
+	if err != nil {
+		fmt.Println("Error occured when loading external config file. Err: ", err)
+	}
+
+	accountInstanceId := os.Getenv("ACCOUNT_INSTANCE_ID")
+	reportId := os.Getenv("REPORT_ID")
+	ruleId := os.Getenv("RULE_ID")
 
 	var shouldSkipTest = func() {
 		Skip("External configuration is not available, skipping examples...")
@@ -107,7 +117,7 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_latest_reports
 
 			getLatestReportsOptions := resultsReportsApiService.NewGetLatestReportsOptions(
-				"testString",
+				accountInstanceId,
 			)
 
 			getLatestReportsResponse, response, err := resultsReportsApiService.GetLatestReports(getLatestReportsOptions)
@@ -127,7 +137,7 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			fmt.Println("\nListReports() result:")
 			// begin-list_reports
 			listReportsOptions := &resultsreportsapiv3.ListReportsOptions{
-				InstanceID:     core.StringPtr("testString"),
+				InstanceID:     core.StringPtr(accountInstanceId),
 				XCorrelationID: core.StringPtr("testString"),
 				HomeAccountID:  core.StringPtr("testString"),
 				AttachmentID:   core.StringPtr("testString"),
@@ -161,7 +171,7 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_reports_profiles
 
 			getReportsProfilesOptions := resultsReportsApiService.NewGetReportsProfilesOptions(
-				"testString",
+				accountInstanceId,
 			)
 
 			getProfilesResponse, response, err := resultsReportsApiService.GetReportsProfiles(getReportsProfilesOptions)
@@ -182,7 +192,7 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_reports_scopes
 
 			getReportsScopesOptions := resultsReportsApiService.NewGetReportsScopesOptions(
-				"testString",
+				accountInstanceId,
 			)
 
 			getScopesResponse, response, err := resultsReportsApiService.GetReportsScopes(getReportsScopesOptions)
@@ -203,8 +213,8 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_report
 
 			getReportOptions := resultsReportsApiService.NewGetReportOptions(
-				"testString",
-				"testString",
+				accountInstanceId,
+				reportId,
 			)
 
 			report, response, err := resultsReportsApiService.GetReport(getReportOptions)
@@ -225,8 +235,8 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_report_summary
 
 			getReportSummaryOptions := resultsReportsApiService.NewGetReportSummaryOptions(
-				"testString",
-				"testString",
+				accountInstanceId,
+				reportId,
 			)
 
 			reportSummary, response, err := resultsReportsApiService.GetReportSummary(getReportSummaryOptions)
@@ -247,8 +257,8 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_report_evaluation
 
 			getReportEvaluationOptions := resultsReportsApiService.NewGetReportEvaluationOptions(
-				"testString",
-				"testString",
+				accountInstanceId,
+				reportId,
 			)
 
 			result, response, err := resultsReportsApiService.GetReportEvaluation(getReportEvaluationOptions)
@@ -279,8 +289,8 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_report_controls
 
 			getReportControlsOptions := resultsReportsApiService.NewGetReportControlsOptions(
-				"testString",
-				"testString",
+				accountInstanceId,
+				reportId,
 			)
 			getReportControlsOptions.SetStatus("compliant")
 
@@ -302,9 +312,9 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_report_rule
 
 			getReportRuleOptions := resultsReportsApiService.NewGetReportRuleOptions(
-				"testString",
-				"testString",
-				"testString",
+				accountInstanceId,
+				reportId,
+				ruleId,
 			)
 
 			rule, response, err := resultsReportsApiService.GetReportRule(getReportRuleOptions)
@@ -324,8 +334,8 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			fmt.Println("\nListReportEvaluations() result:")
 			// begin-list_report_evaluations
 			listReportEvaluationsOptions := &resultsreportsapiv3.ListReportEvaluationsOptions{
-				InstanceID:     core.StringPtr("testString"),
-				ReportID:       core.StringPtr("testString"),
+				InstanceID:     core.StringPtr(accountInstanceId),
+				ReportID:       core.StringPtr(reportId),
 				AssessmentID:   core.StringPtr("testString"),
 				ComponentID:    core.StringPtr("testString"),
 				TargetID:       core.StringPtr("testString"),
@@ -356,8 +366,8 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			fmt.Println("\nListReportResources() result:")
 			// begin-list_report_resources
 			listReportResourcesOptions := &resultsreportsapiv3.ListReportResourcesOptions{
-				InstanceID:     core.StringPtr("testString"),
-				ReportID:       core.StringPtr("testString"),
+				InstanceID:     core.StringPtr(accountInstanceId),
+				ReportID:       core.StringPtr(reportId),
 				ID:             core.StringPtr("testString"),
 				ResourceName:   core.StringPtr("testString"),
 				AccountID:      core.StringPtr("testString"),
@@ -389,7 +399,7 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_report_tags
 
 			getReportTagsOptions := resultsReportsApiService.NewGetReportTagsOptions(
-				"testString",
+				reportId,
 			)
 
 			getTagsResponse, response, err := resultsReportsApiService.GetReportTags(getReportTagsOptions)
@@ -410,8 +420,8 @@ var _ = Describe(`ResultsReportsApiV3 Examples Tests`, func() {
 			// begin-get_report_violations_drift
 
 			getReportViolationsDriftOptions := resultsReportsApiService.NewGetReportViolationsDriftOptions(
-				"testString",
-				"testString",
+				accountInstanceId,
+				reportId,
 			)
 
 			getReportViolationsDriftResult, response, err := resultsReportsApiService.GetReportViolationsDrift(getReportViolationsDriftOptions)
