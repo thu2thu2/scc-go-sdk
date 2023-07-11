@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,17 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"time"
 
+	"github.com/IBM/cloud-go-sdk/adminserviceapiv1"
 	"github.com/IBM/go-sdk-core/v5/core"
-	"github.com/IBM/scc-go-sdk/v4/adminserviceapiv1"
 	"github.com/go-openapi/strfmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/onsi/gomega/gstruct"
 )
 
 var _ = Describe(`AdminServiceApiV1`, func() {
@@ -67,13 +67,14 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 		Context(`Using external config, construct service client instances`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"ADMIN_SERVICE_API_URL":       "https://adminserviceapiv1/api",
+				"ADMIN_SERVICE_API_URL": "https://adminserviceapiv1/api",
 				"ADMIN_SERVICE_API_AUTH_TYPE": "noauth",
 			}
 
 			It(`Create service client using external config successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1UsingExternalConfig(&adminserviceapiv1.AdminServiceApiV1Options{})
+				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1UsingExternalConfig(&adminserviceapiv1.AdminServiceApiV1Options{
+				})
 				Expect(adminServiceApiService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
 				ClearTestEnvironment(testEnvironment)
@@ -102,7 +103,8 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 			})
 			It(`Create service client using external config and set url programatically successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1UsingExternalConfig(&adminserviceapiv1.AdminServiceApiV1Options{})
+				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1UsingExternalConfig(&adminserviceapiv1.AdminServiceApiV1Options{
+				})
 				err := adminServiceApiService.SetServiceURL("https://testService/api")
 				Expect(err).To(BeNil())
 				Expect(adminServiceApiService).ToNot(BeNil())
@@ -120,12 +122,13 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"ADMIN_SERVICE_API_URL":       "https://adminserviceapiv1/api",
+				"ADMIN_SERVICE_API_URL": "https://adminserviceapiv1/api",
 				"ADMIN_SERVICE_API_AUTH_TYPE": "someOtherAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
-			adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1UsingExternalConfig(&adminserviceapiv1.AdminServiceApiV1Options{})
+			adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1UsingExternalConfig(&adminserviceapiv1.AdminServiceApiV1Options{
+			})
 
 			It(`Instantiate service client with error`, func() {
 				Expect(adminServiceApiService).To(BeNil())
@@ -136,7 +139,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"ADMIN_SERVICE_API_AUTH_TYPE": "NOAuth",
+				"ADMIN_SERVICE_API_AUTH_TYPE":   "NOAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
@@ -155,30 +158,30 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 		It(`GetServiceURLForRegion(region string)`, func() {
 			var url string
 			var err error
-			url, err = adminserviceapiv1.GetServiceURLForRegion("us-south")
-			Expect(url).To(Equal("https://us.compliance.cloud.ibm.com"))
-			Expect(err).To(BeNil())
-
-			url, err = adminserviceapiv1.GetServiceURLForRegion("us-east")
-			Expect(url).To(Equal("https://us.compliance.cloud.ibm.com"))
-			Expect(err).To(BeNil())
-
-			url, err = adminserviceapiv1.GetServiceURLForRegion("eu-de")
-			Expect(url).To(Equal("https://eu.compliance.cloud.ibm.com"))
-			Expect(err).To(BeNil())
-
-			url, err = adminserviceapiv1.GetServiceURLForRegion("eu-gb")
-			Expect(url).To(Equal("https://uk.compliance.cloud.ibm.com"))
-			Expect(err).To(BeNil())
-
 			url, err = adminserviceapiv1.GetServiceURLForRegion("INVALID_REGION")
 			Expect(url).To(BeEmpty())
 			Expect(err).ToNot(BeNil())
 			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
+	Describe(`Parameterized URL tests`, func() {
+		It(`Format parameterized URL with all default values`, func() {
+			constructedURL, err := adminserviceapiv1.ConstructServiceURL(nil)
+			Expect(constructedURL).To(Equal("https://us-south.compliance.cloud.ibm.com/instances/instance_id/v3"))
+			Expect(constructedURL).ToNot(BeNil())
+			Expect(err).To(BeNil())
+		})
+		It(`Return an error if a provided variable name is invalid`, func() {
+			var providedUrlVariables = map[string]string{
+				"invalid_variable_name": "value",
+			}
+			constructedURL, err := adminserviceapiv1.ConstructServiceURL(providedUrlVariables)
+			Expect(constructedURL).To(Equal(""))
+			Expect(err).ToNot(BeNil())
+		})
+	})
 	Describe(`GetSettings(getSettingsOptions *GetSettingsOptions) - Operation response error`, func() {
-		getSettingsPath := "/admin/v1/accounts/testString/settings"
+		getSettingsPath := "/settings"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -189,7 +192,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetSettings with error: Operation response processing error`, func() {
@@ -202,7 +205,6 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 
 				// Construct an instance of the GetSettingsOptions model
 				getSettingsOptionsModel := new(adminserviceapiv1.GetSettingsOptions)
-				getSettingsOptionsModel.AccountID = core.StringPtr("testString")
 				getSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := adminServiceApiService.GetSettings(getSettingsOptionsModel)
@@ -223,7 +225,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 		})
 	})
 	Describe(`GetSettings(getSettingsOptions *GetSettingsOptions)`, func() {
-		getSettingsPath := "/admin/v1/accounts/testString/settings"
+		getSettingsPath := "/settings"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -239,7 +241,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"location": {"id": "us"}, "event_notifications": {"instance_crn": "InstanceCrn", "source_name": "SourceName", "source_description": "SourceDescription"}}`)
+					fmt.Fprintf(res, "%s", `{"event_notifications": {"instance_crn": "InstanceCrn", "modified": "Modified", "source_id": "SourceID"}, "object_storage": {"instance_crn": "InstanceCrn", "bucket": "Bucket", "bucket_location": "BucketLocation", "bucket_endpoint": "BucketEndpoint", "modified": "Modified"}}`)
 				}))
 			})
 			It(`Invoke GetSettings successfully with retries`, func() {
@@ -253,7 +255,6 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 
 				// Construct an instance of the GetSettingsOptions model
 				getSettingsOptionsModel := new(adminserviceapiv1.GetSettingsOptions)
-				getSettingsOptionsModel.AccountID = core.StringPtr("testString")
 				getSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -293,7 +294,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"location": {"id": "us"}, "event_notifications": {"instance_crn": "InstanceCrn", "source_name": "SourceName", "source_description": "SourceDescription"}}`)
+					fmt.Fprintf(res, "%s", `{"event_notifications": {"instance_crn": "InstanceCrn", "modified": "Modified", "source_id": "SourceID"}, "object_storage": {"instance_crn": "InstanceCrn", "bucket": "Bucket", "bucket_location": "BucketLocation", "bucket_endpoint": "BucketEndpoint", "modified": "Modified"}}`)
 				}))
 			})
 			It(`Invoke GetSettings successfully`, func() {
@@ -312,7 +313,6 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 
 				// Construct an instance of the GetSettingsOptions model
 				getSettingsOptionsModel := new(adminserviceapiv1.GetSettingsOptions)
-				getSettingsOptionsModel.AccountID = core.StringPtr("testString")
 				getSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -322,7 +322,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke GetSettings with error: Operation validation and request error`, func() {
+			It(`Invoke GetSettings with error: Operation request error`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -332,7 +332,6 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 
 				// Construct an instance of the GetSettingsOptions model
 				getSettingsOptionsModel := new(adminserviceapiv1.GetSettingsOptions)
-				getSettingsOptionsModel.AccountID = core.StringPtr("testString")
 				getSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := adminServiceApiService.SetServiceURL("")
@@ -340,13 +339,6 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				result, response, operationErr := adminServiceApiService.GetSettings(getSettingsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the GetSettingsOptions model with no property values
-				getSettingsOptionsModelNew := new(adminserviceapiv1.GetSettingsOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = adminServiceApiService.GetSettings(getSettingsOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 			})
@@ -373,7 +365,6 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 
 				// Construct an instance of the GetSettingsOptions model
 				getSettingsOptionsModel := new(adminserviceapiv1.GetSettingsOptions)
-				getSettingsOptionsModel.AccountID = core.StringPtr("testString")
 				getSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
@@ -389,22 +380,22 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 			})
 		})
 	})
-	Describe(`PatchAccountSettings(patchAccountSettingsOptions *PatchAccountSettingsOptions) - Operation response error`, func() {
-		patchAccountSettingsPath := "/admin/v1/accounts/testString/settings"
+	Describe(`UpdateSettings(updateSettingsOptions *UpdateSettingsOptions) - Operation response error`, func() {
+		updateSettingsPath := "/settings"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(patchAccountSettingsPath))
+					Expect(req.URL.EscapedPath()).To(Equal(updateSettingsPath))
 					Expect(req.Method).To(Equal("PATCH"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
-			It(`Invoke PatchAccountSettings with error: Operation response processing error`, func() {
+			It(`Invoke UpdateSettings with error: Operation response processing error`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -412,31 +403,26 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(adminServiceApiService).ToNot(BeNil())
 
-				// Construct an instance of the LocationID model
-				locationIdModel := new(adminserviceapiv1.LocationID)
-				locationIdModel.ID = core.StringPtr("us")
+				// Construct an instance of the JSONPatchOperation model
+				jsonPatchOperationModel := new(adminserviceapiv1.JSONPatchOperation)
+				jsonPatchOperationModel.Op = core.StringPtr("add")
+				jsonPatchOperationModel.Path = core.StringPtr("testString")
+				jsonPatchOperationModel.From = core.StringPtr("testString")
+				jsonPatchOperationModel.Value = core.StringPtr("testString")
 
-				// Construct an instance of the NotificationsRegistration model
-				notificationsRegistrationModel := new(adminserviceapiv1.NotificationsRegistration)
-				notificationsRegistrationModel.InstanceCrn = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceName = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceDescription = core.StringPtr("testString")
-
-				// Construct an instance of the PatchAccountSettingsOptions model
-				patchAccountSettingsOptionsModel := new(adminserviceapiv1.PatchAccountSettingsOptions)
-				patchAccountSettingsOptionsModel.AccountID = core.StringPtr("testString")
-				patchAccountSettingsOptionsModel.Location = locationIdModel
-				patchAccountSettingsOptionsModel.EventNotifications = notificationsRegistrationModel
-				patchAccountSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateSettingsOptions model
+				updateSettingsOptionsModel := new(adminserviceapiv1.UpdateSettingsOptions)
+				updateSettingsOptionsModel.Body = []adminserviceapiv1.JSONPatchOperation{*jsonPatchOperationModel}
+				updateSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := adminServiceApiService.PatchAccountSettings(patchAccountSettingsOptionsModel)
+				result, response, operationErr := adminServiceApiService.UpdateSettings(updateSettingsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
 				adminServiceApiService.EnableRetries(0, 0)
-				result, response, operationErr = adminServiceApiService.PatchAccountSettings(patchAccountSettingsOptionsModel)
+				result, response, operationErr = adminServiceApiService.UpdateSettings(updateSettingsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -446,15 +432,15 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 			})
 		})
 	})
-	Describe(`PatchAccountSettings(patchAccountSettingsOptions *PatchAccountSettingsOptions)`, func() {
-		patchAccountSettingsPath := "/admin/v1/accounts/testString/settings"
+	Describe(`UpdateSettings(updateSettingsOptions *UpdateSettingsOptions)`, func() {
+		updateSettingsPath := "/settings"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(patchAccountSettingsPath))
+					Expect(req.URL.EscapedPath()).To(Equal(updateSettingsPath))
 					Expect(req.Method).To(Equal("PATCH"))
 
 					// For gzip-disabled operation, verify Content-Encoding is not set.
@@ -479,10 +465,10 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"location": {"id": "us"}, "event_notifications": {"instance_crn": "InstanceCrn", "source_name": "SourceName", "source_description": "SourceDescription"}}`)
+					fmt.Fprintf(res, "%s", `{"event_notifications": {"instance_crn": "InstanceCrn", "modified": "Modified", "source_id": "SourceID"}, "object_storage": {"instance_crn": "InstanceCrn", "bucket": "Bucket", "bucket_location": "BucketLocation", "bucket_endpoint": "BucketEndpoint", "modified": "Modified"}}`)
 				}))
 			})
-			It(`Invoke PatchAccountSettings successfully with retries`, func() {
+			It(`Invoke UpdateSettings successfully with retries`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -491,33 +477,28 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(adminServiceApiService).ToNot(BeNil())
 				adminServiceApiService.EnableRetries(0, 0)
 
-				// Construct an instance of the LocationID model
-				locationIdModel := new(adminserviceapiv1.LocationID)
-				locationIdModel.ID = core.StringPtr("us")
+				// Construct an instance of the JSONPatchOperation model
+				jsonPatchOperationModel := new(adminserviceapiv1.JSONPatchOperation)
+				jsonPatchOperationModel.Op = core.StringPtr("add")
+				jsonPatchOperationModel.Path = core.StringPtr("testString")
+				jsonPatchOperationModel.From = core.StringPtr("testString")
+				jsonPatchOperationModel.Value = core.StringPtr("testString")
 
-				// Construct an instance of the NotificationsRegistration model
-				notificationsRegistrationModel := new(adminserviceapiv1.NotificationsRegistration)
-				notificationsRegistrationModel.InstanceCrn = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceName = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceDescription = core.StringPtr("testString")
-
-				// Construct an instance of the PatchAccountSettingsOptions model
-				patchAccountSettingsOptionsModel := new(adminserviceapiv1.PatchAccountSettingsOptions)
-				patchAccountSettingsOptionsModel.AccountID = core.StringPtr("testString")
-				patchAccountSettingsOptionsModel.Location = locationIdModel
-				patchAccountSettingsOptionsModel.EventNotifications = notificationsRegistrationModel
-				patchAccountSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateSettingsOptions model
+				updateSettingsOptionsModel := new(adminserviceapiv1.UpdateSettingsOptions)
+				updateSettingsOptionsModel.Body = []adminserviceapiv1.JSONPatchOperation{*jsonPatchOperationModel}
+				updateSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := adminServiceApiService.PatchAccountSettingsWithContext(ctx, patchAccountSettingsOptionsModel)
+				_, _, operationErr := adminServiceApiService.UpdateSettingsWithContext(ctx, updateSettingsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
 				adminServiceApiService.DisableRetries()
-				result, response, operationErr := adminServiceApiService.PatchAccountSettings(patchAccountSettingsOptionsModel)
+				result, response, operationErr := adminServiceApiService.UpdateSettings(updateSettingsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -525,7 +506,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = adminServiceApiService.PatchAccountSettingsWithContext(ctx, patchAccountSettingsOptionsModel)
+				_, _, operationErr = adminServiceApiService.UpdateSettingsWithContext(ctx, updateSettingsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -539,7 +520,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(patchAccountSettingsPath))
+					Expect(req.URL.EscapedPath()).To(Equal(updateSettingsPath))
 					Expect(req.Method).To(Equal("PATCH"))
 
 					// For gzip-disabled operation, verify Content-Encoding is not set.
@@ -561,10 +542,10 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"location": {"id": "us"}, "event_notifications": {"instance_crn": "InstanceCrn", "source_name": "SourceName", "source_description": "SourceDescription"}}`)
+					fmt.Fprintf(res, "%s", `{"event_notifications": {"instance_crn": "InstanceCrn", "modified": "Modified", "source_id": "SourceID"}, "object_storage": {"instance_crn": "InstanceCrn", "bucket": "Bucket", "bucket_location": "BucketLocation", "bucket_endpoint": "BucketEndpoint", "modified": "Modified"}}`)
 				}))
 			})
-			It(`Invoke PatchAccountSettings successfully`, func() {
+			It(`Invoke UpdateSettings successfully`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -573,36 +554,31 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(adminServiceApiService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := adminServiceApiService.PatchAccountSettings(nil)
+				result, response, operationErr := adminServiceApiService.UpdateSettings(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the LocationID model
-				locationIdModel := new(adminserviceapiv1.LocationID)
-				locationIdModel.ID = core.StringPtr("us")
+				// Construct an instance of the JSONPatchOperation model
+				jsonPatchOperationModel := new(adminserviceapiv1.JSONPatchOperation)
+				jsonPatchOperationModel.Op = core.StringPtr("add")
+				jsonPatchOperationModel.Path = core.StringPtr("testString")
+				jsonPatchOperationModel.From = core.StringPtr("testString")
+				jsonPatchOperationModel.Value = core.StringPtr("testString")
 
-				// Construct an instance of the NotificationsRegistration model
-				notificationsRegistrationModel := new(adminserviceapiv1.NotificationsRegistration)
-				notificationsRegistrationModel.InstanceCrn = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceName = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceDescription = core.StringPtr("testString")
-
-				// Construct an instance of the PatchAccountSettingsOptions model
-				patchAccountSettingsOptionsModel := new(adminserviceapiv1.PatchAccountSettingsOptions)
-				patchAccountSettingsOptionsModel.AccountID = core.StringPtr("testString")
-				patchAccountSettingsOptionsModel.Location = locationIdModel
-				patchAccountSettingsOptionsModel.EventNotifications = notificationsRegistrationModel
-				patchAccountSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateSettingsOptions model
+				updateSettingsOptionsModel := new(adminserviceapiv1.UpdateSettingsOptions)
+				updateSettingsOptionsModel.Body = []adminserviceapiv1.JSONPatchOperation{*jsonPatchOperationModel}
+				updateSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = adminServiceApiService.PatchAccountSettings(patchAccountSettingsOptionsModel)
+				result, response, operationErr = adminServiceApiService.UpdateSettings(updateSettingsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke PatchAccountSettings with error: Operation validation and request error`, func() {
+			It(`Invoke UpdateSettings with error: Operation validation and request error`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -610,34 +586,29 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(adminServiceApiService).ToNot(BeNil())
 
-				// Construct an instance of the LocationID model
-				locationIdModel := new(adminserviceapiv1.LocationID)
-				locationIdModel.ID = core.StringPtr("us")
+				// Construct an instance of the JSONPatchOperation model
+				jsonPatchOperationModel := new(adminserviceapiv1.JSONPatchOperation)
+				jsonPatchOperationModel.Op = core.StringPtr("add")
+				jsonPatchOperationModel.Path = core.StringPtr("testString")
+				jsonPatchOperationModel.From = core.StringPtr("testString")
+				jsonPatchOperationModel.Value = core.StringPtr("testString")
 
-				// Construct an instance of the NotificationsRegistration model
-				notificationsRegistrationModel := new(adminserviceapiv1.NotificationsRegistration)
-				notificationsRegistrationModel.InstanceCrn = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceName = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceDescription = core.StringPtr("testString")
-
-				// Construct an instance of the PatchAccountSettingsOptions model
-				patchAccountSettingsOptionsModel := new(adminserviceapiv1.PatchAccountSettingsOptions)
-				patchAccountSettingsOptionsModel.AccountID = core.StringPtr("testString")
-				patchAccountSettingsOptionsModel.Location = locationIdModel
-				patchAccountSettingsOptionsModel.EventNotifications = notificationsRegistrationModel
-				patchAccountSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateSettingsOptions model
+				updateSettingsOptionsModel := new(adminserviceapiv1.UpdateSettingsOptions)
+				updateSettingsOptionsModel.Body = []adminserviceapiv1.JSONPatchOperation{*jsonPatchOperationModel}
+				updateSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := adminServiceApiService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := adminServiceApiService.PatchAccountSettings(patchAccountSettingsOptionsModel)
+				result, response, operationErr := adminServiceApiService.UpdateSettings(updateSettingsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
-				// Construct a second instance of the PatchAccountSettingsOptions model with no property values
-				patchAccountSettingsOptionsModelNew := new(adminserviceapiv1.PatchAccountSettingsOptions)
+				// Construct a second instance of the UpdateSettingsOptions model with no property values
+				updateSettingsOptionsModelNew := new(adminserviceapiv1.UpdateSettingsOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = adminServiceApiService.PatchAccountSettings(patchAccountSettingsOptionsModelNew)
+				result, response, operationErr = adminServiceApiService.UpdateSettings(updateSettingsOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -655,7 +626,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					res.WriteHeader(200)
 				}))
 			})
-			It(`Invoke PatchAccountSettings successfully`, func() {
+			It(`Invoke UpdateSettings successfully`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -663,25 +634,20 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(adminServiceApiService).ToNot(BeNil())
 
-				// Construct an instance of the LocationID model
-				locationIdModel := new(adminserviceapiv1.LocationID)
-				locationIdModel.ID = core.StringPtr("us")
+				// Construct an instance of the JSONPatchOperation model
+				jsonPatchOperationModel := new(adminserviceapiv1.JSONPatchOperation)
+				jsonPatchOperationModel.Op = core.StringPtr("add")
+				jsonPatchOperationModel.Path = core.StringPtr("testString")
+				jsonPatchOperationModel.From = core.StringPtr("testString")
+				jsonPatchOperationModel.Value = core.StringPtr("testString")
 
-				// Construct an instance of the NotificationsRegistration model
-				notificationsRegistrationModel := new(adminserviceapiv1.NotificationsRegistration)
-				notificationsRegistrationModel.InstanceCrn = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceName = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceDescription = core.StringPtr("testString")
-
-				// Construct an instance of the PatchAccountSettingsOptions model
-				patchAccountSettingsOptionsModel := new(adminserviceapiv1.PatchAccountSettingsOptions)
-				patchAccountSettingsOptionsModel.AccountID = core.StringPtr("testString")
-				patchAccountSettingsOptionsModel.Location = locationIdModel
-				patchAccountSettingsOptionsModel.EventNotifications = notificationsRegistrationModel
-				patchAccountSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateSettingsOptions model
+				updateSettingsOptionsModel := new(adminserviceapiv1.UpdateSettingsOptions)
+				updateSettingsOptionsModel.Body = []adminserviceapiv1.JSONPatchOperation{*jsonPatchOperationModel}
+				updateSettingsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := adminServiceApiService.PatchAccountSettings(patchAccountSettingsOptionsModel)
+				result, response, operationErr := adminServiceApiService.UpdateSettings(updateSettingsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -693,434 +659,22 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 			})
 		})
 	})
-	Describe(`ListLocations(listLocationsOptions *ListLocationsOptions) - Operation response error`, func() {
-		listLocationsPath := "/admin/v1/locations"
+	Describe(`PostTestEvent(postTestEventOptions *PostTestEventOptions) - Operation response error`, func() {
+		postTestEventPath := "/test_event"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke ListLocations with error: Operation response processing error`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(adminserviceapiv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := adminServiceApiService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				adminServiceApiService.EnableRetries(0, 0)
-				result, response, operationErr = adminServiceApiService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`ListLocations(listLocationsOptions *ListLocationsOptions)`, func() {
-		listLocationsPath := "/admin/v1/locations"
-		Context(`Using mock server endpoint with timeout`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Sleep a short time to support a timeout test
-					time.Sleep(100 * time.Millisecond)
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"locations": [{"id": "us", "main_endpoint_url": "MainEndpointURL", "governance_endpoint_url": "GovernanceEndpointURL", "results_endpoint_url": "ResultsEndpointURL", "compliance_endpoint_url": "ComplianceEndpointURL", "analytics_endpoint_url": "AnalyticsEndpointURL", "si_endpoint_url": "SiEndpointURL", "regions": [{"id": "us"}]}]}`)
-				}))
-			})
-			It(`Invoke ListLocations successfully with retries`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-				adminServiceApiService.EnableRetries(0, 0)
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(adminserviceapiv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with a Context to test a timeout error
-				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc()
-				_, _, operationErr := adminServiceApiService.ListLocationsWithContext(ctx, listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-
-				// Disable retries and test again
-				adminServiceApiService.DisableRetries()
-				result, response, operationErr := adminServiceApiService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-				// Re-test the timeout error with retries disabled
-				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc2()
-				_, _, operationErr = adminServiceApiService.ListLocationsWithContext(ctx, listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"locations": [{"id": "us", "main_endpoint_url": "MainEndpointURL", "governance_endpoint_url": "GovernanceEndpointURL", "results_endpoint_url": "ResultsEndpointURL", "compliance_endpoint_url": "ComplianceEndpointURL", "analytics_endpoint_url": "AnalyticsEndpointURL", "si_endpoint_url": "SiEndpointURL", "regions": [{"id": "us"}]}]}`)
-				}))
-			})
-			It(`Invoke ListLocations successfully`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-
-				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := adminServiceApiService.ListLocations(nil)
-				Expect(operationErr).NotTo(BeNil())
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(adminserviceapiv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = adminServiceApiService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-			})
-			It(`Invoke ListLocations with error: Operation request error`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(adminserviceapiv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Invoke operation with empty URL (negative test)
-				err := adminServiceApiService.SetServiceURL("")
-				Expect(err).To(BeNil())
-				result, response, operationErr := adminServiceApiService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint with missing response body`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Set success status code with no respoonse body
-					res.WriteHeader(200)
-				}))
-			})
-			It(`Invoke ListLocations successfully`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(adminserviceapiv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation
-				result, response, operationErr := adminServiceApiService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-
-				// Verify a nil result
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`GetLocation(getLocationOptions *GetLocationOptions) - Operation response error`, func() {
-		getLocationPath := "/admin/v1/locations/us"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getLocationPath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke GetLocation with error: Operation response processing error`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-
-				// Construct an instance of the GetLocationOptions model
-				getLocationOptionsModel := new(adminserviceapiv1.GetLocationOptions)
-				getLocationOptionsModel.LocationID = core.StringPtr("us")
-				getLocationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := adminServiceApiService.GetLocation(getLocationOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				adminServiceApiService.EnableRetries(0, 0)
-				result, response, operationErr = adminServiceApiService.GetLocation(getLocationOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`GetLocation(getLocationOptions *GetLocationOptions)`, func() {
-		getLocationPath := "/admin/v1/locations/us"
-		Context(`Using mock server endpoint with timeout`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getLocationPath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Sleep a short time to support a timeout test
-					time.Sleep(100 * time.Millisecond)
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"id": "us", "main_endpoint_url": "MainEndpointURL", "governance_endpoint_url": "GovernanceEndpointURL", "results_endpoint_url": "ResultsEndpointURL", "compliance_endpoint_url": "ComplianceEndpointURL", "analytics_endpoint_url": "AnalyticsEndpointURL", "si_endpoint_url": "SiEndpointURL", "regions": [{"id": "us"}]}`)
-				}))
-			})
-			It(`Invoke GetLocation successfully with retries`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-				adminServiceApiService.EnableRetries(0, 0)
-
-				// Construct an instance of the GetLocationOptions model
-				getLocationOptionsModel := new(adminserviceapiv1.GetLocationOptions)
-				getLocationOptionsModel.LocationID = core.StringPtr("us")
-				getLocationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with a Context to test a timeout error
-				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc()
-				_, _, operationErr := adminServiceApiService.GetLocationWithContext(ctx, getLocationOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-
-				// Disable retries and test again
-				adminServiceApiService.DisableRetries()
-				result, response, operationErr := adminServiceApiService.GetLocation(getLocationOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-				// Re-test the timeout error with retries disabled
-				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc2()
-				_, _, operationErr = adminServiceApiService.GetLocationWithContext(ctx, getLocationOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getLocationPath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"id": "us", "main_endpoint_url": "MainEndpointURL", "governance_endpoint_url": "GovernanceEndpointURL", "results_endpoint_url": "ResultsEndpointURL", "compliance_endpoint_url": "ComplianceEndpointURL", "analytics_endpoint_url": "AnalyticsEndpointURL", "si_endpoint_url": "SiEndpointURL", "regions": [{"id": "us"}]}`)
-				}))
-			})
-			It(`Invoke GetLocation successfully`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-
-				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := adminServiceApiService.GetLocation(nil)
-				Expect(operationErr).NotTo(BeNil())
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-
-				// Construct an instance of the GetLocationOptions model
-				getLocationOptionsModel := new(adminserviceapiv1.GetLocationOptions)
-				getLocationOptionsModel.LocationID = core.StringPtr("us")
-				getLocationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = adminServiceApiService.GetLocation(getLocationOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-			})
-			It(`Invoke GetLocation with error: Operation validation and request error`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-
-				// Construct an instance of the GetLocationOptions model
-				getLocationOptionsModel := new(adminserviceapiv1.GetLocationOptions)
-				getLocationOptionsModel.LocationID = core.StringPtr("us")
-				getLocationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Invoke operation with empty URL (negative test)
-				err := adminServiceApiService.SetServiceURL("")
-				Expect(err).To(BeNil())
-				result, response, operationErr := adminServiceApiService.GetLocation(getLocationOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the GetLocationOptions model with no property values
-				getLocationOptionsModelNew := new(adminserviceapiv1.GetLocationOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = adminServiceApiService.GetLocation(getLocationOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint with missing response body`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Set success status code with no respoonse body
-					res.WriteHeader(200)
-				}))
-			})
-			It(`Invoke GetLocation successfully`, func() {
-				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(adminServiceApiService).ToNot(BeNil())
-
-				// Construct an instance of the GetLocationOptions model
-				getLocationOptionsModel := new(adminserviceapiv1.GetLocationOptions)
-				getLocationOptionsModel.LocationID = core.StringPtr("us")
-				getLocationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation
-				result, response, operationErr := adminServiceApiService.GetLocation(getLocationOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-
-				// Verify a nil result
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`SendTestEvent(sendTestEventOptions *SendTestEventOptions) - Operation response error`, func() {
-		sendTestEventPath := "/admin/v1/accounts/testString/test_event"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(sendTestEventPath))
+					Expect(req.URL.EscapedPath()).To(Equal(postTestEventPath))
 					Expect(req.Method).To(Equal("POST"))
 					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					res.WriteHeader(200)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
-			It(`Invoke SendTestEvent with error: Operation response processing error`, func() {
+			It(`Invoke PostTestEvent with error: Operation response processing error`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1128,19 +682,18 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(adminServiceApiService).ToNot(BeNil())
 
-				// Construct an instance of the SendTestEventOptions model
-				sendTestEventOptionsModel := new(adminserviceapiv1.SendTestEventOptions)
-				sendTestEventOptionsModel.AccountID = core.StringPtr("testString")
-				sendTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the PostTestEventOptions model
+				postTestEventOptionsModel := new(adminserviceapiv1.PostTestEventOptions)
+				postTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := adminServiceApiService.SendTestEvent(sendTestEventOptionsModel)
+				result, response, operationErr := adminServiceApiService.PostTestEvent(postTestEventOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
 				adminServiceApiService.EnableRetries(0, 0)
-				result, response, operationErr = adminServiceApiService.SendTestEvent(sendTestEventOptionsModel)
+				result, response, operationErr = adminServiceApiService.PostTestEvent(postTestEventOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -1150,15 +703,15 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 			})
 		})
 	})
-	Describe(`SendTestEvent(sendTestEventOptions *SendTestEventOptions)`, func() {
-		sendTestEventPath := "/admin/v1/accounts/testString/test_event"
+	Describe(`PostTestEvent(postTestEventOptions *PostTestEventOptions)`, func() {
+		postTestEventPath := "/test_event"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(sendTestEventPath))
+					Expect(req.URL.EscapedPath()).To(Equal(postTestEventPath))
 					Expect(req.Method).To(Equal("POST"))
 
 					// Sleep a short time to support a timeout test
@@ -1166,11 +719,11 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
+					res.WriteHeader(200)
 					fmt.Fprintf(res, "%s", `{"success": false}`)
 				}))
 			})
-			It(`Invoke SendTestEvent successfully with retries`, func() {
+			It(`Invoke PostTestEvent successfully with retries`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1179,21 +732,20 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(adminServiceApiService).ToNot(BeNil())
 				adminServiceApiService.EnableRetries(0, 0)
 
-				// Construct an instance of the SendTestEventOptions model
-				sendTestEventOptionsModel := new(adminserviceapiv1.SendTestEventOptions)
-				sendTestEventOptionsModel.AccountID = core.StringPtr("testString")
-				sendTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the PostTestEventOptions model
+				postTestEventOptionsModel := new(adminserviceapiv1.PostTestEventOptions)
+				postTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := adminServiceApiService.SendTestEventWithContext(ctx, sendTestEventOptionsModel)
+				_, _, operationErr := adminServiceApiService.PostTestEventWithContext(ctx, postTestEventOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
 				adminServiceApiService.DisableRetries()
-				result, response, operationErr := adminServiceApiService.SendTestEvent(sendTestEventOptionsModel)
+				result, response, operationErr := adminServiceApiService.PostTestEvent(postTestEventOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -1201,7 +753,7 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = adminServiceApiService.SendTestEventWithContext(ctx, sendTestEventOptionsModel)
+				_, _, operationErr = adminServiceApiService.PostTestEventWithContext(ctx, postTestEventOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -1215,16 +767,16 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(sendTestEventPath))
+					Expect(req.URL.EscapedPath()).To(Equal(postTestEventPath))
 					Expect(req.Method).To(Equal("POST"))
 
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
+					res.WriteHeader(200)
 					fmt.Fprintf(res, "%s", `{"success": false}`)
 				}))
 			})
-			It(`Invoke SendTestEvent successfully`, func() {
+			It(`Invoke PostTestEvent successfully`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1233,24 +785,23 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(adminServiceApiService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := adminServiceApiService.SendTestEvent(nil)
+				result, response, operationErr := adminServiceApiService.PostTestEvent(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the SendTestEventOptions model
-				sendTestEventOptionsModel := new(adminserviceapiv1.SendTestEventOptions)
-				sendTestEventOptionsModel.AccountID = core.StringPtr("testString")
-				sendTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the PostTestEventOptions model
+				postTestEventOptionsModel := new(adminserviceapiv1.PostTestEventOptions)
+				postTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = adminServiceApiService.SendTestEvent(sendTestEventOptionsModel)
+				result, response, operationErr = adminServiceApiService.PostTestEvent(postTestEventOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke SendTestEvent with error: Operation validation and request error`, func() {
+			It(`Invoke PostTestEvent with error: Operation request error`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1258,23 +809,15 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(adminServiceApiService).ToNot(BeNil())
 
-				// Construct an instance of the SendTestEventOptions model
-				sendTestEventOptionsModel := new(adminserviceapiv1.SendTestEventOptions)
-				sendTestEventOptionsModel.AccountID = core.StringPtr("testString")
-				sendTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the PostTestEventOptions model
+				postTestEventOptionsModel := new(adminserviceapiv1.PostTestEventOptions)
+				postTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := adminServiceApiService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := adminServiceApiService.SendTestEvent(sendTestEventOptionsModel)
+				result, response, operationErr := adminServiceApiService.PostTestEvent(postTestEventOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the SendTestEventOptions model with no property values
-				sendTestEventOptionsModelNew := new(adminserviceapiv1.SendTestEventOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = adminServiceApiService.SendTestEvent(sendTestEventOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 			})
@@ -1288,10 +831,10 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 					defer GinkgoRecover()
 
 					// Set success status code with no respoonse body
-					res.WriteHeader(202)
+					res.WriteHeader(200)
 				}))
 			})
-			It(`Invoke SendTestEvent successfully`, func() {
+			It(`Invoke PostTestEvent successfully`, func() {
 				adminServiceApiService, serviceErr := adminserviceapiv1.NewAdminServiceApiV1(&adminserviceapiv1.AdminServiceApiV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1299,13 +842,12 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(adminServiceApiService).ToNot(BeNil())
 
-				// Construct an instance of the SendTestEventOptions model
-				sendTestEventOptionsModel := new(adminserviceapiv1.SendTestEventOptions)
-				sendTestEventOptionsModel.AccountID = core.StringPtr("testString")
-				sendTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the PostTestEventOptions model
+				postTestEventOptionsModel := new(adminserviceapiv1.PostTestEventOptions)
+				postTestEventOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := adminServiceApiService.SendTestEvent(sendTestEventOptionsModel)
+				result, response, operationErr := adminServiceApiService.PostTestEvent(postTestEventOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -1323,84 +865,89 @@ var _ = Describe(`AdminServiceApiV1`, func() {
 				URL:           "http://adminserviceapiv1modelgenerator.com",
 				Authenticator: &core.NoAuthAuthenticator{},
 			})
-			It(`Invoke NewGetLocationOptions successfully`, func() {
-				// Construct an instance of the GetLocationOptions model
-				locationID := "us"
-				getLocationOptionsModel := adminServiceApiService.NewGetLocationOptions(locationID)
-				getLocationOptionsModel.SetLocationID("us")
-				getLocationOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(getLocationOptionsModel).ToNot(BeNil())
-				Expect(getLocationOptionsModel.LocationID).To(Equal(core.StringPtr("us")))
-				Expect(getLocationOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
-			})
 			It(`Invoke NewGetSettingsOptions successfully`, func() {
 				// Construct an instance of the GetSettingsOptions model
-				accountID := "testString"
-				getSettingsOptionsModel := adminServiceApiService.NewGetSettingsOptions(accountID)
-				getSettingsOptionsModel.SetAccountID("testString")
+				getSettingsOptionsModel := adminServiceApiService.NewGetSettingsOptions()
 				getSettingsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getSettingsOptionsModel).ToNot(BeNil())
-				Expect(getSettingsOptionsModel.AccountID).To(Equal(core.StringPtr("testString")))
 				Expect(getSettingsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
-			It(`Invoke NewListLocationsOptions successfully`, func() {
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := adminServiceApiService.NewListLocationsOptions()
-				listLocationsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(listLocationsOptionsModel).ToNot(BeNil())
-				Expect(listLocationsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
-			})
-			It(`Invoke NewLocationID successfully`, func() {
-				id := "us"
-				_model, err := adminServiceApiService.NewLocationID(id)
+			It(`Invoke NewJSONPatchOperation successfully`, func() {
+				op := "add"
+				path := "testString"
+				_model, err := adminServiceApiService.NewJSONPatchOperation(op, path)
 				Expect(_model).ToNot(BeNil())
 				Expect(err).To(BeNil())
 			})
-			It(`Invoke NewNotificationsRegistration successfully`, func() {
-				instanceCrn := "testString"
-				_model, err := adminServiceApiService.NewNotificationsRegistration(instanceCrn)
-				Expect(_model).ToNot(BeNil())
-				Expect(err).To(BeNil())
+			It(`Invoke NewPostTestEventOptions successfully`, func() {
+				// Construct an instance of the PostTestEventOptions model
+				postTestEventOptionsModel := adminServiceApiService.NewPostTestEventOptions()
+				postTestEventOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(postTestEventOptionsModel).ToNot(BeNil())
+				Expect(postTestEventOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
-			It(`Invoke NewPatchAccountSettingsOptions successfully`, func() {
-				// Construct an instance of the LocationID model
-				locationIdModel := new(adminserviceapiv1.LocationID)
-				Expect(locationIdModel).ToNot(BeNil())
-				locationIdModel.ID = core.StringPtr("us")
-				Expect(locationIdModel.ID).To(Equal(core.StringPtr("us")))
+			It(`Invoke NewSettingsPatch successfully`, func() {
+				// Construct an instance of the EventNotifications model
+				eventNotificationsModel := new(adminserviceapiv1.EventNotifications)
+				eventNotificationsModel.InstanceCrn = core.StringPtr("testString")
+				eventNotificationsModel.Modified = core.StringPtr("testString")
+				eventNotificationsModel.SourceID = core.StringPtr("testString")
 
-				// Construct an instance of the NotificationsRegistration model
-				notificationsRegistrationModel := new(adminserviceapiv1.NotificationsRegistration)
-				Expect(notificationsRegistrationModel).ToNot(BeNil())
-				notificationsRegistrationModel.InstanceCrn = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceName = core.StringPtr("testString")
-				notificationsRegistrationModel.SourceDescription = core.StringPtr("testString")
-				Expect(notificationsRegistrationModel.InstanceCrn).To(Equal(core.StringPtr("testString")))
-				Expect(notificationsRegistrationModel.SourceName).To(Equal(core.StringPtr("testString")))
-				Expect(notificationsRegistrationModel.SourceDescription).To(Equal(core.StringPtr("testString")))
+				// Construct an instance of the ObjectStorage model
+				objectStorageModel := new(adminserviceapiv1.ObjectStorage)
+				objectStorageModel.InstanceCrn = core.StringPtr("testString")
+				objectStorageModel.Bucket = core.StringPtr("testString")
+				objectStorageModel.BucketLocation = core.StringPtr("testString")
+				objectStorageModel.BucketEndpoint = core.StringPtr("testString")
+				objectStorageModel.Modified = core.StringPtr("testString")
 
-				// Construct an instance of the PatchAccountSettingsOptions model
-				accountID := "testString"
-				patchAccountSettingsOptionsModel := adminServiceApiService.NewPatchAccountSettingsOptions(accountID)
-				patchAccountSettingsOptionsModel.SetAccountID("testString")
-				patchAccountSettingsOptionsModel.SetLocation(locationIdModel)
-				patchAccountSettingsOptionsModel.SetEventNotifications(notificationsRegistrationModel)
-				patchAccountSettingsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(patchAccountSettingsOptionsModel).ToNot(BeNil())
-				Expect(patchAccountSettingsOptionsModel.AccountID).To(Equal(core.StringPtr("testString")))
-				Expect(patchAccountSettingsOptionsModel.Location).To(Equal(locationIdModel))
-				Expect(patchAccountSettingsOptionsModel.EventNotifications).To(Equal(notificationsRegistrationModel))
-				Expect(patchAccountSettingsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+				// Construct an instance of the Settings model
+				settings := new(adminserviceapiv1.Settings)
+				settings.EventNotifications = eventNotificationsModel
+				settings.ObjectStorage = objectStorageModel
+
+				settingsPatch := adminServiceApiService.NewSettingsPatch(settings)
+				Expect(settingsPatch).ToNot(BeNil())
+
+				_path := func(op interface{}) string {
+					return *op.(adminserviceapiv1.JSONPatchOperation).Path
+				}
+				Expect(settingsPatch).To(MatchAllElements(_path, Elements{
+				"/event_notifications": MatchAllFields(Fields{
+					"Op": PointTo(Equal(adminserviceapiv1.JSONPatchOperation_Op_Add)),
+					"Path": PointTo(Equal("/event_notifications")),
+					"From": BeNil(),
+					"Value": Equal(settings.EventNotifications),
+					}),
+				"/object_storage": MatchAllFields(Fields{
+					"Op": PointTo(Equal(adminserviceapiv1.JSONPatchOperation_Op_Add)),
+					"Path": PointTo(Equal("/object_storage")),
+					"From": BeNil(),
+					"Value": Equal(settings.ObjectStorage),
+					}),
+				}))
 			})
-			It(`Invoke NewSendTestEventOptions successfully`, func() {
-				// Construct an instance of the SendTestEventOptions model
-				accountID := "testString"
-				sendTestEventOptionsModel := adminServiceApiService.NewSendTestEventOptions(accountID)
-				sendTestEventOptionsModel.SetAccountID("testString")
-				sendTestEventOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(sendTestEventOptionsModel).ToNot(BeNil())
-				Expect(sendTestEventOptionsModel.AccountID).To(Equal(core.StringPtr("testString")))
-				Expect(sendTestEventOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			It(`Invoke NewUpdateSettingsOptions successfully`, func() {
+				// Construct an instance of the JSONPatchOperation model
+				jsonPatchOperationModel := new(adminserviceapiv1.JSONPatchOperation)
+				Expect(jsonPatchOperationModel).ToNot(BeNil())
+				jsonPatchOperationModel.Op = core.StringPtr("add")
+				jsonPatchOperationModel.Path = core.StringPtr("testString")
+				jsonPatchOperationModel.From = core.StringPtr("testString")
+				jsonPatchOperationModel.Value = core.StringPtr("testString")
+				Expect(jsonPatchOperationModel.Op).To(Equal(core.StringPtr("add")))
+				Expect(jsonPatchOperationModel.Path).To(Equal(core.StringPtr("testString")))
+				Expect(jsonPatchOperationModel.From).To(Equal(core.StringPtr("testString")))
+				Expect(jsonPatchOperationModel.Value).To(Equal(core.StringPtr("testString")))
+
+				// Construct an instance of the UpdateSettingsOptions model
+				body := []adminserviceapiv1.JSONPatchOperation{}
+				updateSettingsOptionsModel := adminServiceApiService.NewUpdateSettingsOptions(body)
+				updateSettingsOptionsModel.SetBody([]adminserviceapiv1.JSONPatchOperation{*jsonPatchOperationModel})
+				updateSettingsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(updateSettingsOptionsModel).ToNot(BeNil())
+				Expect(updateSettingsOptionsModel.Body).To(Equal([]adminserviceapiv1.JSONPatchOperation{*jsonPatchOperationModel}))
+				Expect(updateSettingsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 		})
 	})
@@ -1444,7 +991,7 @@ func CreateMockUUID(mockData string) *strfmt.UUID {
 }
 
 func CreateMockReader(mockData string) io.ReadCloser {
-	return ioutil.NopCloser(bytes.NewReader([]byte(mockData)))
+	return io.NopCloser(bytes.NewReader([]byte(mockData)))
 }
 
 func CreateMockDate(mockData string) *strfmt.Date {

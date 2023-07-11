@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package resultsreportsapiv3_test
+package resultsv3_test
 
 import (
 	"bytes"
@@ -27,38 +27,38 @@ import (
 	"time"
 
 	"github.com/IBM/go-sdk-core/v5/core"
-	"github.com/IBM/scc-go-sdk/v4/resultsreportsapiv3"
+	"github.com/IBM/scc-go-sdk/v4/resultsv3"
 	"github.com/go-openapi/strfmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe(`ResultsReportsApiV3`, func() {
+var _ = Describe(`ResultsV3`, func() {
 	var testServer *httptest.Server
 	Describe(`Service constructor tests`, func() {
 		It(`Instantiate service client`, func() {
-			resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+			resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 				Authenticator: &core.NoAuthAuthenticator{},
 			})
-			Expect(resultsReportsApiService).ToNot(BeNil())
+			Expect(resultsService).ToNot(BeNil())
 			Expect(serviceErr).To(BeNil())
 		})
 		It(`Instantiate service client with error: Invalid URL`, func() {
-			resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+			resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 				URL: "{BAD_URL_STRING",
 			})
-			Expect(resultsReportsApiService).To(BeNil())
+			Expect(resultsService).To(BeNil())
 			Expect(serviceErr).ToNot(BeNil())
 		})
 		It(`Instantiate service client with error: Invalid Auth`, func() {
-			resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
-				URL: "https://resultsreportsapiv3/api",
+			resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
+				URL: "https://resultsv3/api",
 				Authenticator: &core.BasicAuthenticator{
 					Username: "",
 					Password: "",
 				},
 			})
-			Expect(resultsReportsApiService).To(BeNil())
+			Expect(resultsService).To(BeNil())
 			Expect(serviceErr).ToNot(BeNil())
 		})
 	})
@@ -66,68 +66,68 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		Context(`Using external config, construct service client instances`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"RESULTS_REPORTS_API_URL":       "https://resultsreportsapiv3/api",
-				"RESULTS_REPORTS_API_AUTH_TYPE": "noauth",
+				"RESULTS_URL":       "https://resultsv3/api",
+				"RESULTS_AUTH_TYPE": "noauth",
 			}
 
 			It(`Create service client using external config successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3UsingExternalConfig(&resultsreportsapiv3.ResultsReportsApiV3Options{})
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				resultsService, serviceErr := resultsv3.NewResultsV3UsingExternalConfig(&resultsv3.ResultsV3Options{})
+				Expect(resultsService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
 				ClearTestEnvironment(testEnvironment)
 
-				clone := resultsReportsApiService.Clone()
+				clone := resultsService.Clone()
 				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != resultsReportsApiService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(resultsReportsApiService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(resultsReportsApiService.Service.Options.Authenticator))
+				Expect(clone.Service != resultsService.Service).To(BeTrue())
+				Expect(clone.GetServiceURL()).To(Equal(resultsService.GetServiceURL()))
+				Expect(clone.Service.Options.Authenticator).To(Equal(resultsService.Service.Options.Authenticator))
 			})
 			It(`Create service client using external config and set url from constructor successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3UsingExternalConfig(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3UsingExternalConfig(&resultsv3.ResultsV3Options{
 					URL: "https://testService/api",
 				})
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService.Service.GetServiceURL()).To(Equal("https://testService/api"))
+				Expect(resultsService.Service.GetServiceURL()).To(Equal("https://testService/api"))
 				ClearTestEnvironment(testEnvironment)
 
-				clone := resultsReportsApiService.Clone()
+				clone := resultsService.Clone()
 				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != resultsReportsApiService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(resultsReportsApiService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(resultsReportsApiService.Service.Options.Authenticator))
+				Expect(clone.Service != resultsService.Service).To(BeTrue())
+				Expect(clone.GetServiceURL()).To(Equal(resultsService.GetServiceURL()))
+				Expect(clone.Service.Options.Authenticator).To(Equal(resultsService.Service.Options.Authenticator))
 			})
 			It(`Create service client using external config and set url programatically successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3UsingExternalConfig(&resultsreportsapiv3.ResultsReportsApiV3Options{})
-				err := resultsReportsApiService.SetServiceURL("https://testService/api")
+				resultsService, serviceErr := resultsv3.NewResultsV3UsingExternalConfig(&resultsv3.ResultsV3Options{})
+				err := resultsService.SetServiceURL("https://testService/api")
 				Expect(err).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService.Service.GetServiceURL()).To(Equal("https://testService/api"))
+				Expect(resultsService.Service.GetServiceURL()).To(Equal("https://testService/api"))
 				ClearTestEnvironment(testEnvironment)
 
-				clone := resultsReportsApiService.Clone()
+				clone := resultsService.Clone()
 				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != resultsReportsApiService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(resultsReportsApiService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(resultsReportsApiService.Service.Options.Authenticator))
+				Expect(clone.Service != resultsService.Service).To(BeTrue())
+				Expect(clone.GetServiceURL()).To(Equal(resultsService.GetServiceURL()))
+				Expect(clone.Service.Options.Authenticator).To(Equal(resultsService.Service.Options.Authenticator))
 			})
 		})
 		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"RESULTS_REPORTS_API_URL":       "https://resultsreportsapiv3/api",
-				"RESULTS_REPORTS_API_AUTH_TYPE": "someOtherAuth",
+				"RESULTS_URL":       "https://resultsv3/api",
+				"RESULTS_AUTH_TYPE": "someOtherAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
-			resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3UsingExternalConfig(&resultsreportsapiv3.ResultsReportsApiV3Options{})
+			resultsService, serviceErr := resultsv3.NewResultsV3UsingExternalConfig(&resultsv3.ResultsV3Options{})
 
 			It(`Instantiate service client with error`, func() {
-				Expect(resultsReportsApiService).To(BeNil())
+				Expect(resultsService).To(BeNil())
 				Expect(serviceErr).ToNot(BeNil())
 				ClearTestEnvironment(testEnvironment)
 			})
@@ -135,16 +135,16 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"RESULTS_REPORTS_API_AUTH_TYPE": "NOAuth",
+				"RESULTS_AUTH_TYPE": "NOAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
-			resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3UsingExternalConfig(&resultsreportsapiv3.ResultsReportsApiV3Options{
+			resultsService, serviceErr := resultsv3.NewResultsV3UsingExternalConfig(&resultsv3.ResultsV3Options{
 				URL: "{BAD_URL_STRING",
 			})
 
 			It(`Instantiate service client with error`, func() {
-				Expect(resultsReportsApiService).To(BeNil())
+				Expect(resultsService).To(BeNil())
 				Expect(serviceErr).ToNot(BeNil())
 				ClearTestEnvironment(testEnvironment)
 			})
@@ -154,7 +154,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		It(`GetServiceURLForRegion(region string)`, func() {
 			var url string
 			var err error
-			url, err = resultsreportsapiv3.GetServiceURLForRegion("INVALID_REGION")
+			url, err = resultsv3.GetServiceURLForRegion("INVALID_REGION")
 			Expect(url).To(BeEmpty())
 			Expect(err).ToNot(BeNil())
 			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
@@ -162,8 +162,8 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 	})
 	Describe(`Parameterized URL tests`, func() {
 		It(`Format parameterized URL with all default values`, func() {
-			constructedURL, err := resultsreportsapiv3.ConstructServiceURL(nil)
-			Expect(constructedURL).To(Equal("https://us-south.compliance.cloud.ibm.com"))
+			constructedURL, err := resultsv3.ConstructServiceURL(nil)
+			Expect(constructedURL).To(Equal("https://us-south.compliance.cloud.ibm.com/instances/instance_id/v3"))
 			Expect(constructedURL).ToNot(BeNil())
 			Expect(err).To(BeNil())
 		})
@@ -171,13 +171,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 			var providedUrlVariables = map[string]string{
 				"invalid_variable_name": "value",
 			}
-			constructedURL, err := resultsreportsapiv3.ConstructServiceURL(providedUrlVariables)
+			constructedURL, err := resultsv3.ConstructServiceURL(providedUrlVariables)
 			Expect(constructedURL).To(Equal(""))
 			Expect(err).ToNot(BeNil())
 		})
 	})
 	Describe(`GetLatestReports(getLatestReportsOptions *GetLatestReportsOptions) - Operation response error`, func() {
-		getLatestReportsPath := "/instances/testString/v3/reports/latest"
+		getLatestReportsPath := "/reports/latest"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -188,7 +188,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["sort"]).To(Equal([]string{"testString"}))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
@@ -196,29 +195,27 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetLatestReports with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetLatestReportsOptions model
-				getLatestReportsOptionsModel := new(resultsreportsapiv3.GetLatestReportsOptions)
-				getLatestReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				getLatestReportsOptionsModel := new(resultsv3.GetLatestReportsOptions)
 				getLatestReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getLatestReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Sort = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetLatestReports(getLatestReportsOptionsModel)
+				result, response, operationErr := resultsService.GetLatestReports(getLatestReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetLatestReports(getLatestReportsOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetLatestReports(getLatestReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -229,7 +226,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetLatestReports(getLatestReportsOptions *GetLatestReportsOptions)`, func() {
-		getLatestReportsPath := "/instances/testString/v3/reports/latest"
+		getLatestReportsPath := "/reports/latest"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -241,7 +238,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["sort"]).To(Equal([]string{"testString"}))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
@@ -249,36 +245,34 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"home_account_id": "HomeAccountID", "controls_summary": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}, "evaluations_summary": {"status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}, "score": {"passed": 1, "total_count": 4, "percent": 25}, "reports": [{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_on": "2022-08-15T12:30:01.001Z", "scan_time": "2022-08-15T12:30:01.001Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}]}`)
+					fmt.Fprintf(res, "%s", `{"home_account_id": "HomeAccountID", "controls_summary": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}, "evaluations_summary": {"status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}, "score": {"passed": 1, "total_count": 4, "percent": 25}, "reports": [{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_at": "2022-08-15T12:30:01Z", "scan_time": "2022-08-15T12:30:01Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "instance_id": "84644a08-31b6-4988-b504-49a46ca69ccd", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}]}`)
 				}))
 			})
 			It(`Invoke GetLatestReports successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetLatestReportsOptions model
-				getLatestReportsOptionsModel := new(resultsreportsapiv3.GetLatestReportsOptions)
-				getLatestReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				getLatestReportsOptionsModel := new(resultsv3.GetLatestReportsOptions)
 				getLatestReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getLatestReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Sort = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetLatestReportsWithContext(ctx, getLatestReportsOptionsModel)
+				_, _, operationErr := resultsService.GetLatestReportsWithContext(ctx, getLatestReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetLatestReports(getLatestReportsOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetLatestReports(getLatestReportsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -286,7 +280,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetLatestReportsWithContext(ctx, getLatestReportsOptionsModel)
+				_, _, operationErr = resultsService.GetLatestReportsWithContext(ctx, getLatestReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -305,71 +299,59 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["sort"]).To(Equal([]string{"testString"}))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"home_account_id": "HomeAccountID", "controls_summary": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}, "evaluations_summary": {"status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}, "score": {"passed": 1, "total_count": 4, "percent": 25}, "reports": [{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_on": "2022-08-15T12:30:01.001Z", "scan_time": "2022-08-15T12:30:01.001Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}]}`)
+					fmt.Fprintf(res, "%s", `{"home_account_id": "HomeAccountID", "controls_summary": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}, "evaluations_summary": {"status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}, "score": {"passed": 1, "total_count": 4, "percent": 25}, "reports": [{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_at": "2022-08-15T12:30:01Z", "scan_time": "2022-08-15T12:30:01Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "instance_id": "84644a08-31b6-4988-b504-49a46ca69ccd", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}]}`)
 				}))
 			})
 			It(`Invoke GetLatestReports successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetLatestReports(nil)
+				result, response, operationErr := resultsService.GetLatestReports(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetLatestReportsOptions model
-				getLatestReportsOptionsModel := new(resultsreportsapiv3.GetLatestReportsOptions)
-				getLatestReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				getLatestReportsOptionsModel := new(resultsv3.GetLatestReportsOptions)
 				getLatestReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getLatestReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Sort = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetLatestReports(getLatestReportsOptionsModel)
+				result, response, operationErr = resultsService.GetLatestReports(getLatestReportsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke GetLatestReports with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+			It(`Invoke GetLatestReports with error: Operation request error`, func() {
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetLatestReportsOptions model
-				getLatestReportsOptionsModel := new(resultsreportsapiv3.GetLatestReportsOptions)
-				getLatestReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				getLatestReportsOptionsModel := new(resultsv3.GetLatestReportsOptions)
 				getLatestReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getLatestReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Sort = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetLatestReports(getLatestReportsOptionsModel)
+				result, response, operationErr := resultsService.GetLatestReports(getLatestReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the GetLatestReportsOptions model with no property values
-				getLatestReportsOptionsModelNew := new(resultsreportsapiv3.GetLatestReportsOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetLatestReports(getLatestReportsOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 			})
@@ -387,23 +369,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetLatestReports successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetLatestReportsOptions model
-				getLatestReportsOptionsModel := new(resultsreportsapiv3.GetLatestReportsOptions)
-				getLatestReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				getLatestReportsOptionsModel := new(resultsv3.GetLatestReportsOptions)
 				getLatestReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getLatestReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Sort = core.StringPtr("testString")
 				getLatestReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetLatestReports(getLatestReportsOptionsModel)
+				result, response, operationErr := resultsService.GetLatestReports(getLatestReportsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -416,7 +396,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`ListReports(listReportsOptions *ListReportsOptions) - Operation response error`, func() {
-		listReportsPath := "/instances/testString/v3/reports"
+		listReportsPath := "/reports"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -427,7 +407,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["attachment_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["group_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["profile_id"]).To(Equal([]string{"testString"}))
@@ -442,18 +421,16 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReports with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportsOptions model
-				listReportsOptionsModel := new(resultsreportsapiv3.ListReportsOptions)
-				listReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportsOptionsModel := new(resultsv3.ListReportsOptions)
 				listReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				listReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				listReportsOptionsModel.AttachmentID = core.StringPtr("testString")
 				listReportsOptionsModel.GroupID = core.StringPtr("testString")
 				listReportsOptionsModel.ProfileID = core.StringPtr("testString")
@@ -464,14 +441,14 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportsOptionsModel.Sort = core.StringPtr("testString")
 				listReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.ListReports(listReportsOptionsModel)
+				result, response, operationErr := resultsService.ListReports(listReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.ListReports(listReportsOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.ListReports(listReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -482,7 +459,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`ListReports(listReportsOptions *ListReportsOptions)`, func() {
-		listReportsPath := "/instances/testString/v3/reports"
+		listReportsPath := "/reports"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -494,7 +471,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["attachment_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["group_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["profile_id"]).To(Equal([]string{"testString"}))
@@ -509,23 +485,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"total_count": 230, "limit": 50, "start": "Start", "first": {"href": "Href"}, "next": {"href": "Href"}, "home_account_id": "HomeAccountID", "reports": [{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_on": "2022-08-15T12:30:01.001Z", "scan_time": "2022-08-15T12:30:01.001Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}]}`)
+					fmt.Fprintf(res, "%s", `{"total_count": 230, "limit": 50, "start": "Start", "first": {"href": "Href"}, "next": {"href": "Href"}, "home_account_id": "HomeAccountID", "reports": [{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_at": "2022-08-15T12:30:01Z", "scan_time": "2022-08-15T12:30:01Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "instance_id": "84644a08-31b6-4988-b504-49a46ca69ccd", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}]}`)
 				}))
 			})
 			It(`Invoke ListReports successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the ListReportsOptions model
-				listReportsOptionsModel := new(resultsreportsapiv3.ListReportsOptions)
-				listReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportsOptionsModel := new(resultsv3.ListReportsOptions)
 				listReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				listReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				listReportsOptionsModel.AttachmentID = core.StringPtr("testString")
 				listReportsOptionsModel.GroupID = core.StringPtr("testString")
 				listReportsOptionsModel.ProfileID = core.StringPtr("testString")
@@ -539,13 +513,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.ListReportsWithContext(ctx, listReportsOptionsModel)
+				_, _, operationErr := resultsService.ListReportsWithContext(ctx, listReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.ListReports(listReportsOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.ListReports(listReportsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -553,7 +527,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.ListReportsWithContext(ctx, listReportsOptionsModel)
+				_, _, operationErr = resultsService.ListReportsWithContext(ctx, listReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -572,7 +546,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["attachment_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["group_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["profile_id"]).To(Equal([]string{"testString"}))
@@ -584,28 +557,26 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"total_count": 230, "limit": 50, "start": "Start", "first": {"href": "Href"}, "next": {"href": "Href"}, "home_account_id": "HomeAccountID", "reports": [{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_on": "2022-08-15T12:30:01.001Z", "scan_time": "2022-08-15T12:30:01.001Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}]}`)
+					fmt.Fprintf(res, "%s", `{"total_count": 230, "limit": 50, "start": "Start", "first": {"href": "Href"}, "next": {"href": "Href"}, "home_account_id": "HomeAccountID", "reports": [{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_at": "2022-08-15T12:30:01Z", "scan_time": "2022-08-15T12:30:01Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "instance_id": "84644a08-31b6-4988-b504-49a46ca69ccd", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}]}`)
 				}))
 			})
 			It(`Invoke ListReports successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.ListReports(nil)
+				result, response, operationErr := resultsService.ListReports(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the ListReportsOptions model
-				listReportsOptionsModel := new(resultsreportsapiv3.ListReportsOptions)
-				listReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportsOptionsModel := new(resultsv3.ListReportsOptions)
 				listReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				listReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				listReportsOptionsModel.AttachmentID = core.StringPtr("testString")
 				listReportsOptionsModel.GroupID = core.StringPtr("testString")
 				listReportsOptionsModel.ProfileID = core.StringPtr("testString")
@@ -617,25 +588,23 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.ListReports(listReportsOptionsModel)
+				result, response, operationErr = resultsService.ListReports(listReportsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke ListReports with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+			It(`Invoke ListReports with error: Operation request error`, func() {
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportsOptions model
-				listReportsOptionsModel := new(resultsreportsapiv3.ListReportsOptions)
-				listReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportsOptionsModel := new(resultsv3.ListReportsOptions)
 				listReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				listReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				listReportsOptionsModel.AttachmentID = core.StringPtr("testString")
 				listReportsOptionsModel.GroupID = core.StringPtr("testString")
 				listReportsOptionsModel.ProfileID = core.StringPtr("testString")
@@ -646,18 +615,11 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportsOptionsModel.Sort = core.StringPtr("testString")
 				listReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.ListReports(listReportsOptionsModel)
+				result, response, operationErr := resultsService.ListReports(listReportsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the ListReportsOptions model with no property values
-				listReportsOptionsModelNew := new(resultsreportsapiv3.ListReportsOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.ListReports(listReportsOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 			})
@@ -675,18 +637,16 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReports successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportsOptions model
-				listReportsOptionsModel := new(resultsreportsapiv3.ListReportsOptions)
-				listReportsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportsOptionsModel := new(resultsv3.ListReportsOptions)
 				listReportsOptionsModel.XCorrelationID = core.StringPtr("testString")
-				listReportsOptionsModel.HomeAccountID = core.StringPtr("testString")
 				listReportsOptionsModel.AttachmentID = core.StringPtr("testString")
 				listReportsOptionsModel.GroupID = core.StringPtr("testString")
 				listReportsOptionsModel.ProfileID = core.StringPtr("testString")
@@ -698,7 +658,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.ListReports(listReportsOptionsModel)
+				result, response, operationErr := resultsService.ListReports(listReportsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -711,8 +671,8 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 		Context(`Test pagination helper method on response`, func() {
 			It(`Invoke GetNextStart successfully`, func() {
-				responseObject := new(resultsreportsapiv3.ReportPage)
-				nextObject := new(resultsreportsapiv3.PageHRef)
+				responseObject := new(resultsv3.ReportPage)
+				nextObject := new(resultsv3.PageHRef)
 				nextObject.Href = core.StringPtr("ibm.com?start=abc-123")
 				responseObject.Next = nextObject
 
@@ -721,15 +681,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				Expect(value).To(Equal(core.StringPtr("abc-123")))
 			})
 			It(`Invoke GetNextStart without a "Next" property in the response`, func() {
-				responseObject := new(resultsreportsapiv3.ReportPage)
+				responseObject := new(resultsv3.ReportPage)
 
 				value, err := responseObject.GetNextStart()
 				Expect(err).To(BeNil())
 				Expect(value).To(BeNil())
 			})
 			It(`Invoke GetNextStart without any query params in the "Next" URL`, func() {
-				responseObject := new(resultsreportsapiv3.ReportPage)
-				nextObject := new(resultsreportsapiv3.PageHRef)
+				responseObject := new(resultsv3.ReportPage)
+				nextObject := new(resultsv3.PageHRef)
 				nextObject.Href = core.StringPtr("ibm.com")
 				responseObject.Next = nextObject
 
@@ -753,26 +713,24 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					res.WriteHeader(200)
 					requestNumber++
 					if requestNumber == 1 {
-						fmt.Fprintf(res, "%s", `{"next":{"href":"https://myhost.com/somePath?start=1"},"reports":[{"id":"44a5-a292-32114fa73558","group_id":"55b6-b3A4-432250b84669","created_on":"2022-08-15T12:30:01.001Z","scan_time":"2022-08-15T12:30:01.001Z","type":"scheduled","cos_object":"crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7","account":{"id":"531fc3e28bfc43c5a2cea07786d93f5c","name":"NIST","type":"account_type"},"profile":{"id":"44a5-a292-32114fa73558","name":"IBM FS Cloud","version":"0.1"},"scope":{"id":"531fc3e28bfc43c5a2cea07786d93f5c","type":"account"},"attachment":{"id":"531fc3e28bfc43c5a2cea07786d93f5c"}}],"total_count":2,"limit":1}`)
+						fmt.Fprintf(res, "%s", `{"next":{"href":"https://myhost.com/somePath?start=1"},"reports":[{"id":"44a5-a292-32114fa73558","group_id":"55b6-b3A4-432250b84669","created_at":"2022-08-15T12:30:01Z","scan_time":"2022-08-15T12:30:01Z","type":"scheduled","cos_object":"crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7","instance_id":"84644a08-31b6-4988-b504-49a46ca69ccd","account":{"id":"531fc3e28bfc43c5a2cea07786d93f5c","name":"NIST","type":"account_type"},"profile":{"id":"44a5-a292-32114fa73558","name":"IBM FS Cloud","version":"0.1"},"scope":{"id":"531fc3e28bfc43c5a2cea07786d93f5c","type":"account"},"attachment":{"id":"531fc3e28bfc43c5a2cea07786d93f5c"}}],"total_count":2,"limit":1}`)
 					} else if requestNumber == 2 {
-						fmt.Fprintf(res, "%s", `{"reports":[{"id":"44a5-a292-32114fa73558","group_id":"55b6-b3A4-432250b84669","created_on":"2022-08-15T12:30:01.001Z","scan_time":"2022-08-15T12:30:01.001Z","type":"scheduled","cos_object":"crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7","account":{"id":"531fc3e28bfc43c5a2cea07786d93f5c","name":"NIST","type":"account_type"},"profile":{"id":"44a5-a292-32114fa73558","name":"IBM FS Cloud","version":"0.1"},"scope":{"id":"531fc3e28bfc43c5a2cea07786d93f5c","type":"account"},"attachment":{"id":"531fc3e28bfc43c5a2cea07786d93f5c"}}],"total_count":2,"limit":1}`)
+						fmt.Fprintf(res, "%s", `{"reports":[{"id":"44a5-a292-32114fa73558","group_id":"55b6-b3A4-432250b84669","created_at":"2022-08-15T12:30:01Z","scan_time":"2022-08-15T12:30:01Z","type":"scheduled","cos_object":"crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7","instance_id":"84644a08-31b6-4988-b504-49a46ca69ccd","account":{"id":"531fc3e28bfc43c5a2cea07786d93f5c","name":"NIST","type":"account_type"},"profile":{"id":"44a5-a292-32114fa73558","name":"IBM FS Cloud","version":"0.1"},"scope":{"id":"531fc3e28bfc43c5a2cea07786d93f5c","type":"account"},"attachment":{"id":"531fc3e28bfc43c5a2cea07786d93f5c"}}],"total_count":2,"limit":1}`)
 					} else {
 						res.WriteHeader(400)
 					}
 				}))
 			})
 			It(`Use ReportsPager.GetNext successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
-				listReportsOptionsModel := &resultsreportsapiv3.ListReportsOptions{
-					InstanceID:     core.StringPtr("testString"),
+				listReportsOptionsModel := &resultsv3.ListReportsOptions{
 					XCorrelationID: core.StringPtr("testString"),
-					HomeAccountID:  core.StringPtr("testString"),
 					AttachmentID:   core.StringPtr("testString"),
 					GroupID:        core.StringPtr("testString"),
 					ProfileID:      core.StringPtr("testString"),
@@ -782,11 +740,11 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					Sort:           core.StringPtr("testString"),
 				}
 
-				pager, err := resultsReportsApiService.NewReportsPager(listReportsOptionsModel)
+				pager, err := resultsService.NewReportsPager(listReportsOptionsModel)
 				Expect(err).To(BeNil())
 				Expect(pager).ToNot(BeNil())
 
-				var allResults []resultsreportsapiv3.Report
+				var allResults []resultsv3.Report
 				for pager.HasNext() {
 					nextPage, err := pager.GetNext()
 					Expect(err).To(BeNil())
@@ -796,17 +754,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				Expect(len(allResults)).To(Equal(2))
 			})
 			It(`Use ReportsPager.GetAll successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
-				listReportsOptionsModel := &resultsreportsapiv3.ListReportsOptions{
-					InstanceID:     core.StringPtr("testString"),
+				listReportsOptionsModel := &resultsv3.ListReportsOptions{
 					XCorrelationID: core.StringPtr("testString"),
-					HomeAccountID:  core.StringPtr("testString"),
 					AttachmentID:   core.StringPtr("testString"),
 					GroupID:        core.StringPtr("testString"),
 					ProfileID:      core.StringPtr("testString"),
@@ -816,7 +772,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					Sort:           core.StringPtr("testString"),
 				}
 
-				pager, err := resultsReportsApiService.NewReportsPager(listReportsOptionsModel)
+				pager, err := resultsService.NewReportsPager(listReportsOptionsModel)
 				Expect(err).To(BeNil())
 				Expect(pager).ToNot(BeNil())
 
@@ -828,7 +784,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportsProfiles(getReportsProfilesOptions *GetReportsProfilesOptions) - Operation response error`, func() {
-		getReportsProfilesPath := "/instances/testString/v3/reports/profiles"
+		getReportsProfilesPath := "/reports/profiles"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -839,7 +795,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["report_id"]).To(Equal([]string{"testString"}))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
@@ -847,29 +802,27 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportsProfiles with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportsProfilesOptions model
-				getReportsProfilesOptionsModel := new(resultsreportsapiv3.GetReportsProfilesOptions)
-				getReportsProfilesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsProfilesOptionsModel := new(resultsv3.GetReportsProfilesOptions)
 				getReportsProfilesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsProfilesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.ReportID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetReportsProfiles(getReportsProfilesOptionsModel)
+				result, response, operationErr := resultsService.GetReportsProfiles(getReportsProfilesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetReportsProfiles(getReportsProfilesOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetReportsProfiles(getReportsProfilesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -880,7 +833,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportsProfiles(getReportsProfilesOptions *GetReportsProfilesOptions)`, func() {
-		getReportsProfilesPath := "/instances/testString/v3/reports/profiles"
+		getReportsProfilesPath := "/reports/profiles"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -892,7 +845,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["report_id"]).To(Equal([]string{"testString"}))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
@@ -904,32 +856,30 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportsProfiles successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportsProfilesOptions model
-				getReportsProfilesOptionsModel := new(resultsreportsapiv3.GetReportsProfilesOptions)
-				getReportsProfilesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsProfilesOptionsModel := new(resultsv3.GetReportsProfilesOptions)
 				getReportsProfilesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsProfilesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.ReportID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportsProfilesWithContext(ctx, getReportsProfilesOptionsModel)
+				_, _, operationErr := resultsService.GetReportsProfilesWithContext(ctx, getReportsProfilesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetReportsProfiles(getReportsProfilesOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReportsProfiles(getReportsProfilesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -937,7 +887,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportsProfilesWithContext(ctx, getReportsProfilesOptionsModel)
+				_, _, operationErr = resultsService.GetReportsProfilesWithContext(ctx, getReportsProfilesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -956,7 +906,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					Expect(req.URL.Query()["report_id"]).To(Equal([]string{"testString"}))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
@@ -965,62 +914,51 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportsProfiles successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReportsProfiles(nil)
+				result, response, operationErr := resultsService.GetReportsProfiles(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportsProfilesOptions model
-				getReportsProfilesOptionsModel := new(resultsreportsapiv3.GetReportsProfilesOptions)
-				getReportsProfilesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsProfilesOptionsModel := new(resultsv3.GetReportsProfilesOptions)
 				getReportsProfilesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsProfilesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.ReportID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetReportsProfiles(getReportsProfilesOptionsModel)
+				result, response, operationErr = resultsService.GetReportsProfiles(getReportsProfilesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke GetReportsProfiles with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+			It(`Invoke GetReportsProfiles with error: Operation request error`, func() {
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportsProfilesOptions model
-				getReportsProfilesOptionsModel := new(resultsreportsapiv3.GetReportsProfilesOptions)
-				getReportsProfilesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsProfilesOptionsModel := new(resultsv3.GetReportsProfilesOptions)
 				getReportsProfilesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsProfilesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.ReportID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReportsProfiles(getReportsProfilesOptionsModel)
+				result, response, operationErr := resultsService.GetReportsProfiles(getReportsProfilesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the GetReportsProfilesOptions model with no property values
-				getReportsProfilesOptionsModelNew := new(resultsreportsapiv3.GetReportsProfilesOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReportsProfiles(getReportsProfilesOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 			})
@@ -1038,23 +976,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportsProfiles successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportsProfilesOptions model
-				getReportsProfilesOptionsModel := new(resultsreportsapiv3.GetReportsProfilesOptions)
-				getReportsProfilesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsProfilesOptionsModel := new(resultsv3.GetReportsProfilesOptions)
 				getReportsProfilesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsProfilesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.ReportID = core.StringPtr("testString")
 				getReportsProfilesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReportsProfiles(getReportsProfilesOptionsModel)
+				result, response, operationErr := resultsService.GetReportsProfiles(getReportsProfilesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -1067,7 +1003,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportsScopes(getReportsScopesOptions *GetReportsScopesOptions) - Operation response error`, func() {
-		getReportsScopesPath := "/instances/testString/v3/reports/scopes"
+		getReportsScopesPath := "/reports/scopes"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1078,35 +1014,32 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
 					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetReportsScopes with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportsScopesOptions model
-				getReportsScopesOptionsModel := new(resultsreportsapiv3.GetReportsScopesOptions)
-				getReportsScopesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsScopesOptionsModel := new(resultsv3.GetReportsScopesOptions)
 				getReportsScopesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsScopesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsScopesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetReportsScopes(getReportsScopesOptionsModel)
+				result, response, operationErr := resultsService.GetReportsScopes(getReportsScopesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetReportsScopes(getReportsScopesOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetReportsScopes(getReportsScopesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -1117,7 +1050,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportsScopes(getReportsScopesOptions *GetReportsScopesOptions)`, func() {
-		getReportsScopesPath := "/instances/testString/v3/reports/scopes"
+		getReportsScopesPath := "/reports/scopes"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1129,7 +1062,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
 
@@ -1140,31 +1072,29 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportsScopes successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportsScopesOptions model
-				getReportsScopesOptionsModel := new(resultsreportsapiv3.GetReportsScopesOptions)
-				getReportsScopesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsScopesOptionsModel := new(resultsv3.GetReportsScopesOptions)
 				getReportsScopesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsScopesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsScopesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportsScopesWithContext(ctx, getReportsScopesOptionsModel)
+				_, _, operationErr := resultsService.GetReportsScopesWithContext(ctx, getReportsScopesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetReportsScopes(getReportsScopesOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReportsScopes(getReportsScopesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -1172,7 +1102,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportsScopesWithContext(ctx, getReportsScopesOptionsModel)
+				_, _, operationErr = resultsService.GetReportsScopesWithContext(ctx, getReportsScopesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -1191,7 +1121,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					Expect(req.URL.Query()["home_account_id"]).To(Equal([]string{"testString"}))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
@@ -1199,60 +1128,49 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportsScopes successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReportsScopes(nil)
+				result, response, operationErr := resultsService.GetReportsScopes(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportsScopesOptions model
-				getReportsScopesOptionsModel := new(resultsreportsapiv3.GetReportsScopesOptions)
-				getReportsScopesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsScopesOptionsModel := new(resultsv3.GetReportsScopesOptions)
 				getReportsScopesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsScopesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsScopesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetReportsScopes(getReportsScopesOptionsModel)
+				result, response, operationErr = resultsService.GetReportsScopes(getReportsScopesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke GetReportsScopes with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+			It(`Invoke GetReportsScopes with error: Operation request error`, func() {
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportsScopesOptions model
-				getReportsScopesOptionsModel := new(resultsreportsapiv3.GetReportsScopesOptions)
-				getReportsScopesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsScopesOptionsModel := new(resultsv3.GetReportsScopesOptions)
 				getReportsScopesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsScopesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsScopesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReportsScopes(getReportsScopesOptionsModel)
+				result, response, operationErr := resultsService.GetReportsScopes(getReportsScopesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the GetReportsScopesOptions model with no property values
-				getReportsScopesOptionsModelNew := new(resultsreportsapiv3.GetReportsScopesOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReportsScopes(getReportsScopesOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 			})
@@ -1270,22 +1188,20 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportsScopes successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportsScopesOptions model
-				getReportsScopesOptionsModel := new(resultsreportsapiv3.GetReportsScopesOptions)
-				getReportsScopesOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportsScopesOptionsModel := new(resultsv3.GetReportsScopesOptions)
 				getReportsScopesOptionsModel.XCorrelationID = core.StringPtr("testString")
-				getReportsScopesOptionsModel.HomeAccountID = core.StringPtr("testString")
 				getReportsScopesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReportsScopes(getReportsScopesOptionsModel)
+				result, response, operationErr := resultsService.GetReportsScopes(getReportsScopesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -1298,7 +1214,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReport(getReportOptions *GetReportOptions) - Operation response error`, func() {
-		getReportPath := "/instances/testString/v3/reports/testString"
+		getReportPath := "/reports/testString"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1315,28 +1231,27 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReport with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportOptions model
-				getReportOptionsModel := new(resultsreportsapiv3.GetReportOptions)
-				getReportOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportOptionsModel := new(resultsv3.GetReportOptions)
 				getReportOptionsModel.ReportID = core.StringPtr("testString")
 				getReportOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetReport(getReportOptionsModel)
+				result, response, operationErr := resultsService.GetReport(getReportOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetReport(getReportOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetReport(getReportOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -1347,7 +1262,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReport(getReportOptions *GetReportOptions)`, func() {
-		getReportPath := "/instances/testString/v3/reports/testString"
+		getReportPath := "/reports/testString"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1365,21 +1280,20 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_on": "2022-08-15T12:30:01.001Z", "scan_time": "2022-08-15T12:30:01.001Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}`)
+					fmt.Fprintf(res, "%s", `{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_at": "2022-08-15T12:30:01Z", "scan_time": "2022-08-15T12:30:01Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "instance_id": "84644a08-31b6-4988-b504-49a46ca69ccd", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}`)
 				}))
 			})
 			It(`Invoke GetReport successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportOptions model
-				getReportOptionsModel := new(resultsreportsapiv3.GetReportOptions)
-				getReportOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportOptionsModel := new(resultsv3.GetReportOptions)
 				getReportOptionsModel.ReportID = core.StringPtr("testString")
 				getReportOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
@@ -1387,13 +1301,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportWithContext(ctx, getReportOptionsModel)
+				_, _, operationErr := resultsService.GetReportWithContext(ctx, getReportOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetReport(getReportOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReport(getReportOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -1401,7 +1315,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportWithContext(ctx, getReportOptionsModel)
+				_, _, operationErr = resultsService.GetReportWithContext(ctx, getReportOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -1423,63 +1337,61 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_on": "2022-08-15T12:30:01.001Z", "scan_time": "2022-08-15T12:30:01.001Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}`)
+					fmt.Fprintf(res, "%s", `{"id": "44a5-a292-32114fa73558", "group_id": "55b6-b3A4-432250b84669", "created_at": "2022-08-15T12:30:01Z", "scan_time": "2022-08-15T12:30:01Z", "type": "scheduled", "cos_object": "crn:v1:bluemix:public:cloud-object-storage:global:a/531fc3e28bfc43c5a2cea07786d93f5c:1a0ec336-f391-4091-a6fb-5e084a4c56f4:bucket:b1a8f3da-49d2-4966-ae83-a8d02bc2aac7", "instance_id": "84644a08-31b6-4988-b504-49a46ca69ccd", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "profile": {"id": "44a5-a292-32114fa73558", "name": "IBM FS Cloud", "version": "0.1"}, "scope": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "type": "account"}, "attachment": {"id": "531fc3e28bfc43c5a2cea07786d93f5c"}}`)
 				}))
 			})
 			It(`Invoke GetReport successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReport(nil)
+				result, response, operationErr := resultsService.GetReport(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportOptions model
-				getReportOptionsModel := new(resultsreportsapiv3.GetReportOptions)
-				getReportOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportOptionsModel := new(resultsv3.GetReportOptions)
 				getReportOptionsModel.ReportID = core.StringPtr("testString")
 				getReportOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetReport(getReportOptionsModel)
+				result, response, operationErr = resultsService.GetReport(getReportOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
 			It(`Invoke GetReport with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportOptions model
-				getReportOptionsModel := new(resultsreportsapiv3.GetReportOptions)
-				getReportOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportOptionsModel := new(resultsv3.GetReportOptions)
 				getReportOptionsModel.ReportID = core.StringPtr("testString")
 				getReportOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReport(getReportOptionsModel)
+				result, response, operationErr := resultsService.GetReport(getReportOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the GetReportOptions model with no property values
-				getReportOptionsModelNew := new(resultsreportsapiv3.GetReportOptions)
+				getReportOptionsModelNew := new(resultsv3.GetReportOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReport(getReportOptionsModelNew)
+				result, response, operationErr = resultsService.GetReport(getReportOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -1498,22 +1410,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReport successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportOptions model
-				getReportOptionsModel := new(resultsreportsapiv3.GetReportOptions)
-				getReportOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportOptionsModel := new(resultsv3.GetReportOptions)
 				getReportOptionsModel.ReportID = core.StringPtr("testString")
 				getReportOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReport(getReportOptionsModel)
+				result, response, operationErr := resultsService.GetReport(getReportOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -1526,7 +1437,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportSummary(getReportSummaryOptions *GetReportSummaryOptions) - Operation response error`, func() {
-		getReportSummaryPath := "/instances/testString/v3/reports/testString/summary"
+		getReportSummaryPath := "/reports/testString/summary"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1543,28 +1454,27 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportSummary with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportSummaryOptions model
-				getReportSummaryOptionsModel := new(resultsreportsapiv3.GetReportSummaryOptions)
-				getReportSummaryOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportSummaryOptionsModel := new(resultsv3.GetReportSummaryOptions)
 				getReportSummaryOptionsModel.ReportID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetReportSummary(getReportSummaryOptionsModel)
+				result, response, operationErr := resultsService.GetReportSummary(getReportSummaryOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetReportSummary(getReportSummaryOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetReportSummary(getReportSummaryOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -1575,7 +1485,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportSummary(getReportSummaryOptions *GetReportSummaryOptions)`, func() {
-		getReportSummaryPath := "/instances/testString/v3/reports/testString/summary"
+		getReportSummaryPath := "/reports/testString/summary"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1593,21 +1503,20 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"report_id": "30b434b3-cb08-4845-af10-7a8fc682b6a8", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "score": {"passed": 1, "total_count": 4, "percent": 25}, "controls": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}, "evaluations": {"status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}, "resources": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10, "top_failed": [{"name": "my-bucket", "id": "531fc3e28bfc43c5a2cea07786d93f5c", "service": "cloud-object-storage", "tags": {"user": ["User"], "access": ["Access"], "service": ["Service"]}, "account": "59bcbfa6ea2f006b4ed7094c1a08dcdd", "status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}]}}`)
+					fmt.Fprintf(res, "%s", `{"report_id": "30b434b3-cb08-4845-af10-7a8fc682b6a8", "isntance_id": "84644a08-31b6-4988-b504-49a46ca69ccd", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "score": {"passed": 1, "total_count": 4, "percent": 25}, "controls": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}, "evaluations": {"status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}, "resources": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10, "top_failed": [{"name": "my-bucket", "id": "531fc3e28bfc43c5a2cea07786d93f5c", "service": "cloud-object-storage", "tags": {"user": ["User"], "access": ["Access"], "service": ["Service"]}, "account": "59bcbfa6ea2f006b4ed7094c1a08dcdd", "status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}]}}`)
 				}))
 			})
 			It(`Invoke GetReportSummary successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportSummaryOptions model
-				getReportSummaryOptionsModel := new(resultsreportsapiv3.GetReportSummaryOptions)
-				getReportSummaryOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportSummaryOptionsModel := new(resultsv3.GetReportSummaryOptions)
 				getReportSummaryOptionsModel.ReportID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
@@ -1615,13 +1524,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportSummaryWithContext(ctx, getReportSummaryOptionsModel)
+				_, _, operationErr := resultsService.GetReportSummaryWithContext(ctx, getReportSummaryOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetReportSummary(getReportSummaryOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReportSummary(getReportSummaryOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -1629,7 +1538,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportSummaryWithContext(ctx, getReportSummaryOptionsModel)
+				_, _, operationErr = resultsService.GetReportSummaryWithContext(ctx, getReportSummaryOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -1651,63 +1560,61 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"report_id": "30b434b3-cb08-4845-af10-7a8fc682b6a8", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "score": {"passed": 1, "total_count": 4, "percent": 25}, "controls": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}, "evaluations": {"status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}, "resources": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10, "top_failed": [{"name": "my-bucket", "id": "531fc3e28bfc43c5a2cea07786d93f5c", "service": "cloud-object-storage", "tags": {"user": ["User"], "access": ["Access"], "service": ["Service"]}, "account": "59bcbfa6ea2f006b4ed7094c1a08dcdd", "status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}]}}`)
+					fmt.Fprintf(res, "%s", `{"report_id": "30b434b3-cb08-4845-af10-7a8fc682b6a8", "isntance_id": "84644a08-31b6-4988-b504-49a46ca69ccd", "account": {"id": "531fc3e28bfc43c5a2cea07786d93f5c", "name": "NIST", "type": "account_type"}, "score": {"passed": 1, "total_count": 4, "percent": 25}, "controls": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}, "evaluations": {"status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}, "resources": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10, "top_failed": [{"name": "my-bucket", "id": "531fc3e28bfc43c5a2cea07786d93f5c", "service": "cloud-object-storage", "tags": {"user": ["User"], "access": ["Access"], "service": ["Service"]}, "account": "59bcbfa6ea2f006b4ed7094c1a08dcdd", "status": "compliant", "total_count": 140, "pass_count": 123, "failure_count": 12, "error_count": 5, "completed_count": 135}]}}`)
 				}))
 			})
 			It(`Invoke GetReportSummary successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReportSummary(nil)
+				result, response, operationErr := resultsService.GetReportSummary(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportSummaryOptions model
-				getReportSummaryOptionsModel := new(resultsreportsapiv3.GetReportSummaryOptions)
-				getReportSummaryOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportSummaryOptionsModel := new(resultsv3.GetReportSummaryOptions)
 				getReportSummaryOptionsModel.ReportID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetReportSummary(getReportSummaryOptionsModel)
+				result, response, operationErr = resultsService.GetReportSummary(getReportSummaryOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
 			It(`Invoke GetReportSummary with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportSummaryOptions model
-				getReportSummaryOptionsModel := new(resultsreportsapiv3.GetReportSummaryOptions)
-				getReportSummaryOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportSummaryOptionsModel := new(resultsv3.GetReportSummaryOptions)
 				getReportSummaryOptionsModel.ReportID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReportSummary(getReportSummaryOptionsModel)
+				result, response, operationErr := resultsService.GetReportSummary(getReportSummaryOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the GetReportSummaryOptions model with no property values
-				getReportSummaryOptionsModelNew := new(resultsreportsapiv3.GetReportSummaryOptions)
+				getReportSummaryOptionsModelNew := new(resultsv3.GetReportSummaryOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReportSummary(getReportSummaryOptionsModelNew)
+				result, response, operationErr = resultsService.GetReportSummary(getReportSummaryOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -1726,22 +1633,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportSummary successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportSummaryOptions model
-				getReportSummaryOptionsModel := new(resultsreportsapiv3.GetReportSummaryOptions)
-				getReportSummaryOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportSummaryOptionsModel := new(resultsv3.GetReportSummaryOptions)
 				getReportSummaryOptionsModel.ReportID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportSummaryOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReportSummary(getReportSummaryOptionsModel)
+				result, response, operationErr := resultsService.GetReportSummary(getReportSummaryOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -1754,7 +1660,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportEvaluation(getReportEvaluationOptions *GetReportEvaluationOptions)`, func() {
-		getReportEvaluationPath := "/instances/testString/v3/reports/testString/download"
+		getReportEvaluationPath := "/reports/testString/download"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1766,6 +1672,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
+					// TODO: Add check for exclude_summary query parameter
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
 
@@ -1776,31 +1683,31 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportEvaluation successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportEvaluationOptions model
-				getReportEvaluationOptionsModel := new(resultsreportsapiv3.GetReportEvaluationOptions)
-				getReportEvaluationOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportEvaluationOptionsModel := new(resultsv3.GetReportEvaluationOptions)
 				getReportEvaluationOptionsModel.ReportID = core.StringPtr("testString")
 				getReportEvaluationOptionsModel.XCorrelationID = core.StringPtr("testString")
+				getReportEvaluationOptionsModel.ExcludeSummary = core.BoolPtr(true)
 				getReportEvaluationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportEvaluationWithContext(ctx, getReportEvaluationOptionsModel)
+				_, _, operationErr := resultsService.GetReportEvaluationWithContext(ctx, getReportEvaluationOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetReportEvaluation(getReportEvaluationOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReportEvaluation(getReportEvaluationOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -1808,7 +1715,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportEvaluationWithContext(ctx, getReportEvaluationOptionsModel)
+				_, _, operationErr = resultsService.GetReportEvaluationWithContext(ctx, getReportEvaluationOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -1827,6 +1734,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 
 					Expect(req.Header["X-Correlation-Id"]).ToNot(BeNil())
 					Expect(req.Header["X-Correlation-Id"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
+					// TODO: Add check for exclude_summary query parameter
 					// Set mock response
 					res.Header().Set("Content-type", "application/csv")
 					res.WriteHeader(200)
@@ -1834,59 +1742,59 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportEvaluation successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReportEvaluation(nil)
+				result, response, operationErr := resultsService.GetReportEvaluation(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportEvaluationOptions model
-				getReportEvaluationOptionsModel := new(resultsreportsapiv3.GetReportEvaluationOptions)
-				getReportEvaluationOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportEvaluationOptionsModel := new(resultsv3.GetReportEvaluationOptions)
 				getReportEvaluationOptionsModel.ReportID = core.StringPtr("testString")
 				getReportEvaluationOptionsModel.XCorrelationID = core.StringPtr("testString")
+				getReportEvaluationOptionsModel.ExcludeSummary = core.BoolPtr(true)
 				getReportEvaluationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetReportEvaluation(getReportEvaluationOptionsModel)
+				result, response, operationErr = resultsService.GetReportEvaluation(getReportEvaluationOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
 			It(`Invoke GetReportEvaluation with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportEvaluationOptions model
-				getReportEvaluationOptionsModel := new(resultsreportsapiv3.GetReportEvaluationOptions)
-				getReportEvaluationOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportEvaluationOptionsModel := new(resultsv3.GetReportEvaluationOptions)
 				getReportEvaluationOptionsModel.ReportID = core.StringPtr("testString")
 				getReportEvaluationOptionsModel.XCorrelationID = core.StringPtr("testString")
+				getReportEvaluationOptionsModel.ExcludeSummary = core.BoolPtr(true)
 				getReportEvaluationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReportEvaluation(getReportEvaluationOptionsModel)
+				result, response, operationErr := resultsService.GetReportEvaluation(getReportEvaluationOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the GetReportEvaluationOptions model with no property values
-				getReportEvaluationOptionsModelNew := new(resultsreportsapiv3.GetReportEvaluationOptions)
+				getReportEvaluationOptionsModelNew := new(resultsv3.GetReportEvaluationOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReportEvaluation(getReportEvaluationOptionsModelNew)
+				result, response, operationErr = resultsService.GetReportEvaluation(getReportEvaluationOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -1905,22 +1813,22 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportEvaluation successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportEvaluationOptions model
-				getReportEvaluationOptionsModel := new(resultsreportsapiv3.GetReportEvaluationOptions)
-				getReportEvaluationOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportEvaluationOptionsModel := new(resultsv3.GetReportEvaluationOptions)
 				getReportEvaluationOptionsModel.ReportID = core.StringPtr("testString")
 				getReportEvaluationOptionsModel.XCorrelationID = core.StringPtr("testString")
+				getReportEvaluationOptionsModel.ExcludeSummary = core.BoolPtr(true)
 				getReportEvaluationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReportEvaluation(getReportEvaluationOptionsModel)
+				result, response, operationErr := resultsService.GetReportEvaluation(getReportEvaluationOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -1937,7 +1845,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportControls(getReportControlsOptions *GetReportControlsOptions) - Operation response error`, func() {
-		getReportControlsPath := "/instances/testString/v3/reports/testString/controls"
+		getReportControlsPath := "/reports/testString/controls"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1960,16 +1868,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportControls with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportControlsOptions model
-				getReportControlsOptionsModel := new(resultsreportsapiv3.GetReportControlsOptions)
-				getReportControlsOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportControlsOptionsModel := new(resultsv3.GetReportControlsOptions)
 				getReportControlsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlName = core.StringPtr("testString")
@@ -1980,14 +1887,14 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				getReportControlsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportControlsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetReportControls(getReportControlsOptionsModel)
+				result, response, operationErr := resultsService.GetReportControls(getReportControlsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetReportControls(getReportControlsOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetReportControls(getReportControlsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -1998,7 +1905,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportControls(getReportControlsOptions *GetReportControlsOptions)`, func() {
-		getReportControlsPath := "/instances/testString/v3/reports/testString/controls"
+		getReportControlsPath := "/reports/testString/controls"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -2026,17 +1933,16 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportControls successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportControlsOptions model
-				getReportControlsOptionsModel := new(resultsreportsapiv3.GetReportControlsOptions)
-				getReportControlsOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportControlsOptionsModel := new(resultsv3.GetReportControlsOptions)
 				getReportControlsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlName = core.StringPtr("testString")
@@ -2050,13 +1956,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportControlsWithContext(ctx, getReportControlsOptionsModel)
+				_, _, operationErr := resultsService.GetReportControlsWithContext(ctx, getReportControlsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetReportControls(getReportControlsOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReportControls(getReportControlsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -2064,7 +1970,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportControlsWithContext(ctx, getReportControlsOptionsModel)
+				_, _, operationErr = resultsService.GetReportControlsWithContext(ctx, getReportControlsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -2096,22 +2002,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportControls successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReportControls(nil)
+				result, response, operationErr := resultsService.GetReportControls(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportControlsOptions model
-				getReportControlsOptionsModel := new(resultsreportsapiv3.GetReportControlsOptions)
-				getReportControlsOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportControlsOptionsModel := new(resultsv3.GetReportControlsOptions)
 				getReportControlsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlName = core.StringPtr("testString")
@@ -2123,23 +2028,22 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				getReportControlsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetReportControls(getReportControlsOptionsModel)
+				result, response, operationErr = resultsService.GetReportControls(getReportControlsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
 			It(`Invoke GetReportControls with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportControlsOptions model
-				getReportControlsOptionsModel := new(resultsreportsapiv3.GetReportControlsOptions)
-				getReportControlsOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportControlsOptionsModel := new(resultsv3.GetReportControlsOptions)
 				getReportControlsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlName = core.StringPtr("testString")
@@ -2150,17 +2054,17 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				getReportControlsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportControlsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReportControls(getReportControlsOptionsModel)
+				result, response, operationErr := resultsService.GetReportControls(getReportControlsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the GetReportControlsOptions model with no property values
-				getReportControlsOptionsModelNew := new(resultsreportsapiv3.GetReportControlsOptions)
+				getReportControlsOptionsModelNew := new(resultsv3.GetReportControlsOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReportControls(getReportControlsOptionsModelNew)
+				result, response, operationErr = resultsService.GetReportControls(getReportControlsOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -2179,16 +2083,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportControls successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportControlsOptions model
-				getReportControlsOptionsModel := new(resultsreportsapiv3.GetReportControlsOptions)
-				getReportControlsOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportControlsOptionsModel := new(resultsv3.GetReportControlsOptions)
 				getReportControlsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlID = core.StringPtr("testString")
 				getReportControlsOptionsModel.ControlName = core.StringPtr("testString")
@@ -2200,7 +2103,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				getReportControlsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReportControls(getReportControlsOptionsModel)
+				result, response, operationErr := resultsService.GetReportControls(getReportControlsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -2213,7 +2116,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportRule(getReportRuleOptions *GetReportRuleOptions) - Operation response error`, func() {
-		getReportRulePath := "/instances/testString/v3/reports/testString/rules/testString"
+		getReportRulePath := "/reports/testString/rules/testString"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -2230,29 +2133,28 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportRule with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportRuleOptions model
-				getReportRuleOptionsModel := new(resultsreportsapiv3.GetReportRuleOptions)
-				getReportRuleOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportRuleOptionsModel := new(resultsv3.GetReportRuleOptions)
 				getReportRuleOptionsModel.ReportID = core.StringPtr("testString")
 				getReportRuleOptionsModel.RuleID = core.StringPtr("testString")
 				getReportRuleOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportRuleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetReportRule(getReportRuleOptionsModel)
+				result, response, operationErr := resultsService.GetReportRule(getReportRuleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetReportRule(getReportRuleOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetReportRule(getReportRuleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -2263,7 +2165,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportRule(getReportRuleOptions *GetReportRuleOptions)`, func() {
-		getReportRulePath := "/instances/testString/v3/reports/testString/rules/testString"
+		getReportRulePath := "/reports/testString/rules/testString"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -2281,21 +2183,20 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"id": "rule-7b0560a4-df94-4629-bb76-680f3155ddda", "type": "user_defined/system_defined"", "description": "rule", "version": "1.2.3", "account_id": "59bcbfa6ea2f006b4ed7094c1a08dcdd", "creation_date": "2022-08-15T12:30:01.001Z", "created_by": "IBMid-12345", "modification_date": "2022-08-15T12:30:01.001Z", "modified_by": "IBMid-12345", "labels": ["Labels"]}`)
+					fmt.Fprintf(res, "%s", `{"id": "rule-7b0560a4-df94-4629-bb76-680f3155ddda", "type": "user_defined/system_defined", "description": "rule", "version": "1.2.3", "account_id": "59bcbfa6ea2f006b4ed7094c1a08dcdd", "created_at": "2022-08-15T12:30:01Z", "created_by": "IBMid-12345", "updated_at": "2022-08-15T12:30:01Z", "updated_by": "IBMid-12345", "labels": ["Labels"]}`)
 				}))
 			})
 			It(`Invoke GetReportRule successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportRuleOptions model
-				getReportRuleOptionsModel := new(resultsreportsapiv3.GetReportRuleOptions)
-				getReportRuleOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportRuleOptionsModel := new(resultsv3.GetReportRuleOptions)
 				getReportRuleOptionsModel.ReportID = core.StringPtr("testString")
 				getReportRuleOptionsModel.RuleID = core.StringPtr("testString")
 				getReportRuleOptionsModel.XCorrelationID = core.StringPtr("testString")
@@ -2304,14 +2205,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportRuleWithContext(ctx, getReportRuleOptionsModel)
+				_, _, operationErr := resultsService.GetReportRuleWithContext(ctx, getReportRuleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReportRule(getReportRuleOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
 
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportRuleWithContext(ctx, getReportRuleOptionsModel)
+				_, _, operationErr = resultsService.GetReportRuleWithContext(ctx, getReportRuleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -2333,59 +2241,63 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"id": "rule-7b0560a4-df94-4629-bb76-680f3155ddda", "type": "user_defined/system_defined"", "description": "rule", "version": "1.2.3", "account_id": "59bcbfa6ea2f006b4ed7094c1a08dcdd", "creation_date": "2022-08-15T12:30:01.001Z", "created_by": "IBMid-12345", "modification_date": "2022-08-15T12:30:01.001Z", "modified_by": "IBMid-12345", "labels": ["Labels"]}`)
+					fmt.Fprintf(res, "%s", `{"id": "rule-7b0560a4-df94-4629-bb76-680f3155ddda", "type": "user_defined/system_defined", "description": "rule", "version": "1.2.3", "account_id": "59bcbfa6ea2f006b4ed7094c1a08dcdd", "created_at": "2022-08-15T12:30:01Z", "created_by": "IBMid-12345", "updated_at": "2022-08-15T12:30:01Z", "updated_by": "IBMid-12345", "labels": ["Labels"]}`)
 				}))
 			})
 			It(`Invoke GetReportRule successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReportRule(nil)
+				result, response, operationErr := resultsService.GetReportRule(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportRuleOptions model
-				getReportRuleOptionsModel := new(resultsreportsapiv3.GetReportRuleOptions)
-				getReportRuleOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportRuleOptionsModel := new(resultsv3.GetReportRuleOptions)
 				getReportRuleOptionsModel.ReportID = core.StringPtr("testString")
 				getReportRuleOptionsModel.RuleID = core.StringPtr("testString")
 				getReportRuleOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportRuleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = resultsService.GetReportRule(getReportRuleOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
 			})
 			It(`Invoke GetReportRule with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportRuleOptions model
-				getReportRuleOptionsModel := new(resultsreportsapiv3.GetReportRuleOptions)
-				getReportRuleOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportRuleOptionsModel := new(resultsv3.GetReportRuleOptions)
 				getReportRuleOptionsModel.ReportID = core.StringPtr("testString")
 				getReportRuleOptionsModel.RuleID = core.StringPtr("testString")
 				getReportRuleOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportRuleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReportRule(getReportRuleOptionsModel)
+				result, response, operationErr := resultsService.GetReportRule(getReportRuleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the GetReportRuleOptions model with no property values
-				getReportRuleOptionsModelNew := new(resultsreportsapiv3.GetReportRuleOptions)
+				getReportRuleOptionsModelNew := new(resultsv3.GetReportRuleOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReportRule(getReportRuleOptionsModelNew)
+				result, response, operationErr = resultsService.GetReportRule(getReportRuleOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -2404,23 +2316,22 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportRule successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportRuleOptions model
-				getReportRuleOptionsModel := new(resultsreportsapiv3.GetReportRuleOptions)
-				getReportRuleOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportRuleOptionsModel := new(resultsv3.GetReportRuleOptions)
 				getReportRuleOptionsModel.ReportID = core.StringPtr("testString")
 				getReportRuleOptionsModel.RuleID = core.StringPtr("testString")
 				getReportRuleOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportRuleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReportRule(getReportRuleOptionsModel)
+				result, response, operationErr := resultsService.GetReportRule(getReportRuleOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -2433,7 +2344,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`ListReportEvaluations(listReportEvaluationsOptions *ListReportEvaluationsOptions) - Operation response error`, func() {
-		listReportEvaluationsPath := "/instances/testString/v3/reports/testString/evaluations"
+		listReportEvaluationsPath := "/reports/testString/evaluations"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -2457,16 +2368,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReportEvaluations with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportEvaluationsOptions model
-				listReportEvaluationsOptionsModel := new(resultsreportsapiv3.ListReportEvaluationsOptions)
-				listReportEvaluationsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportEvaluationsOptionsModel := new(resultsv3.ListReportEvaluationsOptions)
 				listReportEvaluationsOptionsModel.ReportID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.AssessmentID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.ComponentID = core.StringPtr("testString")
@@ -2478,14 +2388,14 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportEvaluationsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.ListReportEvaluations(listReportEvaluationsOptionsModel)
+				result, response, operationErr := resultsService.ListReportEvaluations(listReportEvaluationsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.ListReportEvaluations(listReportEvaluationsOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.ListReportEvaluations(listReportEvaluationsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -2496,7 +2406,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`ListReportEvaluations(listReportEvaluationsOptions *ListReportEvaluationsOptions)`, func() {
-		listReportEvaluationsPath := "/instances/testString/v3/reports/testString/evaluations"
+		listReportEvaluationsPath := "/reports/testString/evaluations"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -2525,17 +2435,16 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReportEvaluations successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the ListReportEvaluationsOptions model
-				listReportEvaluationsOptionsModel := new(resultsreportsapiv3.ListReportEvaluationsOptions)
-				listReportEvaluationsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportEvaluationsOptionsModel := new(resultsv3.ListReportEvaluationsOptions)
 				listReportEvaluationsOptionsModel.ReportID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.AssessmentID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.ComponentID = core.StringPtr("testString")
@@ -2550,13 +2459,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.ListReportEvaluationsWithContext(ctx, listReportEvaluationsOptionsModel)
+				_, _, operationErr := resultsService.ListReportEvaluationsWithContext(ctx, listReportEvaluationsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.ListReportEvaluations(listReportEvaluationsOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.ListReportEvaluations(listReportEvaluationsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -2564,7 +2473,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.ListReportEvaluationsWithContext(ctx, listReportEvaluationsOptionsModel)
+				_, _, operationErr = resultsService.ListReportEvaluationsWithContext(ctx, listReportEvaluationsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -2597,22 +2506,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReportEvaluations successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.ListReportEvaluations(nil)
+				result, response, operationErr := resultsService.ListReportEvaluations(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the ListReportEvaluationsOptions model
-				listReportEvaluationsOptionsModel := new(resultsreportsapiv3.ListReportEvaluationsOptions)
-				listReportEvaluationsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportEvaluationsOptionsModel := new(resultsv3.ListReportEvaluationsOptions)
 				listReportEvaluationsOptionsModel.ReportID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.AssessmentID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.ComponentID = core.StringPtr("testString")
@@ -2625,23 +2533,22 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportEvaluationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.ListReportEvaluations(listReportEvaluationsOptionsModel)
+				result, response, operationErr = resultsService.ListReportEvaluations(listReportEvaluationsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
 			It(`Invoke ListReportEvaluations with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportEvaluationsOptions model
-				listReportEvaluationsOptionsModel := new(resultsreportsapiv3.ListReportEvaluationsOptions)
-				listReportEvaluationsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportEvaluationsOptionsModel := new(resultsv3.ListReportEvaluationsOptions)
 				listReportEvaluationsOptionsModel.ReportID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.AssessmentID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.ComponentID = core.StringPtr("testString")
@@ -2653,17 +2560,17 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportEvaluationsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.ListReportEvaluations(listReportEvaluationsOptionsModel)
+				result, response, operationErr := resultsService.ListReportEvaluations(listReportEvaluationsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the ListReportEvaluationsOptions model with no property values
-				listReportEvaluationsOptionsModelNew := new(resultsreportsapiv3.ListReportEvaluationsOptions)
+				listReportEvaluationsOptionsModelNew := new(resultsv3.ListReportEvaluationsOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.ListReportEvaluations(listReportEvaluationsOptionsModelNew)
+				result, response, operationErr = resultsService.ListReportEvaluations(listReportEvaluationsOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -2682,16 +2589,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReportEvaluations successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportEvaluationsOptions model
-				listReportEvaluationsOptionsModel := new(resultsreportsapiv3.ListReportEvaluationsOptions)
-				listReportEvaluationsOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportEvaluationsOptionsModel := new(resultsv3.ListReportEvaluationsOptions)
 				listReportEvaluationsOptionsModel.ReportID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.AssessmentID = core.StringPtr("testString")
 				listReportEvaluationsOptionsModel.ComponentID = core.StringPtr("testString")
@@ -2704,7 +2610,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportEvaluationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.ListReportEvaluations(listReportEvaluationsOptionsModel)
+				result, response, operationErr := resultsService.ListReportEvaluations(listReportEvaluationsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -2717,8 +2623,8 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 		Context(`Test pagination helper method on response`, func() {
 			It(`Invoke GetNextStart successfully`, func() {
-				responseObject := new(resultsreportsapiv3.EvaluationPage)
-				nextObject := new(resultsreportsapiv3.PageHRef)
+				responseObject := new(resultsv3.EvaluationPage)
+				nextObject := new(resultsv3.PageHRef)
 				nextObject.Href = core.StringPtr("ibm.com?start=abc-123")
 				responseObject.Next = nextObject
 
@@ -2727,15 +2633,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				Expect(value).To(Equal(core.StringPtr("abc-123")))
 			})
 			It(`Invoke GetNextStart without a "Next" property in the response`, func() {
-				responseObject := new(resultsreportsapiv3.EvaluationPage)
+				responseObject := new(resultsv3.EvaluationPage)
 
 				value, err := responseObject.GetNextStart()
 				Expect(err).To(BeNil())
 				Expect(value).To(BeNil())
 			})
 			It(`Invoke GetNextStart without any query params in the "Next" URL`, func() {
-				responseObject := new(resultsreportsapiv3.EvaluationPage)
-				nextObject := new(resultsreportsapiv3.PageHRef)
+				responseObject := new(resultsv3.EvaluationPage)
+				nextObject := new(resultsv3.PageHRef)
 				nextObject.Href = core.StringPtr("ibm.com")
 				responseObject.Next = nextObject
 
@@ -2768,15 +2674,14 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Use ReportEvaluationsPager.GetNext successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
-				listReportEvaluationsOptionsModel := &resultsreportsapiv3.ListReportEvaluationsOptions{
-					InstanceID:     core.StringPtr("testString"),
+				listReportEvaluationsOptionsModel := &resultsv3.ListReportEvaluationsOptions{
 					ReportID:       core.StringPtr("testString"),
 					AssessmentID:   core.StringPtr("testString"),
 					ComponentID:    core.StringPtr("testString"),
@@ -2787,11 +2692,11 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					XCorrelationID: core.StringPtr("testString"),
 				}
 
-				pager, err := resultsReportsApiService.NewReportEvaluationsPager(listReportEvaluationsOptionsModel)
+				pager, err := resultsService.NewReportEvaluationsPager(listReportEvaluationsOptionsModel)
 				Expect(err).To(BeNil())
 				Expect(pager).ToNot(BeNil())
 
-				var allResults []resultsreportsapiv3.Evaluation
+				var allResults []resultsv3.Evaluation
 				for pager.HasNext() {
 					nextPage, err := pager.GetNext()
 					Expect(err).To(BeNil())
@@ -2801,15 +2706,14 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				Expect(len(allResults)).To(Equal(2))
 			})
 			It(`Use ReportEvaluationsPager.GetAll successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
-				listReportEvaluationsOptionsModel := &resultsreportsapiv3.ListReportEvaluationsOptions{
-					InstanceID:     core.StringPtr("testString"),
+				listReportEvaluationsOptionsModel := &resultsv3.ListReportEvaluationsOptions{
 					ReportID:       core.StringPtr("testString"),
 					AssessmentID:   core.StringPtr("testString"),
 					ComponentID:    core.StringPtr("testString"),
@@ -2820,7 +2724,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					XCorrelationID: core.StringPtr("testString"),
 				}
 
-				pager, err := resultsReportsApiService.NewReportEvaluationsPager(listReportEvaluationsOptionsModel)
+				pager, err := resultsService.NewReportEvaluationsPager(listReportEvaluationsOptionsModel)
 				Expect(err).To(BeNil())
 				Expect(pager).ToNot(BeNil())
 
@@ -2832,7 +2736,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`ListReportResources(listReportResourcesOptions *ListReportResourcesOptions) - Operation response error`, func() {
-		listReportResourcesPath := "/instances/testString/v3/reports/testString/resources"
+		listReportResourcesPath := "/reports/testString/resources"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -2856,16 +2760,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReportResources with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportResourcesOptions model
-				listReportResourcesOptionsModel := new(resultsreportsapiv3.ListReportResourcesOptions)
-				listReportResourcesOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportResourcesOptionsModel := new(resultsv3.ListReportResourcesOptions)
 				listReportResourcesOptionsModel.ReportID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ResourceName = core.StringPtr("testString")
@@ -2877,14 +2780,14 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportResourcesOptionsModel.XCorrelationID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.ListReportResources(listReportResourcesOptionsModel)
+				result, response, operationErr := resultsService.ListReportResources(listReportResourcesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.ListReportResources(listReportResourcesOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.ListReportResources(listReportResourcesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -2895,7 +2798,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`ListReportResources(listReportResourcesOptions *ListReportResourcesOptions)`, func() {
-		listReportResourcesPath := "/instances/testString/v3/reports/testString/resources"
+		listReportResourcesPath := "/reports/testString/resources"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -2924,17 +2827,16 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReportResources successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the ListReportResourcesOptions model
-				listReportResourcesOptionsModel := new(resultsreportsapiv3.ListReportResourcesOptions)
-				listReportResourcesOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportResourcesOptionsModel := new(resultsv3.ListReportResourcesOptions)
 				listReportResourcesOptionsModel.ReportID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ResourceName = core.StringPtr("testString")
@@ -2949,13 +2851,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.ListReportResourcesWithContext(ctx, listReportResourcesOptionsModel)
+				_, _, operationErr := resultsService.ListReportResourcesWithContext(ctx, listReportResourcesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.ListReportResources(listReportResourcesOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.ListReportResources(listReportResourcesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -2963,7 +2865,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.ListReportResourcesWithContext(ctx, listReportResourcesOptionsModel)
+				_, _, operationErr = resultsService.ListReportResourcesWithContext(ctx, listReportResourcesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -2996,22 +2898,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReportResources successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.ListReportResources(nil)
+				result, response, operationErr := resultsService.ListReportResources(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the ListReportResourcesOptions model
-				listReportResourcesOptionsModel := new(resultsreportsapiv3.ListReportResourcesOptions)
-				listReportResourcesOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportResourcesOptionsModel := new(resultsv3.ListReportResourcesOptions)
 				listReportResourcesOptionsModel.ReportID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ResourceName = core.StringPtr("testString")
@@ -3024,23 +2925,22 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportResourcesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.ListReportResources(listReportResourcesOptionsModel)
+				result, response, operationErr = resultsService.ListReportResources(listReportResourcesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
 			It(`Invoke ListReportResources with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportResourcesOptions model
-				listReportResourcesOptionsModel := new(resultsreportsapiv3.ListReportResourcesOptions)
-				listReportResourcesOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportResourcesOptionsModel := new(resultsv3.ListReportResourcesOptions)
 				listReportResourcesOptionsModel.ReportID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ResourceName = core.StringPtr("testString")
@@ -3052,17 +2952,17 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportResourcesOptionsModel.XCorrelationID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.ListReportResources(listReportResourcesOptionsModel)
+				result, response, operationErr := resultsService.ListReportResources(listReportResourcesOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the ListReportResourcesOptions model with no property values
-				listReportResourcesOptionsModelNew := new(resultsreportsapiv3.ListReportResourcesOptions)
+				listReportResourcesOptionsModelNew := new(resultsv3.ListReportResourcesOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.ListReportResources(listReportResourcesOptionsModelNew)
+				result, response, operationErr = resultsService.ListReportResources(listReportResourcesOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -3081,16 +2981,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke ListReportResources successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the ListReportResourcesOptions model
-				listReportResourcesOptionsModel := new(resultsreportsapiv3.ListReportResourcesOptions)
-				listReportResourcesOptionsModel.InstanceID = core.StringPtr("testString")
+				listReportResourcesOptionsModel := new(resultsv3.ListReportResourcesOptions)
 				listReportResourcesOptionsModel.ReportID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ID = core.StringPtr("testString")
 				listReportResourcesOptionsModel.ResourceName = core.StringPtr("testString")
@@ -3103,7 +3002,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportResourcesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.ListReportResources(listReportResourcesOptionsModel)
+				result, response, operationErr := resultsService.ListReportResources(listReportResourcesOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -3116,8 +3015,8 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 		Context(`Test pagination helper method on response`, func() {
 			It(`Invoke GetNextStart successfully`, func() {
-				responseObject := new(resultsreportsapiv3.ResourcePage)
-				nextObject := new(resultsreportsapiv3.PageHRef)
+				responseObject := new(resultsv3.ResourcePage)
+				nextObject := new(resultsv3.PageHRef)
 				nextObject.Href = core.StringPtr("ibm.com?start=abc-123")
 				responseObject.Next = nextObject
 
@@ -3126,15 +3025,15 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				Expect(value).To(Equal(core.StringPtr("abc-123")))
 			})
 			It(`Invoke GetNextStart without a "Next" property in the response`, func() {
-				responseObject := new(resultsreportsapiv3.ResourcePage)
+				responseObject := new(resultsv3.ResourcePage)
 
 				value, err := responseObject.GetNextStart()
 				Expect(err).To(BeNil())
 				Expect(value).To(BeNil())
 			})
 			It(`Invoke GetNextStart without any query params in the "Next" URL`, func() {
-				responseObject := new(resultsreportsapiv3.ResourcePage)
-				nextObject := new(resultsreportsapiv3.PageHRef)
+				responseObject := new(resultsv3.ResourcePage)
+				nextObject := new(resultsv3.PageHRef)
 				nextObject.Href = core.StringPtr("ibm.com")
 				responseObject.Next = nextObject
 
@@ -3167,15 +3066,14 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Use ReportResourcesPager.GetNext successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
-				listReportResourcesOptionsModel := &resultsreportsapiv3.ListReportResourcesOptions{
-					InstanceID:     core.StringPtr("testString"),
+				listReportResourcesOptionsModel := &resultsv3.ListReportResourcesOptions{
 					ReportID:       core.StringPtr("testString"),
 					ID:             core.StringPtr("testString"),
 					ResourceName:   core.StringPtr("testString"),
@@ -3186,11 +3084,11 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					XCorrelationID: core.StringPtr("testString"),
 				}
 
-				pager, err := resultsReportsApiService.NewReportResourcesPager(listReportResourcesOptionsModel)
+				pager, err := resultsService.NewReportResourcesPager(listReportResourcesOptionsModel)
 				Expect(err).To(BeNil())
 				Expect(pager).ToNot(BeNil())
 
-				var allResults []resultsreportsapiv3.Resource
+				var allResults []resultsv3.Resource
 				for pager.HasNext() {
 					nextPage, err := pager.GetNext()
 					Expect(err).To(BeNil())
@@ -3200,15 +3098,14 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				Expect(len(allResults)).To(Equal(2))
 			})
 			It(`Use ReportResourcesPager.GetAll successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
-				listReportResourcesOptionsModel := &resultsreportsapiv3.ListReportResourcesOptions{
-					InstanceID:     core.StringPtr("testString"),
+				listReportResourcesOptionsModel := &resultsv3.ListReportResourcesOptions{
 					ReportID:       core.StringPtr("testString"),
 					ID:             core.StringPtr("testString"),
 					ResourceName:   core.StringPtr("testString"),
@@ -3219,7 +3116,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					XCorrelationID: core.StringPtr("testString"),
 				}
 
-				pager, err := resultsReportsApiService.NewReportResourcesPager(listReportResourcesOptionsModel)
+				pager, err := resultsService.NewReportResourcesPager(listReportResourcesOptionsModel)
 				Expect(err).To(BeNil())
 				Expect(pager).ToNot(BeNil())
 
@@ -3231,7 +3128,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportTags(getReportTagsOptions *GetReportTagsOptions) - Operation response error`, func() {
-		getReportTagsPath := "/v3/reports/testString/tags"
+		getReportTagsPath := "/reports/testString/tags"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -3248,27 +3145,27 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportTags with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportTagsOptions model
-				getReportTagsOptionsModel := new(resultsreportsapiv3.GetReportTagsOptions)
+				getReportTagsOptionsModel := new(resultsv3.GetReportTagsOptions)
 				getReportTagsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportTagsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportTagsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetReportTags(getReportTagsOptionsModel)
+				result, response, operationErr := resultsService.GetReportTags(getReportTagsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetReportTags(getReportTagsOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetReportTags(getReportTagsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -3279,7 +3176,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportTags(getReportTagsOptions *GetReportTagsOptions)`, func() {
-		getReportTagsPath := "/v3/reports/testString/tags"
+		getReportTagsPath := "/reports/testString/tags"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -3301,16 +3198,16 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportTags successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportTagsOptions model
-				getReportTagsOptionsModel := new(resultsreportsapiv3.GetReportTagsOptions)
+				getReportTagsOptionsModel := new(resultsv3.GetReportTagsOptions)
 				getReportTagsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportTagsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportTagsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
@@ -3318,13 +3215,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportTagsWithContext(ctx, getReportTagsOptionsModel)
+				_, _, operationErr := resultsService.GetReportTagsWithContext(ctx, getReportTagsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetReportTags(getReportTagsOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReportTags(getReportTagsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -3332,7 +3229,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportTagsWithContext(ctx, getReportTagsOptionsModel)
+				_, _, operationErr = resultsService.GetReportTagsWithContext(ctx, getReportTagsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -3358,57 +3255,57 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportTags successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReportTags(nil)
+				result, response, operationErr := resultsService.GetReportTags(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportTagsOptions model
-				getReportTagsOptionsModel := new(resultsreportsapiv3.GetReportTagsOptions)
+				getReportTagsOptionsModel := new(resultsv3.GetReportTagsOptions)
 				getReportTagsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportTagsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportTagsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetReportTags(getReportTagsOptionsModel)
+				result, response, operationErr = resultsService.GetReportTags(getReportTagsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
 			It(`Invoke GetReportTags with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportTagsOptions model
-				getReportTagsOptionsModel := new(resultsreportsapiv3.GetReportTagsOptions)
+				getReportTagsOptionsModel := new(resultsv3.GetReportTagsOptions)
 				getReportTagsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportTagsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportTagsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReportTags(getReportTagsOptionsModel)
+				result, response, operationErr := resultsService.GetReportTags(getReportTagsOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the GetReportTagsOptions model with no property values
-				getReportTagsOptionsModelNew := new(resultsreportsapiv3.GetReportTagsOptions)
+				getReportTagsOptionsModelNew := new(resultsv3.GetReportTagsOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReportTags(getReportTagsOptionsModelNew)
+				result, response, operationErr = resultsService.GetReportTags(getReportTagsOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -3427,21 +3324,21 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportTags successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportTagsOptions model
-				getReportTagsOptionsModel := new(resultsreportsapiv3.GetReportTagsOptions)
+				getReportTagsOptionsModel := new(resultsv3.GetReportTagsOptions)
 				getReportTagsOptionsModel.ReportID = core.StringPtr("testString")
 				getReportTagsOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportTagsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReportTags(getReportTagsOptionsModel)
+				result, response, operationErr := resultsService.GetReportTags(getReportTagsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -3454,7 +3351,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportViolationsDrift(getReportViolationsDriftOptions *GetReportViolationsDriftOptions) - Operation response error`, func() {
-		getReportViolationsDriftPath := "/instances/testString/v3/reports/testString/violations_drift"
+		getReportViolationsDriftPath := "/reports/testString/violations_drift"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -3472,29 +3369,28 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportViolationsDrift with error: Operation response processing error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportViolationsDriftOptions model
-				getReportViolationsDriftOptionsModel := new(resultsreportsapiv3.GetReportViolationsDriftOptions)
-				getReportViolationsDriftOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportViolationsDriftOptionsModel := new(resultsv3.GetReportViolationsDriftOptions)
 				getReportViolationsDriftOptionsModel.ReportID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.ScanTimeDuration = core.Int64Ptr(int64(0))
 				getReportViolationsDriftOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := resultsReportsApiService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
+				result, response, operationErr := resultsService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
-				resultsReportsApiService.EnableRetries(0, 0)
-				result, response, operationErr = resultsReportsApiService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
+				resultsService.EnableRetries(0, 0)
+				result, response, operationErr = resultsService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -3505,7 +3401,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 		})
 	})
 	Describe(`GetReportViolationsDrift(getReportViolationsDriftOptions *GetReportViolationsDriftOptions)`, func() {
-		getReportViolationsDriftPath := "/instances/testString/v3/reports/testString/violations_drift"
+		getReportViolationsDriftPath := "/reports/testString/violations_drift"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -3524,21 +3420,20 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"home_account_id": "HomeAccountID", "report_id": "ReportID", "data_points": [{"report_id": "30b434b3-cb08-4845-af10-7a8fc682b6a8", "report_group_id": "55b6-b3A4-432250b84669", "scan_time": "2022-08-15T12:30:01.001Z", "controls": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}}]}`)
+					fmt.Fprintf(res, "%s", `{"home_account_id": "HomeAccountID", "report_id": "ReportID", "data_points": [{"report_id": "30b434b3-cb08-4845-af10-7a8fc682b6a8", "report_group_id": "55b6-b3A4-432250b84669", "scan_time": "2022-08-15T12:30:01Z", "controls": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}}]}`)
 				}))
 			})
 			It(`Invoke GetReportViolationsDrift successfully with retries`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
-				resultsReportsApiService.EnableRetries(0, 0)
+				Expect(resultsService).ToNot(BeNil())
+				resultsService.EnableRetries(0, 0)
 
 				// Construct an instance of the GetReportViolationsDriftOptions model
-				getReportViolationsDriftOptionsModel := new(resultsreportsapiv3.GetReportViolationsDriftOptions)
-				getReportViolationsDriftOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportViolationsDriftOptionsModel := new(resultsv3.GetReportViolationsDriftOptions)
 				getReportViolationsDriftOptionsModel.ReportID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.ScanTimeDuration = core.Int64Ptr(int64(0))
 				getReportViolationsDriftOptionsModel.XCorrelationID = core.StringPtr("testString")
@@ -3547,13 +3442,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := resultsReportsApiService.GetReportViolationsDriftWithContext(ctx, getReportViolationsDriftOptionsModel)
+				_, _, operationErr := resultsService.GetReportViolationsDriftWithContext(ctx, getReportViolationsDriftOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
-				resultsReportsApiService.DisableRetries()
-				result, response, operationErr := resultsReportsApiService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
+				resultsService.DisableRetries()
+				result, response, operationErr := resultsService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -3561,7 +3456,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = resultsReportsApiService.GetReportViolationsDriftWithContext(ctx, getReportViolationsDriftOptionsModel)
+				_, _, operationErr = resultsService.GetReportViolationsDriftWithContext(ctx, getReportViolationsDriftOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -3584,65 +3479,63 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"home_account_id": "HomeAccountID", "report_id": "ReportID", "data_points": [{"report_id": "30b434b3-cb08-4845-af10-7a8fc682b6a8", "report_group_id": "55b6-b3A4-432250b84669", "scan_time": "2022-08-15T12:30:01.001Z", "controls": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}}]}`)
+					fmt.Fprintf(res, "%s", `{"home_account_id": "HomeAccountID", "report_id": "ReportID", "data_points": [{"report_id": "30b434b3-cb08-4845-af10-7a8fc682b6a8", "report_group_id": "55b6-b3A4-432250b84669", "scan_time": "2022-08-15T12:30:01Z", "controls": {"status": "compliant", "total_count": 150, "compliant_count": 130, "not_compliant_count": 5, "unable_to_perform_count": 5, "user_evaluation_required_count": 10}}]}`)
 				}))
 			})
 			It(`Invoke GetReportViolationsDrift successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := resultsReportsApiService.GetReportViolationsDrift(nil)
+				result, response, operationErr := resultsService.GetReportViolationsDrift(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
 				// Construct an instance of the GetReportViolationsDriftOptions model
-				getReportViolationsDriftOptionsModel := new(resultsreportsapiv3.GetReportViolationsDriftOptions)
-				getReportViolationsDriftOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportViolationsDriftOptionsModel := new(resultsv3.GetReportViolationsDriftOptions)
 				getReportViolationsDriftOptionsModel.ReportID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.ScanTimeDuration = core.Int64Ptr(int64(0))
 				getReportViolationsDriftOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = resultsReportsApiService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
+				result, response, operationErr = resultsService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
 			It(`Invoke GetReportViolationsDrift with error: Operation validation and request error`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportViolationsDriftOptions model
-				getReportViolationsDriftOptionsModel := new(resultsreportsapiv3.GetReportViolationsDriftOptions)
-				getReportViolationsDriftOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportViolationsDriftOptionsModel := new(resultsv3.GetReportViolationsDriftOptions)
 				getReportViolationsDriftOptionsModel.ReportID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.ScanTimeDuration = core.Int64Ptr(int64(0))
 				getReportViolationsDriftOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
-				err := resultsReportsApiService.SetServiceURL("")
+				err := resultsService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := resultsReportsApiService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
+				result, response, operationErr := resultsService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 				// Construct a second instance of the GetReportViolationsDriftOptions model with no property values
-				getReportViolationsDriftOptionsModelNew := new(resultsreportsapiv3.GetReportViolationsDriftOptions)
+				getReportViolationsDriftOptionsModelNew := new(resultsv3.GetReportViolationsDriftOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = resultsReportsApiService.GetReportViolationsDrift(getReportViolationsDriftOptionsModelNew)
+				result, response, operationErr = resultsService.GetReportViolationsDrift(getReportViolationsDriftOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -3661,23 +3554,22 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				}))
 			})
 			It(`Invoke GetReportViolationsDrift successfully`, func() {
-				resultsReportsApiService, serviceErr := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
+				resultsService, serviceErr := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
 				})
 				Expect(serviceErr).To(BeNil())
-				Expect(resultsReportsApiService).ToNot(BeNil())
+				Expect(resultsService).ToNot(BeNil())
 
 				// Construct an instance of the GetReportViolationsDriftOptions model
-				getReportViolationsDriftOptionsModel := new(resultsreportsapiv3.GetReportViolationsDriftOptions)
-				getReportViolationsDriftOptionsModel.InstanceID = core.StringPtr("testString")
+				getReportViolationsDriftOptionsModel := new(resultsv3.GetReportViolationsDriftOptions)
 				getReportViolationsDriftOptionsModel.ReportID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.ScanTimeDuration = core.Int64Ptr(int64(0))
 				getReportViolationsDriftOptionsModel.XCorrelationID = core.StringPtr("testString")
 				getReportViolationsDriftOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := resultsReportsApiService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
+				result, response, operationErr := resultsService.GetReportViolationsDrift(getReportViolationsDriftOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -3691,32 +3583,25 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 	})
 	Describe(`Model constructor tests`, func() {
 		Context(`Using a service client instance`, func() {
-			resultsReportsApiService, _ := resultsreportsapiv3.NewResultsReportsApiV3(&resultsreportsapiv3.ResultsReportsApiV3Options{
-				URL:           "http://resultsreportsapiv3modelgenerator.com",
+			resultsService, _ := resultsv3.NewResultsV3(&resultsv3.ResultsV3Options{
+				URL:           "http://resultsv3modelgenerator.com",
 				Authenticator: &core.NoAuthAuthenticator{},
 			})
 			It(`Invoke NewGetLatestReportsOptions successfully`, func() {
 				// Construct an instance of the GetLatestReportsOptions model
-				instanceID := "testString"
-				getLatestReportsOptionsModel := resultsReportsApiService.NewGetLatestReportsOptions(instanceID)
-				getLatestReportsOptionsModel.SetInstanceID("testString")
+				getLatestReportsOptionsModel := resultsService.NewGetLatestReportsOptions()
 				getLatestReportsOptionsModel.SetXCorrelationID("testString")
-				getLatestReportsOptionsModel.SetHomeAccountID("testString")
 				getLatestReportsOptionsModel.SetSort("testString")
 				getLatestReportsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getLatestReportsOptionsModel).ToNot(BeNil())
-				Expect(getLatestReportsOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getLatestReportsOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
-				Expect(getLatestReportsOptionsModel.HomeAccountID).To(Equal(core.StringPtr("testString")))
 				Expect(getLatestReportsOptionsModel.Sort).To(Equal(core.StringPtr("testString")))
 				Expect(getLatestReportsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetReportControlsOptions successfully`, func() {
 				// Construct an instance of the GetReportControlsOptions model
-				instanceID := "testString"
 				reportID := "testString"
-				getReportControlsOptionsModel := resultsReportsApiService.NewGetReportControlsOptions(instanceID, reportID)
-				getReportControlsOptionsModel.SetInstanceID("testString")
+				getReportControlsOptionsModel := resultsService.NewGetReportControlsOptions(reportID)
 				getReportControlsOptionsModel.SetReportID("testString")
 				getReportControlsOptionsModel.SetControlID("testString")
 				getReportControlsOptionsModel.SetControlName("testString")
@@ -3727,7 +3612,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				getReportControlsOptionsModel.SetXCorrelationID("testString")
 				getReportControlsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getReportControlsOptionsModel).ToNot(BeNil())
-				Expect(getReportControlsOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportControlsOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportControlsOptionsModel.ControlID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportControlsOptionsModel.ControlName).To(Equal(core.StringPtr("testString")))
@@ -3740,47 +3624,40 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 			})
 			It(`Invoke NewGetReportEvaluationOptions successfully`, func() {
 				// Construct an instance of the GetReportEvaluationOptions model
-				instanceID := "testString"
 				reportID := "testString"
-				getReportEvaluationOptionsModel := resultsReportsApiService.NewGetReportEvaluationOptions(instanceID, reportID)
-				getReportEvaluationOptionsModel.SetInstanceID("testString")
+				getReportEvaluationOptionsModel := resultsService.NewGetReportEvaluationOptions(reportID)
 				getReportEvaluationOptionsModel.SetReportID("testString")
 				getReportEvaluationOptionsModel.SetXCorrelationID("testString")
+				getReportEvaluationOptionsModel.SetExcludeSummary(true)
 				getReportEvaluationOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getReportEvaluationOptionsModel).ToNot(BeNil())
-				Expect(getReportEvaluationOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportEvaluationOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportEvaluationOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
+				Expect(getReportEvaluationOptionsModel.ExcludeSummary).To(Equal(core.BoolPtr(true)))
 				Expect(getReportEvaluationOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetReportOptions successfully`, func() {
 				// Construct an instance of the GetReportOptions model
-				instanceID := "testString"
 				reportID := "testString"
-				getReportOptionsModel := resultsReportsApiService.NewGetReportOptions(instanceID, reportID)
-				getReportOptionsModel.SetInstanceID("testString")
+				getReportOptionsModel := resultsService.NewGetReportOptions(reportID)
 				getReportOptionsModel.SetReportID("testString")
 				getReportOptionsModel.SetXCorrelationID("testString")
 				getReportOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getReportOptionsModel).ToNot(BeNil())
-				Expect(getReportOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetReportRuleOptions successfully`, func() {
 				// Construct an instance of the GetReportRuleOptions model
-				instanceID := "testString"
 				reportID := "testString"
 				ruleID := "testString"
-				getReportRuleOptionsModel := resultsReportsApiService.NewGetReportRuleOptions(instanceID, reportID, ruleID)
-				getReportRuleOptionsModel.SetInstanceID("testString")
+				getReportRuleOptionsModel := resultsService.NewGetReportRuleOptions(reportID, ruleID)
 				getReportRuleOptionsModel.SetReportID("testString")
 				getReportRuleOptionsModel.SetRuleID("testString")
 				getReportRuleOptionsModel.SetXCorrelationID("testString")
 				getReportRuleOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getReportRuleOptionsModel).ToNot(BeNil())
-				Expect(getReportRuleOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportRuleOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportRuleOptionsModel.RuleID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportRuleOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
@@ -3788,15 +3665,12 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 			})
 			It(`Invoke NewGetReportSummaryOptions successfully`, func() {
 				// Construct an instance of the GetReportSummaryOptions model
-				instanceID := "testString"
 				reportID := "testString"
-				getReportSummaryOptionsModel := resultsReportsApiService.NewGetReportSummaryOptions(instanceID, reportID)
-				getReportSummaryOptionsModel.SetInstanceID("testString")
+				getReportSummaryOptionsModel := resultsService.NewGetReportSummaryOptions(reportID)
 				getReportSummaryOptionsModel.SetReportID("testString")
 				getReportSummaryOptionsModel.SetXCorrelationID("testString")
 				getReportSummaryOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getReportSummaryOptionsModel).ToNot(BeNil())
-				Expect(getReportSummaryOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportSummaryOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportSummaryOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportSummaryOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
@@ -3804,7 +3678,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 			It(`Invoke NewGetReportTagsOptions successfully`, func() {
 				// Construct an instance of the GetReportTagsOptions model
 				reportID := "testString"
-				getReportTagsOptionsModel := resultsReportsApiService.NewGetReportTagsOptions(reportID)
+				getReportTagsOptionsModel := resultsService.NewGetReportTagsOptions(reportID)
 				getReportTagsOptionsModel.SetReportID("testString")
 				getReportTagsOptionsModel.SetXCorrelationID("testString")
 				getReportTagsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
@@ -3815,16 +3689,13 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 			})
 			It(`Invoke NewGetReportViolationsDriftOptions successfully`, func() {
 				// Construct an instance of the GetReportViolationsDriftOptions model
-				instanceID := "testString"
 				reportID := "testString"
-				getReportViolationsDriftOptionsModel := resultsReportsApiService.NewGetReportViolationsDriftOptions(instanceID, reportID)
-				getReportViolationsDriftOptionsModel.SetInstanceID("testString")
+				getReportViolationsDriftOptionsModel := resultsService.NewGetReportViolationsDriftOptions(reportID)
 				getReportViolationsDriftOptionsModel.SetReportID("testString")
 				getReportViolationsDriftOptionsModel.SetScanTimeDuration(int64(0))
 				getReportViolationsDriftOptionsModel.SetXCorrelationID("testString")
 				getReportViolationsDriftOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getReportViolationsDriftOptionsModel).ToNot(BeNil())
-				Expect(getReportViolationsDriftOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportViolationsDriftOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportViolationsDriftOptionsModel.ScanTimeDuration).To(Equal(core.Int64Ptr(int64(0))))
 				Expect(getReportViolationsDriftOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
@@ -3832,40 +3703,28 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 			})
 			It(`Invoke NewGetReportsProfilesOptions successfully`, func() {
 				// Construct an instance of the GetReportsProfilesOptions model
-				instanceID := "testString"
-				getReportsProfilesOptionsModel := resultsReportsApiService.NewGetReportsProfilesOptions(instanceID)
-				getReportsProfilesOptionsModel.SetInstanceID("testString")
+				getReportsProfilesOptionsModel := resultsService.NewGetReportsProfilesOptions()
 				getReportsProfilesOptionsModel.SetXCorrelationID("testString")
-				getReportsProfilesOptionsModel.SetHomeAccountID("testString")
 				getReportsProfilesOptionsModel.SetReportID("testString")
 				getReportsProfilesOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getReportsProfilesOptionsModel).ToNot(BeNil())
-				Expect(getReportsProfilesOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportsProfilesOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
-				Expect(getReportsProfilesOptionsModel.HomeAccountID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportsProfilesOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportsProfilesOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetReportsScopesOptions successfully`, func() {
 				// Construct an instance of the GetReportsScopesOptions model
-				instanceID := "testString"
-				getReportsScopesOptionsModel := resultsReportsApiService.NewGetReportsScopesOptions(instanceID)
-				getReportsScopesOptionsModel.SetInstanceID("testString")
+				getReportsScopesOptionsModel := resultsService.NewGetReportsScopesOptions()
 				getReportsScopesOptionsModel.SetXCorrelationID("testString")
-				getReportsScopesOptionsModel.SetHomeAccountID("testString")
 				getReportsScopesOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getReportsScopesOptionsModel).ToNot(BeNil())
-				Expect(getReportsScopesOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportsScopesOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
-				Expect(getReportsScopesOptionsModel.HomeAccountID).To(Equal(core.StringPtr("testString")))
 				Expect(getReportsScopesOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewListReportEvaluationsOptions successfully`, func() {
 				// Construct an instance of the ListReportEvaluationsOptions model
-				instanceID := "testString"
 				reportID := "testString"
-				listReportEvaluationsOptionsModel := resultsReportsApiService.NewListReportEvaluationsOptions(instanceID, reportID)
-				listReportEvaluationsOptionsModel.SetInstanceID("testString")
+				listReportEvaluationsOptionsModel := resultsService.NewListReportEvaluationsOptions(reportID)
 				listReportEvaluationsOptionsModel.SetReportID("testString")
 				listReportEvaluationsOptionsModel.SetAssessmentID("testString")
 				listReportEvaluationsOptionsModel.SetComponentID("testString")
@@ -3877,7 +3736,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportEvaluationsOptionsModel.SetXCorrelationID("testString")
 				listReportEvaluationsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(listReportEvaluationsOptionsModel).ToNot(BeNil())
-				Expect(listReportEvaluationsOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportEvaluationsOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportEvaluationsOptionsModel.AssessmentID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportEvaluationsOptionsModel.ComponentID).To(Equal(core.StringPtr("testString")))
@@ -3891,10 +3749,8 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 			})
 			It(`Invoke NewListReportResourcesOptions successfully`, func() {
 				// Construct an instance of the ListReportResourcesOptions model
-				instanceID := "testString"
 				reportID := "testString"
-				listReportResourcesOptionsModel := resultsReportsApiService.NewListReportResourcesOptions(instanceID, reportID)
-				listReportResourcesOptionsModel.SetInstanceID("testString")
+				listReportResourcesOptionsModel := resultsService.NewListReportResourcesOptions(reportID)
 				listReportResourcesOptionsModel.SetReportID("testString")
 				listReportResourcesOptionsModel.SetID("testString")
 				listReportResourcesOptionsModel.SetResourceName("testString")
@@ -3906,7 +3762,6 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportResourcesOptionsModel.SetXCorrelationID("testString")
 				listReportResourcesOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(listReportResourcesOptionsModel).ToNot(BeNil())
-				Expect(listReportResourcesOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportResourcesOptionsModel.ReportID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportResourcesOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportResourcesOptionsModel.ResourceName).To(Equal(core.StringPtr("testString")))
@@ -3920,11 +3775,8 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 			})
 			It(`Invoke NewListReportsOptions successfully`, func() {
 				// Construct an instance of the ListReportsOptions model
-				instanceID := "testString"
-				listReportsOptionsModel := resultsReportsApiService.NewListReportsOptions(instanceID)
-				listReportsOptionsModel.SetInstanceID("testString")
+				listReportsOptionsModel := resultsService.NewListReportsOptions()
 				listReportsOptionsModel.SetXCorrelationID("testString")
-				listReportsOptionsModel.SetHomeAccountID("testString")
 				listReportsOptionsModel.SetAttachmentID("testString")
 				listReportsOptionsModel.SetGroupID("testString")
 				listReportsOptionsModel.SetProfileID("testString")
@@ -3935,9 +3787,7 @@ var _ = Describe(`ResultsReportsApiV3`, func() {
 				listReportsOptionsModel.SetSort("testString")
 				listReportsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(listReportsOptionsModel).ToNot(BeNil())
-				Expect(listReportsOptionsModel.InstanceID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportsOptionsModel.XCorrelationID).To(Equal(core.StringPtr("testString")))
-				Expect(listReportsOptionsModel.HomeAccountID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportsOptionsModel.AttachmentID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportsOptionsModel.GroupID).To(Equal(core.StringPtr("testString")))
 				Expect(listReportsOptionsModel.ProfileID).To(Equal(core.StringPtr("testString")))

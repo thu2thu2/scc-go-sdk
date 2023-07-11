@@ -1,0 +1,11 @@
+Profile Name,profile 0710
+Scan ID,065b7839-a794-46f5-aaf0-d0fc7134e563
+Success Rate,0
+Environment,ibm-cloud
+Scan Date,2023-07-10 18:30:57 +0000 UTC
+Passed,0
+Failed,0
+Unable To Perform,0
+Billable Evaluations,0
+
+Component,Resource Name,Resource ID,Account,Status,Control ID,Control Name,Control Description,Control Specification,Control Specification Description,Environment,Assessment ID,Tags,Reason,Details

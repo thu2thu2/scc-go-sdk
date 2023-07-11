@@ -1,8 +1,7 @@
-//go:build examples
 // +build examples
 
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +23,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/IBM/cloud-go-sdk/adminserviceapiv1"
 	"github.com/IBM/go-sdk-core/v5/core"
-	"github.com/IBM/scc-go-sdk/v4/adminserviceapiv1"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -43,36 +42,36 @@ import (
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const externalConfigFile = "../admin_service_api_v1.env"
-
-var (
-	adminServiceApiService *adminserviceapiv1.AdminServiceApiV1
-	config                 map[string]string
-	configLoaded           bool = false
-)
-
-func shouldSkipTest() {
-	if !configLoaded {
-		Skip("External configuration is not available, skipping tests...")
-	}
-}
-
 var _ = Describe(`AdminServiceApiV1 Examples Tests`, func() {
+
+	const externalConfigFile = "../admin_service_api_v1.env"
+
+	var (
+		adminServiceApiService *adminserviceapiv1.AdminServiceApiV1
+		config       map[string]string
+	)
+
+	var shouldSkipTest = func() {
+		Skip("External configuration is not available, skipping examples...")
+	}
+
 	Describe(`External configuration`, func() {
 		It("Successfully load the configuration", func() {
 			var err error
 			_, err = os.Stat(externalConfigFile)
 			if err != nil {
-				Skip("External configuration file not found, skipping tests: " + err.Error())
+				Skip("External configuration file not found, skipping examples: " + err.Error())
 			}
 
 			os.Setenv("IBM_CREDENTIALS_FILE", externalConfigFile)
 			config, err = core.GetServiceProperties(adminserviceapiv1.DefaultServiceName)
 			if err != nil {
-				Skip("Error loading service properties, skipping tests: " + err.Error())
+				Skip("Error loading service properties, skipping examples: " + err.Error())
+			} else if len(config) == 0 {
+				Skip("Unable to load service properties, skipping examples")
 			}
 
-			configLoaded = len(config) > 0
+			shouldSkipTest = func() {}
 		})
 	})
 
@@ -105,111 +104,67 @@ var _ = Describe(`AdminServiceApiV1 Examples Tests`, func() {
 		})
 		It(`GetSettings request example`, func() {
 			fmt.Println("\nGetSettings() result:")
-			// begin-GetSettings
+			// begin-get_settings
 
-			getSettingsOptions := adminServiceApiService.NewGetSettingsOptions(
-				"testString",
-			)
+			getSettingsOptions := adminServiceApiService.NewGetSettingsOptions()
 
-			accountSettings, response, err := adminServiceApiService.GetSettings(getSettingsOptions)
+			settings, response, err := adminServiceApiService.GetSettings(getSettingsOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(accountSettings, "", "  ")
+			b, _ := json.MarshalIndent(settings, "", "  ")
 			fmt.Println(string(b))
 
-			// end-GetSettings
+			// end-get_settings
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(accountSettings).ToNot(BeNil())
-
+			Expect(settings).ToNot(BeNil())
 		})
-		It(`PatchAccountSettings request example`, func() {
-			fmt.Println("\nPatchAccountSettings() result:")
-			// begin-PatchAccountSettings
+		It(`UpdateSettings request example`, func() {
+			fmt.Println("\nUpdateSettings() result:")
+			// begin-update_settings
 
-			patchAccountSettingsOptions := adminServiceApiService.NewPatchAccountSettingsOptions(
-				"testString",
+			jsonPatchOperationModel := &adminserviceapiv1.JSONPatchOperation{
+				Op: core.StringPtr("add"),
+				Path: core.StringPtr("testString"),
+			}
+
+			updateSettingsOptions := adminServiceApiService.NewUpdateSettingsOptions(
+				[]adminserviceapiv1.JSONPatchOperation{*jsonPatchOperationModel},
 			)
 
-			accountSettings, response, err := adminServiceApiService.PatchAccountSettings(patchAccountSettingsOptions)
+			settings, response, err := adminServiceApiService.UpdateSettings(updateSettingsOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(accountSettings, "", "  ")
+			b, _ := json.MarshalIndent(settings, "", "  ")
 			fmt.Println(string(b))
 
-			// end-PatchAccountSettings
+			// end-update_settings
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(accountSettings).ToNot(BeNil())
-
+			Expect(settings).ToNot(BeNil())
 		})
-		It(`ListLocations request example`, func() {
-			fmt.Println("\nListLocations() result:")
-			// begin-ListLocations
+		It(`PostTestEvent request example`, func() {
+			fmt.Println("\nPostTestEvent() result:")
+			// begin-post_test_event
 
-			listLocationsOptions := adminServiceApiService.NewListLocationsOptions()
+			postTestEventOptions := adminServiceApiService.NewPostTestEventOptions()
 
-			locations, response, err := adminServiceApiService.ListLocations(listLocationsOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(locations, "", "  ")
-			fmt.Println(string(b))
-
-			// end-ListLocations
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(locations).ToNot(BeNil())
-
-		})
-		It(`GetLocation request example`, func() {
-			fmt.Println("\nGetLocation() result:")
-			// begin-GetLocation
-
-			getLocationOptions := adminServiceApiService.NewGetLocationOptions(
-				"us",
-			)
-
-			location, response, err := adminServiceApiService.GetLocation(getLocationOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(location, "", "  ")
-			fmt.Println(string(b))
-
-			// end-GetLocation
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(location).ToNot(BeNil())
-
-		})
-		It(`SendTestEvent request example`, func() {
-			fmt.Println("\nSendTestEvent() result:")
-			// begin-SendTestEvent
-
-			sendTestEventOptions := adminServiceApiService.NewSendTestEventOptions(
-				"testString",
-			)
-
-			testEvent, response, err := adminServiceApiService.SendTestEvent(sendTestEventOptions)
+			testEvent, response, err := adminServiceApiService.PostTestEvent(postTestEventOptions)
 			if err != nil {
 				panic(err)
 			}
 			b, _ := json.MarshalIndent(testEvent, "", "  ")
 			fmt.Println(string(b))
 
-			// end-SendTestEvent
+			// end-post_test_event
 
 			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
+			Expect(response.StatusCode).To(Equal(200))
 			Expect(testEvent).ToNot(BeNil())
-
 		})
 	})
 })

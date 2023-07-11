@@ -18,8 +18,8 @@
  * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
  */
 
-// Package resultsreportsapiv3 : Operations and models for the ResultsReportsApiV3 service
-package resultsreportsapiv3
+// Package resultsv3 : Operations and models for the ResultsV3 service
+package resultsv3
 
 import (
 	"context"
@@ -32,37 +32,37 @@ import (
 
 	"github.com/IBM/go-sdk-core/v5/core"
 	common "github.com/IBM/scc-go-sdk/v4/common"
-	"github.com/go-openapi/strfmt"
 )
 
-// ResultsReportsApiV3 : Security and Compliance Center Results/Reports API
+// ResultsV3 : The Security and Compliance Center API reference.
 //
 // API Version: 3.0.0
-type ResultsReportsApiV3 struct {
+type ResultsV3 struct {
 	Service *core.BaseService
 }
 
 // DefaultServiceURL is the default URL to make service requests to.
-const DefaultServiceURL = "https://us-south.compliance.cloud.ibm.com"
+const DefaultServiceURL = "https://us-south.compliance.cloud.ibm.com/instances/instance_id/v3"
 
 // DefaultServiceName is the default key used to find external configuration information.
-const DefaultServiceName = "results_reports_api"
+const DefaultServiceName = "results"
 
-const ParameterizedServiceURL = "https://{environment}.cloud.ibm.com"
+const ParameterizedServiceURL = "https://{region}.cloud.ibm.com/instances/{instance_id}/v3"
 
 var defaultUrlVariables = map[string]string{
-	"environment": "us-south.compliance",
+	"region":      "us-south.compliance",
+	"instance_id": "instance_id",
 }
 
-// ResultsReportsApiV3Options : Service options
-type ResultsReportsApiV3Options struct {
+// ResultsV3Options : Service options
+type ResultsV3Options struct {
 	ServiceName   string
 	URL           string
 	Authenticator core.Authenticator
 }
 
-// NewResultsReportsApiV3UsingExternalConfig : constructs an instance of ResultsReportsApiV3 with passed in options and external configuration.
-func NewResultsReportsApiV3UsingExternalConfig(options *ResultsReportsApiV3Options) (resultsReportsApi *ResultsReportsApiV3, err error) {
+// NewResultsV3UsingExternalConfig : constructs an instance of ResultsV3 with passed in options and external configuration.
+func NewResultsV3UsingExternalConfig(options *ResultsV3Options) (results *ResultsV3, err error) {
 	if options.ServiceName == "" {
 		options.ServiceName = DefaultServiceName
 	}
@@ -74,24 +74,24 @@ func NewResultsReportsApiV3UsingExternalConfig(options *ResultsReportsApiV3Optio
 		}
 	}
 
-	resultsReportsApi, err = NewResultsReportsApiV3(options)
+	results, err = NewResultsV3(options)
 	if err != nil {
 		return
 	}
 
-	err = resultsReportsApi.Service.ConfigureService(options.ServiceName)
+	err = results.Service.ConfigureService(options.ServiceName)
 	if err != nil {
 		return
 	}
 
 	if options.URL != "" {
-		err = resultsReportsApi.Service.SetServiceURL(options.URL)
+		err = results.Service.SetServiceURL(options.URL)
 	}
 	return
 }
 
-// NewResultsReportsApiV3 : constructs an instance of ResultsReportsApiV3 with passed in options.
-func NewResultsReportsApiV3(options *ResultsReportsApiV3Options) (service *ResultsReportsApiV3, err error) {
+// NewResultsV3 : constructs an instance of ResultsV3 with passed in options.
+func NewResultsV3(options *ResultsV3Options) (service *ResultsV3, err error) {
 	serviceOptions := &core.ServiceOptions{
 		URL:           DefaultServiceURL,
 		Authenticator: options.Authenticator,
@@ -109,7 +109,7 @@ func NewResultsReportsApiV3(options *ResultsReportsApiV3Options) (service *Resul
 		}
 	}
 
-	service = &ResultsReportsApiV3{
+	service = &ResultsV3{
 		Service: baseService,
 	}
 
@@ -121,13 +121,13 @@ func GetServiceURLForRegion(region string) (string, error) {
 	return "", fmt.Errorf("service does not support regional URLs")
 }
 
-// Clone makes a copy of "resultsReportsApi" suitable for processing requests.
-func (resultsReportsApi *ResultsReportsApiV3) Clone() *ResultsReportsApiV3 {
-	if core.IsNil(resultsReportsApi) {
+// Clone makes a copy of "results" suitable for processing requests.
+func (results *ResultsV3) Clone() *ResultsV3 {
+	if core.IsNil(results) {
 		return nil
 	}
-	clone := *resultsReportsApi
-	clone.Service = resultsReportsApi.Service.Clone()
+	clone := *results
+	clone.Service = results.Service.Clone()
 	return &clone
 }
 
@@ -137,66 +137,58 @@ func ConstructServiceURL(providedUrlVariables map[string]string) (string, error)
 }
 
 // SetServiceURL sets the service URL
-func (resultsReportsApi *ResultsReportsApiV3) SetServiceURL(url string) error {
-	return resultsReportsApi.Service.SetServiceURL(url)
+func (results *ResultsV3) SetServiceURL(url string) error {
+	return results.Service.SetServiceURL(url)
 }
 
 // GetServiceURL returns the service URL
-func (resultsReportsApi *ResultsReportsApiV3) GetServiceURL() string {
-	return resultsReportsApi.Service.GetServiceURL()
+func (results *ResultsV3) GetServiceURL() string {
+	return results.Service.GetServiceURL()
 }
 
 // SetDefaultHeaders sets HTTP headers to be sent in every request
-func (resultsReportsApi *ResultsReportsApiV3) SetDefaultHeaders(headers http.Header) {
-	resultsReportsApi.Service.SetDefaultHeaders(headers)
+func (results *ResultsV3) SetDefaultHeaders(headers http.Header) {
+	results.Service.SetDefaultHeaders(headers)
 }
 
 // SetEnableGzipCompression sets the service's EnableGzipCompression field
-func (resultsReportsApi *ResultsReportsApiV3) SetEnableGzipCompression(enableGzip bool) {
-	resultsReportsApi.Service.SetEnableGzipCompression(enableGzip)
+func (results *ResultsV3) SetEnableGzipCompression(enableGzip bool) {
+	results.Service.SetEnableGzipCompression(enableGzip)
 }
 
 // GetEnableGzipCompression returns the service's EnableGzipCompression field
-func (resultsReportsApi *ResultsReportsApiV3) GetEnableGzipCompression() bool {
-	return resultsReportsApi.Service.GetEnableGzipCompression()
+func (results *ResultsV3) GetEnableGzipCompression() bool {
+	return results.Service.GetEnableGzipCompression()
 }
 
 // EnableRetries enables automatic retries for requests invoked for this service instance.
 // If either parameter is specified as 0, then a default value is used instead.
-func (resultsReportsApi *ResultsReportsApiV3) EnableRetries(maxRetries int, maxRetryInterval time.Duration) {
-	resultsReportsApi.Service.EnableRetries(maxRetries, maxRetryInterval)
+func (results *ResultsV3) EnableRetries(maxRetries int, maxRetryInterval time.Duration) {
+	results.Service.EnableRetries(maxRetries, maxRetryInterval)
 }
 
 // DisableRetries disables automatic retries for requests invoked for this service instance.
-func (resultsReportsApi *ResultsReportsApiV3) DisableRetries() {
-	resultsReportsApi.Service.DisableRetries()
+func (results *ResultsV3) DisableRetries() {
+	results.Service.DisableRetries()
 }
 
-// GetLatestReports : Return the latest distinct reports grouped by profile ID, scope ID and attachment ID
-// Retrieves the latest distinct reports grouped by profile ID, scope ID and attachment ID.
-func (resultsReportsApi *ResultsReportsApiV3) GetLatestReports(getLatestReportsOptions *GetLatestReportsOptions) (result *GetLatestReportsResponse, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetLatestReportsWithContext(context.Background(), getLatestReportsOptions)
+// GetLatestReports : Get the latest reports
+// Retrieve the latest reports that are grouped by profile ID, scope ID, and attachment ID.
+func (results *ResultsV3) GetLatestReports(getLatestReportsOptions *GetLatestReportsOptions) (result *GetLatestReportsResponse, response *core.DetailedResponse, err error) {
+	return results.GetLatestReportsWithContext(context.Background(), getLatestReportsOptions)
 }
 
 // GetLatestReportsWithContext is an alternate form of the GetLatestReports method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetLatestReportsWithContext(ctx context.Context, getLatestReportsOptions *GetLatestReportsOptions) (result *GetLatestReportsResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getLatestReportsOptions, "getLatestReportsOptions cannot be nil")
-	if err != nil {
-		return
-	}
+func (results *ResultsV3) GetLatestReportsWithContext(ctx context.Context, getLatestReportsOptions *GetLatestReportsOptions) (result *GetLatestReportsResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateStruct(getLatestReportsOptions, "getLatestReportsOptions")
 	if err != nil {
 		return
 	}
 
-	pathParamsMap := map[string]string{
-		"instance_id": *getLatestReportsOptions.InstanceID,
-	}
-
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/latest`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/latest`, nil)
 	if err != nil {
 		return
 	}
@@ -205,7 +197,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetLatestReportsWithContext(ctx co
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetLatestReports")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetLatestReports")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -214,9 +206,6 @@ func (resultsReportsApi *ResultsReportsApiV3) GetLatestReportsWithContext(ctx co
 		builder.AddHeader("X-Correlation-Id", fmt.Sprint(*getLatestReportsOptions.XCorrelationID))
 	}
 
-	if getLatestReportsOptions.HomeAccountID != nil {
-		builder.AddQuery("home_account_id", fmt.Sprint(*getLatestReportsOptions.HomeAccountID))
-	}
 	if getLatestReportsOptions.Sort != nil {
 		builder.AddQuery("sort", fmt.Sprint(*getLatestReportsOptions.Sort))
 	}
@@ -227,7 +216,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetLatestReportsWithContext(ctx co
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -243,30 +232,22 @@ func (resultsReportsApi *ResultsReportsApiV3) GetLatestReportsWithContext(ctx co
 }
 
 // ListReports : List reports
-// Retrieves a page of reports filtered by the specified parameters.
-func (resultsReportsApi *ResultsReportsApiV3) ListReports(listReportsOptions *ListReportsOptions) (result *ReportPage, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.ListReportsWithContext(context.Background(), listReportsOptions)
+// Retrieve a page of reports that are filtered by the specified parameters.
+func (results *ResultsV3) ListReports(listReportsOptions *ListReportsOptions) (result *ReportPage, response *core.DetailedResponse, err error) {
+	return results.ListReportsWithContext(context.Background(), listReportsOptions)
 }
 
 // ListReportsWithContext is an alternate form of the ListReports method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) ListReportsWithContext(ctx context.Context, listReportsOptions *ListReportsOptions) (result *ReportPage, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(listReportsOptions, "listReportsOptions cannot be nil")
-	if err != nil {
-		return
-	}
+func (results *ResultsV3) ListReportsWithContext(ctx context.Context, listReportsOptions *ListReportsOptions) (result *ReportPage, response *core.DetailedResponse, err error) {
 	err = core.ValidateStruct(listReportsOptions, "listReportsOptions")
 	if err != nil {
 		return
 	}
 
-	pathParamsMap := map[string]string{
-		"instance_id": *listReportsOptions.InstanceID,
-	}
-
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports`, nil)
 	if err != nil {
 		return
 	}
@@ -275,7 +256,7 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportsWithContext(ctx context
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "ListReports")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "ListReports")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -284,9 +265,6 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportsWithContext(ctx context
 		builder.AddHeader("X-Correlation-Id", fmt.Sprint(*listReportsOptions.XCorrelationID))
 	}
 
-	if listReportsOptions.HomeAccountID != nil {
-		builder.AddQuery("home_account_id", fmt.Sprint(*listReportsOptions.HomeAccountID))
-	}
 	if listReportsOptions.AttachmentID != nil {
 		builder.AddQuery("attachment_id", fmt.Sprint(*listReportsOptions.AttachmentID))
 	}
@@ -318,7 +296,7 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportsWithContext(ctx context
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -333,31 +311,24 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportsWithContext(ctx context
 	return
 }
 
-// GetReportsProfiles : Retrieve a unique list of profiles
-// Gets a list of profile groups from the set of reports, without duplicates, to be used as a filtering option.
-func (resultsReportsApi *ResultsReportsApiV3) GetReportsProfiles(getReportsProfilesOptions *GetReportsProfilesOptions) (result *GetProfilesResponse, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportsProfilesWithContext(context.Background(), getReportsProfilesOptions)
+// GetReportsProfiles : Get a list of profiles
+// Retrieve a list of profile groups from the set of reports, without duplicates. You can use the list as a filtering
+// option.
+func (results *ResultsV3) GetReportsProfiles(getReportsProfilesOptions *GetReportsProfilesOptions) (result *GetProfilesResponse, response *core.DetailedResponse, err error) {
+	return results.GetReportsProfilesWithContext(context.Background(), getReportsProfilesOptions)
 }
 
 // GetReportsProfilesWithContext is an alternate form of the GetReportsProfiles method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportsProfilesWithContext(ctx context.Context, getReportsProfilesOptions *GetReportsProfilesOptions) (result *GetProfilesResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getReportsProfilesOptions, "getReportsProfilesOptions cannot be nil")
-	if err != nil {
-		return
-	}
+func (results *ResultsV3) GetReportsProfilesWithContext(ctx context.Context, getReportsProfilesOptions *GetReportsProfilesOptions) (result *GetProfilesResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateStruct(getReportsProfilesOptions, "getReportsProfilesOptions")
 	if err != nil {
 		return
 	}
 
-	pathParamsMap := map[string]string{
-		"instance_id": *getReportsProfilesOptions.InstanceID,
-	}
-
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/profiles`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/profiles`, nil)
 	if err != nil {
 		return
 	}
@@ -366,7 +337,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportsProfilesWithContext(ctx 
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReportsProfiles")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReportsProfiles")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -375,9 +346,6 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportsProfilesWithContext(ctx 
 		builder.AddHeader("X-Correlation-Id", fmt.Sprint(*getReportsProfilesOptions.XCorrelationID))
 	}
 
-	if getReportsProfilesOptions.HomeAccountID != nil {
-		builder.AddQuery("home_account_id", fmt.Sprint(*getReportsProfilesOptions.HomeAccountID))
-	}
 	if getReportsProfilesOptions.ReportID != nil {
 		builder.AddQuery("report_id", fmt.Sprint(*getReportsProfilesOptions.ReportID))
 	}
@@ -388,7 +356,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportsProfilesWithContext(ctx 
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -403,31 +371,23 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportsProfilesWithContext(ctx 
 	return
 }
 
-// GetReportsScopes : Retrieve a unique list of scopes
-// Gets a list of scopes from the set of reports, without duplicates, to be used as a filtering option.
-func (resultsReportsApi *ResultsReportsApiV3) GetReportsScopes(getReportsScopesOptions *GetReportsScopesOptions) (result *GetScopesResponse, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportsScopesWithContext(context.Background(), getReportsScopesOptions)
+// GetReportsScopes : Get a list of scopes
+// Retrieve a list of scopes from the set of reports, without duplicates. You can use the list as a filtering option.
+func (results *ResultsV3) GetReportsScopes(getReportsScopesOptions *GetReportsScopesOptions) (result *GetScopesResponse, response *core.DetailedResponse, err error) {
+	return results.GetReportsScopesWithContext(context.Background(), getReportsScopesOptions)
 }
 
 // GetReportsScopesWithContext is an alternate form of the GetReportsScopes method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportsScopesWithContext(ctx context.Context, getReportsScopesOptions *GetReportsScopesOptions) (result *GetScopesResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getReportsScopesOptions, "getReportsScopesOptions cannot be nil")
-	if err != nil {
-		return
-	}
+func (results *ResultsV3) GetReportsScopesWithContext(ctx context.Context, getReportsScopesOptions *GetReportsScopesOptions) (result *GetScopesResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateStruct(getReportsScopesOptions, "getReportsScopesOptions")
 	if err != nil {
 		return
 	}
 
-	pathParamsMap := map[string]string{
-		"instance_id": *getReportsScopesOptions.InstanceID,
-	}
-
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/scopes`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/scopes`, nil)
 	if err != nil {
 		return
 	}
@@ -436,7 +396,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportsScopesWithContext(ctx co
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReportsScopes")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReportsScopes")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -445,17 +405,13 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportsScopesWithContext(ctx co
 		builder.AddHeader("X-Correlation-Id", fmt.Sprint(*getReportsScopesOptions.XCorrelationID))
 	}
 
-	if getReportsScopesOptions.HomeAccountID != nil {
-		builder.AddQuery("home_account_id", fmt.Sprint(*getReportsScopesOptions.HomeAccountID))
-	}
-
 	request, err := builder.Build()
 	if err != nil {
 		return
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -470,14 +426,14 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportsScopesWithContext(ctx co
 	return
 }
 
-// GetReport : Retrieve a single report
-// Retrieves the report by the specified `report_id`.
-func (resultsReportsApi *ResultsReportsApiV3) GetReport(getReportOptions *GetReportOptions) (result *Report, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportWithContext(context.Background(), getReportOptions)
+// GetReport : Get a report
+// Retrieve a report by specifying its ID.
+func (results *ResultsV3) GetReport(getReportOptions *GetReportOptions) (result *Report, response *core.DetailedResponse, err error) {
+	return results.GetReportWithContext(context.Background(), getReportOptions)
 }
 
 // GetReportWithContext is an alternate form of the GetReport method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportWithContext(ctx context.Context, getReportOptions *GetReportOptions) (result *Report, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) GetReportWithContext(ctx context.Context, getReportOptions *GetReportOptions) (result *Report, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getReportOptions, "getReportOptions cannot be nil")
 	if err != nil {
 		return
@@ -488,14 +444,13 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportWithContext(ctx context.C
 	}
 
 	pathParamsMap := map[string]string{
-		"instance_id": *getReportOptions.InstanceID,
-		"report_id":   *getReportOptions.ReportID,
+		"report_id": *getReportOptions.ReportID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/{report_id}`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -504,7 +459,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportWithContext(ctx context.C
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReport")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReport")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -519,7 +474,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportWithContext(ctx context.C
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -534,14 +489,14 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportWithContext(ctx context.C
 	return
 }
 
-// GetReportSummary : Retrieve a report summary
-// Gets the complete summarized information for a single report.
-func (resultsReportsApi *ResultsReportsApiV3) GetReportSummary(getReportSummaryOptions *GetReportSummaryOptions) (result *ReportSummary, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportSummaryWithContext(context.Background(), getReportSummaryOptions)
+// GetReportSummary : Get a report summary
+// Retrieve the complete summarized information for a report.
+func (results *ResultsV3) GetReportSummary(getReportSummaryOptions *GetReportSummaryOptions) (result *ReportSummary, response *core.DetailedResponse, err error) {
+	return results.GetReportSummaryWithContext(context.Background(), getReportSummaryOptions)
 }
 
 // GetReportSummaryWithContext is an alternate form of the GetReportSummary method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportSummaryWithContext(ctx context.Context, getReportSummaryOptions *GetReportSummaryOptions) (result *ReportSummary, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) GetReportSummaryWithContext(ctx context.Context, getReportSummaryOptions *GetReportSummaryOptions) (result *ReportSummary, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getReportSummaryOptions, "getReportSummaryOptions cannot be nil")
 	if err != nil {
 		return
@@ -552,14 +507,13 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportSummaryWithContext(ctx co
 	}
 
 	pathParamsMap := map[string]string{
-		"instance_id": *getReportSummaryOptions.InstanceID,
-		"report_id":   *getReportSummaryOptions.ReportID,
+		"report_id": *getReportSummaryOptions.ReportID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/{report_id}/summary`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}/summary`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -568,7 +522,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportSummaryWithContext(ctx co
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReportSummary")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReportSummary")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -583,7 +537,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportSummaryWithContext(ctx co
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -598,14 +552,14 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportSummaryWithContext(ctx co
 	return
 }
 
-// GetReportEvaluation : Get evaluation details for a given report
-// Retrieves evaluation details of a report by the specified `report_id`.
-func (resultsReportsApi *ResultsReportsApiV3) GetReportEvaluation(getReportEvaluationOptions *GetReportEvaluationOptions) (result io.ReadCloser, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportEvaluationWithContext(context.Background(), getReportEvaluationOptions)
+// GetReportEvaluation : Get report evaluation details
+// Retrieve the evaluation details of a report by specifying the report ID.
+func (results *ResultsV3) GetReportEvaluation(getReportEvaluationOptions *GetReportEvaluationOptions) (result io.ReadCloser, response *core.DetailedResponse, err error) {
+	return results.GetReportEvaluationWithContext(context.Background(), getReportEvaluationOptions)
 }
 
 // GetReportEvaluationWithContext is an alternate form of the GetReportEvaluation method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportEvaluationWithContext(ctx context.Context, getReportEvaluationOptions *GetReportEvaluationOptions) (result io.ReadCloser, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) GetReportEvaluationWithContext(ctx context.Context, getReportEvaluationOptions *GetReportEvaluationOptions) (result io.ReadCloser, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getReportEvaluationOptions, "getReportEvaluationOptions cannot be nil")
 	if err != nil {
 		return
@@ -616,14 +570,13 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportEvaluationWithContext(ctx
 	}
 
 	pathParamsMap := map[string]string{
-		"instance_id": *getReportEvaluationOptions.InstanceID,
-		"report_id":   *getReportEvaluationOptions.ReportID,
+		"report_id": *getReportEvaluationOptions.ReportID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/{report_id}/download`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}/download`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -632,7 +585,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportEvaluationWithContext(ctx
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReportEvaluation")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReportEvaluation")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -641,24 +594,28 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportEvaluationWithContext(ctx
 		builder.AddHeader("X-Correlation-Id", fmt.Sprint(*getReportEvaluationOptions.XCorrelationID))
 	}
 
+	if getReportEvaluationOptions.ExcludeSummary != nil {
+		builder.AddQuery("exclude_summary", fmt.Sprint(*getReportEvaluationOptions.ExcludeSummary))
+	}
+
 	request, err := builder.Build()
 	if err != nil {
 		return
 	}
 
-	response, err = resultsReportsApi.Service.Request(request, &result)
+	response, err = results.Service.Request(request, &result)
 
 	return
 }
 
-// GetReportControls : Get controls for a given report
-// Gets a sorted and filtered list of controls for the specified report.
-func (resultsReportsApi *ResultsReportsApiV3) GetReportControls(getReportControlsOptions *GetReportControlsOptions) (result *GetReportControlsResponse, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportControlsWithContext(context.Background(), getReportControlsOptions)
+// GetReportControls : Get report controls
+// Retrieve a sorted and filtered list of controls for the specified report.
+func (results *ResultsV3) GetReportControls(getReportControlsOptions *GetReportControlsOptions) (result *GetReportControlsResponse, response *core.DetailedResponse, err error) {
+	return results.GetReportControlsWithContext(context.Background(), getReportControlsOptions)
 }
 
 // GetReportControlsWithContext is an alternate form of the GetReportControls method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportControlsWithContext(ctx context.Context, getReportControlsOptions *GetReportControlsOptions) (result *GetReportControlsResponse, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) GetReportControlsWithContext(ctx context.Context, getReportControlsOptions *GetReportControlsOptions) (result *GetReportControlsResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getReportControlsOptions, "getReportControlsOptions cannot be nil")
 	if err != nil {
 		return
@@ -669,14 +626,13 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportControlsWithContext(ctx c
 	}
 
 	pathParamsMap := map[string]string{
-		"instance_id": *getReportControlsOptions.InstanceID,
-		"report_id":   *getReportControlsOptions.ReportID,
+		"report_id": *getReportControlsOptions.ReportID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/{report_id}/controls`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}/controls`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -685,7 +641,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportControlsWithContext(ctx c
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReportControls")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReportControls")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -719,7 +675,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportControlsWithContext(ctx c
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -734,14 +690,14 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportControlsWithContext(ctx c
 	return
 }
 
-// GetReportRule : Retrieve a single rule in a report
-// Retrieves the rule by the specified `report_id` and `rule_id`.
-func (resultsReportsApi *ResultsReportsApiV3) GetReportRule(getReportRuleOptions *GetReportRuleOptions) (result *Rule, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportRuleWithContext(context.Background(), getReportRuleOptions)
+// GetReportRule : Get a report rule
+// Retrieve the rule by specifying the report ID and rule ID.
+func (results *ResultsV3) GetReportRule(getReportRuleOptions *GetReportRuleOptions) (result *Rule, response *core.DetailedResponse, err error) {
+	return results.GetReportRuleWithContext(context.Background(), getReportRuleOptions)
 }
 
 // GetReportRuleWithContext is an alternate form of the GetReportRule method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportRuleWithContext(ctx context.Context, getReportRuleOptions *GetReportRuleOptions) (result *Rule, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) GetReportRuleWithContext(ctx context.Context, getReportRuleOptions *GetReportRuleOptions) (result *Rule, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getReportRuleOptions, "getReportRuleOptions cannot be nil")
 	if err != nil {
 		return
@@ -752,15 +708,14 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportRuleWithContext(ctx conte
 	}
 
 	pathParamsMap := map[string]string{
-		"instance_id": *getReportRuleOptions.InstanceID,
-		"report_id":   *getReportRuleOptions.ReportID,
-		"rule_id":     *getReportRuleOptions.RuleID,
+		"report_id": *getReportRuleOptions.ReportID,
+		"rule_id":   *getReportRuleOptions.RuleID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/{report_id}/rules/{rule_id}`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}/rules/{rule_id}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -769,7 +724,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportRuleWithContext(ctx conte
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReportRule")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReportRule")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -784,7 +739,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportRuleWithContext(ctx conte
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -800,13 +755,13 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportRuleWithContext(ctx conte
 }
 
 // ListReportEvaluations : List report evaluations
-// Gets a paginated list of evaluations for the specified report.
-func (resultsReportsApi *ResultsReportsApiV3) ListReportEvaluations(listReportEvaluationsOptions *ListReportEvaluationsOptions) (result *EvaluationPage, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.ListReportEvaluationsWithContext(context.Background(), listReportEvaluationsOptions)
+// Get a paginated list of evaluations for the specified report.
+func (results *ResultsV3) ListReportEvaluations(listReportEvaluationsOptions *ListReportEvaluationsOptions) (result *EvaluationPage, response *core.DetailedResponse, err error) {
+	return results.ListReportEvaluationsWithContext(context.Background(), listReportEvaluationsOptions)
 }
 
 // ListReportEvaluationsWithContext is an alternate form of the ListReportEvaluations method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) ListReportEvaluationsWithContext(ctx context.Context, listReportEvaluationsOptions *ListReportEvaluationsOptions) (result *EvaluationPage, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) ListReportEvaluationsWithContext(ctx context.Context, listReportEvaluationsOptions *ListReportEvaluationsOptions) (result *EvaluationPage, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(listReportEvaluationsOptions, "listReportEvaluationsOptions cannot be nil")
 	if err != nil {
 		return
@@ -817,14 +772,13 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportEvaluationsWithContext(c
 	}
 
 	pathParamsMap := map[string]string{
-		"instance_id": *listReportEvaluationsOptions.InstanceID,
-		"report_id":   *listReportEvaluationsOptions.ReportID,
+		"report_id": *listReportEvaluationsOptions.ReportID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/{report_id}/evaluations`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}/evaluations`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -833,7 +787,7 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportEvaluationsWithContext(c
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "ListReportEvaluations")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "ListReportEvaluations")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -870,7 +824,7 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportEvaluationsWithContext(c
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -886,13 +840,13 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportEvaluationsWithContext(c
 }
 
 // ListReportResources : List report resources
-// Gets a paginated list of resources for the specified report.
-func (resultsReportsApi *ResultsReportsApiV3) ListReportResources(listReportResourcesOptions *ListReportResourcesOptions) (result *ResourcePage, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.ListReportResourcesWithContext(context.Background(), listReportResourcesOptions)
+// Get a paginated list of resources for the specified report.
+func (results *ResultsV3) ListReportResources(listReportResourcesOptions *ListReportResourcesOptions) (result *ResourcePage, response *core.DetailedResponse, err error) {
+	return results.ListReportResourcesWithContext(context.Background(), listReportResourcesOptions)
 }
 
 // ListReportResourcesWithContext is an alternate form of the ListReportResources method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) ListReportResourcesWithContext(ctx context.Context, listReportResourcesOptions *ListReportResourcesOptions) (result *ResourcePage, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) ListReportResourcesWithContext(ctx context.Context, listReportResourcesOptions *ListReportResourcesOptions) (result *ResourcePage, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(listReportResourcesOptions, "listReportResourcesOptions cannot be nil")
 	if err != nil {
 		return
@@ -903,14 +857,13 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportResourcesWithContext(ctx
 	}
 
 	pathParamsMap := map[string]string{
-		"instance_id": *listReportResourcesOptions.InstanceID,
-		"report_id":   *listReportResourcesOptions.ReportID,
+		"report_id": *listReportResourcesOptions.ReportID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/{report_id}/resources`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}/resources`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -919,7 +872,7 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportResourcesWithContext(ctx
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "ListReportResources")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "ListReportResources")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -956,7 +909,7 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportResourcesWithContext(ctx
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -973,12 +926,12 @@ func (resultsReportsApi *ResultsReportsApiV3) ListReportResourcesWithContext(ctx
 
 // GetReportTags : Get tags associated with the report
 // Gets a list of tags for the specified report.
-func (resultsReportsApi *ResultsReportsApiV3) GetReportTags(getReportTagsOptions *GetReportTagsOptions) (result *GetTagsResponse, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportTagsWithContext(context.Background(), getReportTagsOptions)
+func (results *ResultsV3) GetReportTags(getReportTagsOptions *GetReportTagsOptions) (result *GetTagsResponse, response *core.DetailedResponse, err error) {
+	return results.GetReportTagsWithContext(context.Background(), getReportTagsOptions)
 }
 
 // GetReportTagsWithContext is an alternate form of the GetReportTags method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportTagsWithContext(ctx context.Context, getReportTagsOptions *GetReportTagsOptions) (result *GetTagsResponse, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) GetReportTagsWithContext(ctx context.Context, getReportTagsOptions *GetReportTagsOptions) (result *GetTagsResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getReportTagsOptions, "getReportTagsOptions cannot be nil")
 	if err != nil {
 		return
@@ -994,8 +947,8 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportTagsWithContext(ctx conte
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/v3/reports/{report_id}/tags`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}/tags`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -1004,7 +957,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportTagsWithContext(ctx conte
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReportTags")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReportTags")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -1019,7 +972,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportTagsWithContext(ctx conte
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -1035,13 +988,13 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportTagsWithContext(ctx conte
 }
 
 // GetReportViolationsDrift : Get report violations drift
-// Gets a list of report violation data points for the specified report and timeframe.
-func (resultsReportsApi *ResultsReportsApiV3) GetReportViolationsDrift(getReportViolationsDriftOptions *GetReportViolationsDriftOptions) (result *GetReportViolationsDriftResult, response *core.DetailedResponse, err error) {
-	return resultsReportsApi.GetReportViolationsDriftWithContext(context.Background(), getReportViolationsDriftOptions)
+// Get a list of report violation data points for the specified report and time frame.
+func (results *ResultsV3) GetReportViolationsDrift(getReportViolationsDriftOptions *GetReportViolationsDriftOptions) (result *GetReportViolationsDriftResult, response *core.DetailedResponse, err error) {
+	return results.GetReportViolationsDriftWithContext(context.Background(), getReportViolationsDriftOptions)
 }
 
 // GetReportViolationsDriftWithContext is an alternate form of the GetReportViolationsDrift method which supports a Context parameter
-func (resultsReportsApi *ResultsReportsApiV3) GetReportViolationsDriftWithContext(ctx context.Context, getReportViolationsDriftOptions *GetReportViolationsDriftOptions) (result *GetReportViolationsDriftResult, response *core.DetailedResponse, err error) {
+func (results *ResultsV3) GetReportViolationsDriftWithContext(ctx context.Context, getReportViolationsDriftOptions *GetReportViolationsDriftOptions) (result *GetReportViolationsDriftResult, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getReportViolationsDriftOptions, "getReportViolationsDriftOptions cannot be nil")
 	if err != nil {
 		return
@@ -1052,14 +1005,13 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportViolationsDriftWithContex
 	}
 
 	pathParamsMap := map[string]string{
-		"instance_id": *getReportViolationsDriftOptions.InstanceID,
-		"report_id":   *getReportViolationsDriftOptions.ReportID,
+		"report_id": *getReportViolationsDriftOptions.ReportID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = resultsReportsApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(resultsReportsApi.Service.Options.URL, `/instances/{instance_id}/v3/reports/{report_id}/violations_drift`, pathParamsMap)
+	builder.EnableGzipCompression = results.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(results.Service.Options.URL, `/reports/{report_id}/violations_drift`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -1068,7 +1020,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportViolationsDriftWithContex
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("results_reports_api", "V3", "GetReportViolationsDrift")
+	sdkHeaders := common.GetSdkHeaders("results", "V3", "GetReportViolationsDrift")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -1087,7 +1039,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportViolationsDriftWithContex
 	}
 
 	var rawResponse map[string]json.RawMessage
-	response, err = resultsReportsApi.Service.Request(request, &rawResponse)
+	response, err = results.Service.Request(request, &rawResponse)
 	if err != nil {
 		return
 	}
@@ -1102,7 +1054,7 @@ func (resultsReportsApi *ResultsReportsApiV3) GetReportViolationsDriftWithContex
 	return
 }
 
-// Account : The account associated to a report.
+// Account : The account that is associated with a report.
 type Account struct {
 	// The account ID.
 	ID *string `json:"id,omitempty"`
@@ -1133,7 +1085,7 @@ func UnmarshalAccount(m map[string]json.RawMessage, result interface{}) (err err
 	return
 }
 
-// Assessment : A control specification assessment.
+// Assessment : The control specification assessment.
 type Assessment struct {
 	// The assessment ID.
 	AssessmentID *string `json:"assessment_id,omitempty"`
@@ -1185,7 +1137,7 @@ func UnmarshalAssessment(m map[string]json.RawMessage, result interface{}) (err 
 	return
 }
 
-// Attachment : The attachment associated to a report.
+// Attachment : The attachment that is associated with a report.
 type Attachment struct {
 	// The attachment ID.
 	ID *string `json:"id,omitempty"`
@@ -1202,15 +1154,15 @@ func UnmarshalAttachment(m map[string]json.RawMessage, result interface{}) (err 
 	return
 }
 
-// ComplianceScore : A compliance score.
+// ComplianceScore : The compliance score.
 type ComplianceScore struct {
-	// The number of passed evaluations.
+	// The number of successful evaluations.
 	Passed *int64 `json:"passed,omitempty"`
 
 	// The total number of evaluations.
 	TotalCount *int64 `json:"total_count,omitempty"`
 
-	// The percent of passed evaluations out of the total.
+	// The percentage of successful evaluations.
 	Percent *int64 `json:"percent,omitempty"`
 }
 
@@ -1233,7 +1185,7 @@ func UnmarshalComplianceScore(m map[string]json.RawMessage, result interface{}) 
 	return
 }
 
-// ComplianceStats : Compliance stats.
+// ComplianceStats : The compliance stats.
 type ComplianceStats struct {
 	// The allowed values of an aggregated status for controls, specifications, assessments, and resources.
 	Status *string `json:"status,omitempty"`
@@ -1244,13 +1196,13 @@ type ComplianceStats struct {
 	// The number of compliant checks.
 	CompliantCount *int64 `json:"compliant_count,omitempty"`
 
-	// The number of not compliant checks.
+	// The number of checks that are not compliant.
 	NotCompliantCount *int64 `json:"not_compliant_count,omitempty"`
 
-	// The number of checks unable to perform.
+	// The number of checks that are unable to perform.
 	UnableToPerformCount *int64 `json:"unable_to_perform_count,omitempty"`
 
-	// The number of checks requiring a user evaluation.
+	// The number of checks that require a user evaluation.
 	UserEvaluationRequiredCount *int64 `json:"user_evaluation_required_count,omitempty"`
 }
 
@@ -1294,7 +1246,7 @@ func UnmarshalComplianceStats(m map[string]json.RawMessage, result interface{}) 
 	return
 }
 
-// ControlSpecificationWithStats : A control specification with compliance stats.
+// ControlSpecificationWithStats : The control specification with compliance stats.
 type ControlSpecificationWithStats struct {
 	// The control specification ID.
 	ID *string `json:"id,omitempty"`
@@ -1323,13 +1275,13 @@ type ControlSpecificationWithStats struct {
 	// The number of compliant checks.
 	CompliantCount *int64 `json:"compliant_count,omitempty"`
 
-	// The number of not compliant checks.
+	// The number of checks that are not compliant.
 	NotCompliantCount *int64 `json:"not_compliant_count,omitempty"`
 
-	// The number of checks unable to perform.
+	// The number of checks that are unable to perform.
 	UnableToPerformCount *int64 `json:"unable_to_perform_count,omitempty"`
 
-	// The number of checks requiring a user evaluation.
+	// The number of checks that require a user evaluation.
 	UserEvaluationRequiredCount *int64 `json:"user_evaluation_required_count,omitempty"`
 }
 
@@ -1397,7 +1349,7 @@ func UnmarshalControlSpecificationWithStats(m map[string]json.RawMessage, result
 	return
 }
 
-// ControlWithStats : A control with compliance stats.
+// ControlWithStats : The control with compliance stats.
 type ControlWithStats struct {
 	// The control ID.
 	ID *string `json:"id,omitempty"`
@@ -1420,7 +1372,7 @@ type ControlWithStats struct {
 	// The control path.
 	ControlPath *string `json:"control_path,omitempty"`
 
-	// The list of specifications in this page.
+	// The list of specifications that are on the page.
 	ControlSpecifications []ControlSpecificationWithStats `json:"control_specifications,omitempty"`
 
 	// The allowed values of an aggregated status for controls, specifications, assessments, and resources.
@@ -1432,13 +1384,13 @@ type ControlWithStats struct {
 	// The number of compliant checks.
 	CompliantCount *int64 `json:"compliant_count,omitempty"`
 
-	// The number of not compliant checks.
+	// The number of checks that are not compliant.
 	NotCompliantCount *int64 `json:"not_compliant_count,omitempty"`
 
-	// The number of checks unable to perform.
+	// The number of checks that are unable to perform.
 	UnableToPerformCount *int64 `json:"unable_to_perform_count,omitempty"`
 
-	// The number of checks requiring a user evaluation.
+	// The number of checks that require a user evaluation.
 	UserEvaluationRequiredCount *int64 `json:"user_evaluation_required_count,omitempty"`
 }
 
@@ -1514,7 +1466,7 @@ func UnmarshalControlWithStats(m map[string]json.RawMessage, result interface{})
 	return
 }
 
-// EvalDetails : Evaluation details.
+// EvalDetails : The evaluation details.
 type EvalDetails struct {
 	// The evaluation properties.
 	Properties []Property `json:"properties,omitempty"`
@@ -1531,7 +1483,7 @@ func UnmarshalEvalDetails(m map[string]json.RawMessage, result interface{}) (err
 	return
 }
 
-// EvalStats : Evaluation stats.
+// EvalStats : The evaluation stats.
 type EvalStats struct {
 	// The allowed values of an aggregated status for controls, specifications, assessments, and resources.
 	Status *string `json:"status,omitempty"`
@@ -1545,10 +1497,10 @@ type EvalStats struct {
 	// The number of failed evaluations.
 	FailureCount *int64 `json:"failure_count,omitempty"`
 
-	// The number of evaluations that ended with errors (started but not finished).
+	// The number of evaluations that started, but did not finish, and ended with errors.
 	ErrorCount *int64 `json:"error_count,omitempty"`
 
-	// The number of completed evaluations (passed and failed).
+	// The total number of completed evaluations.
 	CompletedCount *int64 `json:"completed_count,omitempty"`
 }
 
@@ -1592,12 +1544,12 @@ func UnmarshalEvalStats(m map[string]json.RawMessage, result interface{}) (err e
 	return
 }
 
-// Evaluation : A control specification assessment evaluation.
+// Evaluation : The evaluation of a control specification assessment.
 type Evaluation struct {
-	// The id of the home account.
+	// The ID of the home account.
 	HomeAccountID *string `json:"home_account_id,omitempty"`
 
-	// The ID of the report associated to this evaluation.
+	// The ID of the report that is associated to the evaluation.
 	ReportID *string `json:"report_id,omitempty"`
 
 	// The control ID.
@@ -1606,13 +1558,13 @@ type Evaluation struct {
 	// The component ID.
 	ComponentID *string `json:"component_id,omitempty"`
 
-	// A control specification assessment.
+	// The control specification assessment.
 	Assessment *Assessment `json:"assessment,omitempty"`
 
-	// The time the evaluation was made.
+	// The time when the evaluation was made.
 	EvaluateTime *string `json:"evaluate_time,omitempty"`
 
-	// An evaluation target.
+	// The evaluation target.
 	Target *Target `json:"target,omitempty"`
 
 	// The allowed values of an evaluation status.
@@ -1621,7 +1573,7 @@ type Evaluation struct {
 	// The reason for the evaluation failure.
 	Reason *string `json:"reason,omitempty"`
 
-	// Evaluation details.
+	// The evaluation details.
 	Details *EvalDetails `json:"details,omitempty"`
 }
 
@@ -1681,7 +1633,7 @@ func UnmarshalEvaluation(m map[string]json.RawMessage, result interface{}) (err 
 	return
 }
 
-// EvaluationPage : A page of assessment evaluations.
+// EvaluationPage : The page of assessment evaluations.
 type EvaluationPage struct {
 	// The total number of resources in the collection.
 	TotalCount *int64 `json:"total_count" validate:"required"`
@@ -1704,7 +1656,7 @@ type EvaluationPage struct {
 	// The id of the report.
 	ReportID *string `json:"report_id,omitempty"`
 
-	// The list of evaluations in this page.
+	// The list of evaluations that are on the page.
 	Evaluations []Evaluation `json:"evaluations,omitempty"`
 }
 
@@ -1761,16 +1713,10 @@ func (resp *EvaluationPage) GetNextStart() (*string, error) {
 
 // GetLatestReportsOptions : The GetLatestReports options.
 type GetLatestReportsOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The supplied or generated value of this header is logged for a request and repeated in a response header for the
 	// corresponding response. The same value is used for downstream requests and retries of those requests. If a value of
 	// this headers is not supplied in a request, the service generates a random (version 4) UUID.
 	XCorrelationID *string `json:"X-Correlation-Id,omitempty"`
-
-	// The ID of the home account.
-	HomeAccountID *string `json:"home_account_id,omitempty"`
 
 	// Sorts results by using a valid sort field. To learn more, see
 	// [Sorting](https://cloud.ibm.com/docs/api-handbook?topic=api-handbook-sorting).
@@ -1781,27 +1727,13 @@ type GetLatestReportsOptions struct {
 }
 
 // NewGetLatestReportsOptions : Instantiate GetLatestReportsOptions
-func (*ResultsReportsApiV3) NewGetLatestReportsOptions(instanceID string) *GetLatestReportsOptions {
-	return &GetLatestReportsOptions{
-		InstanceID: core.StringPtr(instanceID),
-	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetLatestReportsOptions) SetInstanceID(instanceID string) *GetLatestReportsOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
+func (*ResultsV3) NewGetLatestReportsOptions() *GetLatestReportsOptions {
+	return &GetLatestReportsOptions{}
 }
 
 // SetXCorrelationID : Allow user to set XCorrelationID
 func (_options *GetLatestReportsOptions) SetXCorrelationID(xCorrelationID string) *GetLatestReportsOptions {
 	_options.XCorrelationID = core.StringPtr(xCorrelationID)
-	return _options
-}
-
-// SetHomeAccountID : Allow user to set HomeAccountID
-func (_options *GetLatestReportsOptions) SetHomeAccountID(homeAccountID string) *GetLatestReportsOptions {
-	_options.HomeAccountID = core.StringPtr(homeAccountID)
 	return _options
 }
 
@@ -1822,16 +1754,16 @@ type GetLatestReportsResponse struct {
 	// The id of the home account.
 	HomeAccountID *string `json:"home_account_id,omitempty"`
 
-	// Compliance stats.
+	// The compliance stats.
 	ControlsSummary *ComplianceStats `json:"controls_summary,omitempty"`
 
-	// Evaluation stats.
+	// The evaluation stats.
 	EvaluationsSummary *EvalStats `json:"evaluations_summary,omitempty"`
 
-	// A compliance score.
+	// The compliance score.
 	Score *ComplianceScore `json:"score,omitempty"`
 
-	// A list of reports.
+	// The list of reports.
 	Reports []Report `json:"reports,omitempty"`
 }
 
@@ -1864,10 +1796,10 @@ func UnmarshalGetLatestReportsResponse(m map[string]json.RawMessage, result inte
 
 // GetProfilesResponse : The response body of the `get_profiles` operation.
 type GetProfilesResponse struct {
-	// The id of the home account.
+	// The ID of the home account.
 	HomeAccountID *string `json:"home_account_id,omitempty"`
 
-	// A list of profile groups.
+	// The list of profile groups.
 	Profiles []Profile `json:"profiles,omitempty"`
 }
 
@@ -1888,9 +1820,6 @@ func UnmarshalGetProfilesResponse(m map[string]json.RawMessage, result interface
 
 // GetReportControlsOptions : The GetReportControls options.
 type GetReportControlsOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The ID of the scan associated to a report.
 	ReportID *string `json:"report_id" validate:"required,ne="`
 
@@ -1932,17 +1861,10 @@ const (
 )
 
 // NewGetReportControlsOptions : Instantiate GetReportControlsOptions
-func (*ResultsReportsApiV3) NewGetReportControlsOptions(instanceID string, reportID string) *GetReportControlsOptions {
+func (*ResultsV3) NewGetReportControlsOptions(reportID string) *GetReportControlsOptions {
 	return &GetReportControlsOptions{
-		InstanceID: core.StringPtr(instanceID),
-		ReportID:   core.StringPtr(reportID),
+		ReportID: core.StringPtr(reportID),
 	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetReportControlsOptions) SetInstanceID(instanceID string) *GetReportControlsOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
 }
 
 // SetReportID : Allow user to set ReportID
@@ -1999,7 +1921,7 @@ func (options *GetReportControlsOptions) SetHeaders(param map[string]string) *Ge
 	return options
 }
 
-// GetReportControlsResponse : A list of controls.
+// GetReportControlsResponse : The list of controls.
 type GetReportControlsResponse struct {
 	// The allowed values of an aggregated status for controls, specifications, assessments, and resources.
 	Status *string `json:"status,omitempty"`
@@ -2010,22 +1932,22 @@ type GetReportControlsResponse struct {
 	// The number of compliant checks.
 	CompliantCount *int64 `json:"compliant_count,omitempty"`
 
-	// The number of not compliant checks.
+	// The number of checks that are not compliant.
 	NotCompliantCount *int64 `json:"not_compliant_count,omitempty"`
 
-	// The number of checks unable to perform.
+	// The number of checks that are unable to perform.
 	UnableToPerformCount *int64 `json:"unable_to_perform_count,omitempty"`
 
-	// The number of checks requiring a user evaluation.
+	// The number of checks that require a user evaluation.
 	UserEvaluationRequiredCount *int64 `json:"user_evaluation_required_count,omitempty"`
 
-	// The id of the home account.
+	// The ID of the home account.
 	HomeAccountID *string `json:"home_account_id,omitempty"`
 
-	// The id of the report.
+	// The ID of the report.
 	ReportID *string `json:"report_id,omitempty"`
 
-	// The list of controls in the report.
+	// The list of controls that are in the report.
 	Controls []ControlWithStats `json:"controls,omitempty"`
 }
 
@@ -2083,9 +2005,6 @@ func UnmarshalGetReportControlsResponse(m map[string]json.RawMessage, result int
 
 // GetReportEvaluationOptions : The GetReportEvaluation options.
 type GetReportEvaluationOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The ID of the scan associated to a report.
 	ReportID *string `json:"report_id" validate:"required,ne="`
 
@@ -2094,22 +2013,18 @@ type GetReportEvaluationOptions struct {
 	// this headers is not supplied in a request, the service generates a random (version 4) UUID.
 	XCorrelationID *string `json:"X-Correlation-Id,omitempty"`
 
+	// Specifies whether or not report summary metadata should be excluded.
+	ExcludeSummary *bool `json:"exclude_summary,omitempty"`
+
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewGetReportEvaluationOptions : Instantiate GetReportEvaluationOptions
-func (*ResultsReportsApiV3) NewGetReportEvaluationOptions(instanceID string, reportID string) *GetReportEvaluationOptions {
+func (*ResultsV3) NewGetReportEvaluationOptions(reportID string) *GetReportEvaluationOptions {
 	return &GetReportEvaluationOptions{
-		InstanceID: core.StringPtr(instanceID),
-		ReportID:   core.StringPtr(reportID),
+		ReportID: core.StringPtr(reportID),
 	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetReportEvaluationOptions) SetInstanceID(instanceID string) *GetReportEvaluationOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
 }
 
 // SetReportID : Allow user to set ReportID
@@ -2124,6 +2039,12 @@ func (_options *GetReportEvaluationOptions) SetXCorrelationID(xCorrelationID str
 	return _options
 }
 
+// SetExcludeSummary : Allow user to set ExcludeSummary
+func (_options *GetReportEvaluationOptions) SetExcludeSummary(excludeSummary bool) *GetReportEvaluationOptions {
+	_options.ExcludeSummary = core.BoolPtr(excludeSummary)
+	return _options
+}
+
 // SetHeaders : Allow user to set Headers
 func (options *GetReportEvaluationOptions) SetHeaders(param map[string]string) *GetReportEvaluationOptions {
 	options.Headers = param
@@ -2132,9 +2053,6 @@ func (options *GetReportEvaluationOptions) SetHeaders(param map[string]string) *
 
 // GetReportOptions : The GetReport options.
 type GetReportOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The ID of the scan associated to a report.
 	ReportID *string `json:"report_id" validate:"required,ne="`
 
@@ -2148,17 +2066,10 @@ type GetReportOptions struct {
 }
 
 // NewGetReportOptions : Instantiate GetReportOptions
-func (*ResultsReportsApiV3) NewGetReportOptions(instanceID string, reportID string) *GetReportOptions {
+func (*ResultsV3) NewGetReportOptions(reportID string) *GetReportOptions {
 	return &GetReportOptions{
-		InstanceID: core.StringPtr(instanceID),
-		ReportID:   core.StringPtr(reportID),
+		ReportID: core.StringPtr(reportID),
 	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetReportOptions) SetInstanceID(instanceID string) *GetReportOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
 }
 
 // SetReportID : Allow user to set ReportID
@@ -2181,9 +2092,6 @@ func (options *GetReportOptions) SetHeaders(param map[string]string) *GetReportO
 
 // GetReportRuleOptions : The GetReportRule options.
 type GetReportRuleOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The ID of the scan associated to a report.
 	ReportID *string `json:"report_id" validate:"required,ne="`
 
@@ -2200,18 +2108,11 @@ type GetReportRuleOptions struct {
 }
 
 // NewGetReportRuleOptions : Instantiate GetReportRuleOptions
-func (*ResultsReportsApiV3) NewGetReportRuleOptions(instanceID string, reportID string, ruleID string) *GetReportRuleOptions {
+func (*ResultsV3) NewGetReportRuleOptions(reportID string, ruleID string) *GetReportRuleOptions {
 	return &GetReportRuleOptions{
-		InstanceID: core.StringPtr(instanceID),
-		ReportID:   core.StringPtr(reportID),
-		RuleID:     core.StringPtr(ruleID),
+		ReportID: core.StringPtr(reportID),
+		RuleID:   core.StringPtr(ruleID),
 	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetReportRuleOptions) SetInstanceID(instanceID string) *GetReportRuleOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
 }
 
 // SetReportID : Allow user to set ReportID
@@ -2240,9 +2141,6 @@ func (options *GetReportRuleOptions) SetHeaders(param map[string]string) *GetRep
 
 // GetReportSummaryOptions : The GetReportSummary options.
 type GetReportSummaryOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The ID of the scan associated to a report.
 	ReportID *string `json:"report_id" validate:"required,ne="`
 
@@ -2256,17 +2154,10 @@ type GetReportSummaryOptions struct {
 }
 
 // NewGetReportSummaryOptions : Instantiate GetReportSummaryOptions
-func (*ResultsReportsApiV3) NewGetReportSummaryOptions(instanceID string, reportID string) *GetReportSummaryOptions {
+func (*ResultsV3) NewGetReportSummaryOptions(reportID string) *GetReportSummaryOptions {
 	return &GetReportSummaryOptions{
-		InstanceID: core.StringPtr(instanceID),
-		ReportID:   core.StringPtr(reportID),
+		ReportID: core.StringPtr(reportID),
 	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetReportSummaryOptions) SetInstanceID(instanceID string) *GetReportSummaryOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
 }
 
 // SetReportID : Allow user to set ReportID
@@ -2302,7 +2193,7 @@ type GetReportTagsOptions struct {
 }
 
 // NewGetReportTagsOptions : Instantiate GetReportTagsOptions
-func (*ResultsReportsApiV3) NewGetReportTagsOptions(reportID string) *GetReportTagsOptions {
+func (*ResultsV3) NewGetReportTagsOptions(reportID string) *GetReportTagsOptions {
 	return &GetReportTagsOptions{
 		ReportID: core.StringPtr(reportID),
 	}
@@ -2328,9 +2219,6 @@ func (options *GetReportTagsOptions) SetHeaders(param map[string]string) *GetRep
 
 // GetReportViolationsDriftOptions : The GetReportViolationsDrift options.
 type GetReportViolationsDriftOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The ID of the scan associated to a report.
 	ReportID *string `json:"report_id" validate:"required,ne="`
 
@@ -2347,17 +2235,10 @@ type GetReportViolationsDriftOptions struct {
 }
 
 // NewGetReportViolationsDriftOptions : Instantiate GetReportViolationsDriftOptions
-func (*ResultsReportsApiV3) NewGetReportViolationsDriftOptions(instanceID string, reportID string) *GetReportViolationsDriftOptions {
+func (*ResultsV3) NewGetReportViolationsDriftOptions(reportID string) *GetReportViolationsDriftOptions {
 	return &GetReportViolationsDriftOptions{
-		InstanceID: core.StringPtr(instanceID),
-		ReportID:   core.StringPtr(reportID),
+		ReportID: core.StringPtr(reportID),
 	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetReportViolationsDriftOptions) SetInstanceID(instanceID string) *GetReportViolationsDriftOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
 }
 
 // SetReportID : Allow user to set ReportID
@@ -2386,13 +2267,13 @@ func (options *GetReportViolationsDriftOptions) SetHeaders(param map[string]stri
 
 // GetReportViolationsDriftResult : The response body of the `get_report_violations_drift` operation.
 type GetReportViolationsDriftResult struct {
-	// The id of the home account.
+	// The ID of the home account.
 	HomeAccountID *string `json:"home_account_id,omitempty"`
 
-	// The id of the report.
+	// The ID of the report.
 	ReportID *string `json:"report_id,omitempty"`
 
-	// A list of report violations data points.
+	// The list of report violations data points.
 	DataPoints []ReportViolationDataPoint `json:"data_points,omitempty"`
 }
 
@@ -2417,16 +2298,10 @@ func UnmarshalGetReportViolationsDriftResult(m map[string]json.RawMessage, resul
 
 // GetReportsProfilesOptions : The GetReportsProfiles options.
 type GetReportsProfilesOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The supplied or generated value of this header is logged for a request and repeated in a response header for the
 	// corresponding response. The same value is used for downstream requests and retries of those requests. If a value of
 	// this headers is not supplied in a request, the service generates a random (version 4) UUID.
 	XCorrelationID *string `json:"X-Correlation-Id,omitempty"`
-
-	// The ID of the home account.
-	HomeAccountID *string `json:"home_account_id,omitempty"`
 
 	// The ID of the report.
 	ReportID *string `json:"report_id,omitempty"`
@@ -2436,27 +2311,13 @@ type GetReportsProfilesOptions struct {
 }
 
 // NewGetReportsProfilesOptions : Instantiate GetReportsProfilesOptions
-func (*ResultsReportsApiV3) NewGetReportsProfilesOptions(instanceID string) *GetReportsProfilesOptions {
-	return &GetReportsProfilesOptions{
-		InstanceID: core.StringPtr(instanceID),
-	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetReportsProfilesOptions) SetInstanceID(instanceID string) *GetReportsProfilesOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
+func (*ResultsV3) NewGetReportsProfilesOptions() *GetReportsProfilesOptions {
+	return &GetReportsProfilesOptions{}
 }
 
 // SetXCorrelationID : Allow user to set XCorrelationID
 func (_options *GetReportsProfilesOptions) SetXCorrelationID(xCorrelationID string) *GetReportsProfilesOptions {
 	_options.XCorrelationID = core.StringPtr(xCorrelationID)
-	return _options
-}
-
-// SetHomeAccountID : Allow user to set HomeAccountID
-func (_options *GetReportsProfilesOptions) SetHomeAccountID(homeAccountID string) *GetReportsProfilesOptions {
-	_options.HomeAccountID = core.StringPtr(homeAccountID)
 	return _options
 }
 
@@ -2474,43 +2335,23 @@ func (options *GetReportsProfilesOptions) SetHeaders(param map[string]string) *G
 
 // GetReportsScopesOptions : The GetReportsScopes options.
 type GetReportsScopesOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The supplied or generated value of this header is logged for a request and repeated in a response header for the
 	// corresponding response. The same value is used for downstream requests and retries of those requests. If a value of
 	// this headers is not supplied in a request, the service generates a random (version 4) UUID.
 	XCorrelationID *string `json:"X-Correlation-Id,omitempty"`
-
-	// The ID of the home account.
-	HomeAccountID *string `json:"home_account_id,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewGetReportsScopesOptions : Instantiate GetReportsScopesOptions
-func (*ResultsReportsApiV3) NewGetReportsScopesOptions(instanceID string) *GetReportsScopesOptions {
-	return &GetReportsScopesOptions{
-		InstanceID: core.StringPtr(instanceID),
-	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *GetReportsScopesOptions) SetInstanceID(instanceID string) *GetReportsScopesOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
+func (*ResultsV3) NewGetReportsScopesOptions() *GetReportsScopesOptions {
+	return &GetReportsScopesOptions{}
 }
 
 // SetXCorrelationID : Allow user to set XCorrelationID
 func (_options *GetReportsScopesOptions) SetXCorrelationID(xCorrelationID string) *GetReportsScopesOptions {
 	_options.XCorrelationID = core.StringPtr(xCorrelationID)
-	return _options
-}
-
-// SetHomeAccountID : Allow user to set HomeAccountID
-func (_options *GetReportsScopesOptions) SetHomeAccountID(homeAccountID string) *GetReportsScopesOptions {
-	_options.HomeAccountID = core.StringPtr(homeAccountID)
 	return _options
 }
 
@@ -2522,10 +2363,10 @@ func (options *GetReportsScopesOptions) SetHeaders(param map[string]string) *Get
 
 // GetScopesResponse : The response body of the `get_scopes` operation.
 type GetScopesResponse struct {
-	// The id of the home account.
+	// The ID of the home account.
 	HomeAccountID *string `json:"home_account_id,omitempty"`
 
-	// A list of scopes.
+	// The list of scopes.
 	Scopes []Scope `json:"scopes,omitempty"`
 }
 
@@ -2546,10 +2387,10 @@ func UnmarshalGetScopesResponse(m map[string]json.RawMessage, result interface{}
 
 // GetTagsResponse : The response body of the `get_tags` operation.
 type GetTagsResponse struct {
-	// The id of the report.
+	// The ID of the report.
 	ReportID *string `json:"report_id,omitempty"`
 
-	// The resource tags.
+	// The collection of different types of tags.
 	Tags *Tags `json:"tags,omitempty"`
 }
 
@@ -2570,9 +2411,6 @@ func UnmarshalGetTagsResponse(m map[string]json.RawMessage, result interface{}) 
 
 // ListReportEvaluationsOptions : The ListReportEvaluations options.
 type ListReportEvaluationsOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The ID of the scan associated to a report.
 	ReportID *string `json:"report_id" validate:"required,ne="`
 
@@ -2616,17 +2454,10 @@ const (
 )
 
 // NewListReportEvaluationsOptions : Instantiate ListReportEvaluationsOptions
-func (*ResultsReportsApiV3) NewListReportEvaluationsOptions(instanceID string, reportID string) *ListReportEvaluationsOptions {
+func (*ResultsV3) NewListReportEvaluationsOptions(reportID string) *ListReportEvaluationsOptions {
 	return &ListReportEvaluationsOptions{
-		InstanceID: core.StringPtr(instanceID),
-		ReportID:   core.StringPtr(reportID),
+		ReportID: core.StringPtr(reportID),
 	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *ListReportEvaluationsOptions) SetInstanceID(instanceID string) *ListReportEvaluationsOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
 }
 
 // SetReportID : Allow user to set ReportID
@@ -2691,9 +2522,6 @@ func (options *ListReportEvaluationsOptions) SetHeaders(param map[string]string)
 
 // ListReportResourcesOptions : The ListReportResources options.
 type ListReportResourcesOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The ID of the scan associated to a report.
 	ReportID *string `json:"report_id" validate:"required,ne="`
 
@@ -2737,17 +2565,10 @@ const (
 )
 
 // NewListReportResourcesOptions : Instantiate ListReportResourcesOptions
-func (*ResultsReportsApiV3) NewListReportResourcesOptions(instanceID string, reportID string) *ListReportResourcesOptions {
+func (*ResultsV3) NewListReportResourcesOptions(reportID string) *ListReportResourcesOptions {
 	return &ListReportResourcesOptions{
-		InstanceID: core.StringPtr(instanceID),
-		ReportID:   core.StringPtr(reportID),
+		ReportID: core.StringPtr(reportID),
 	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *ListReportResourcesOptions) SetInstanceID(instanceID string) *ListReportResourcesOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
 }
 
 // SetReportID : Allow user to set ReportID
@@ -2812,16 +2633,10 @@ func (options *ListReportResourcesOptions) SetHeaders(param map[string]string) *
 
 // ListReportsOptions : The ListReports options.
 type ListReportsOptions struct {
-	// Instance id.
-	InstanceID *string `json:"instance_id" validate:"required,ne="`
-
 	// The supplied or generated value of this header is logged for a request and repeated in a response header for the
 	// corresponding response. The same value is used for downstream requests and retries of those requests. If a value of
 	// this headers is not supplied in a request, the service generates a random (version 4) UUID.
 	XCorrelationID *string `json:"X-Correlation-Id,omitempty"`
-
-	// The ID of the home account.
-	HomeAccountID *string `json:"home_account_id,omitempty"`
 
 	// The ID of the attachment.
 	AttachmentID *string `json:"attachment_id,omitempty"`
@@ -2860,27 +2675,13 @@ const (
 )
 
 // NewListReportsOptions : Instantiate ListReportsOptions
-func (*ResultsReportsApiV3) NewListReportsOptions(instanceID string) *ListReportsOptions {
-	return &ListReportsOptions{
-		InstanceID: core.StringPtr(instanceID),
-	}
-}
-
-// SetInstanceID : Allow user to set InstanceID
-func (_options *ListReportsOptions) SetInstanceID(instanceID string) *ListReportsOptions {
-	_options.InstanceID = core.StringPtr(instanceID)
-	return _options
+func (*ResultsV3) NewListReportsOptions() *ListReportsOptions {
+	return &ListReportsOptions{}
 }
 
 // SetXCorrelationID : Allow user to set XCorrelationID
 func (_options *ListReportsOptions) SetXCorrelationID(xCorrelationID string) *ListReportsOptions {
 	_options.XCorrelationID = core.StringPtr(xCorrelationID)
-	return _options
-}
-
-// SetHomeAccountID : Allow user to set HomeAccountID
-func (_options *ListReportsOptions) SetHomeAccountID(homeAccountID string) *ListReportsOptions {
-	_options.HomeAccountID = core.StringPtr(homeAccountID)
 	return _options
 }
 
@@ -2955,7 +2756,7 @@ func UnmarshalPageHRef(m map[string]json.RawMessage, result interface{}) (err er
 	return
 }
 
-// Parameter : A parameter.
+// Parameter : The parameter.
 type Parameter struct {
 	// The parameter name.
 	ParameterName *string `json:"parameter_name,omitempty"`
@@ -2966,7 +2767,7 @@ type Parameter struct {
 	// The parameter type.
 	ParameterType *string `json:"parameter_type,omitempty"`
 
-	// A property value.
+	// A property's value.
 	ParameterValue interface{} `json:"parameter_value,omitempty"`
 }
 
@@ -2993,7 +2794,7 @@ func UnmarshalParameter(m map[string]json.RawMessage, result interface{}) (err e
 	return
 }
 
-// Profile : A profile.
+// Profile : The profile.
 type Profile struct {
 	// The profile ID.
 	ID *string `json:"id,omitempty"`
@@ -3024,7 +2825,7 @@ func UnmarshalProfile(m map[string]json.RawMessage, result interface{}) (err err
 	return
 }
 
-// Property : A property.
+// Property : The property.
 type Property struct {
 	// The property name.
 	Property *string `json:"property,omitempty"`
@@ -3035,10 +2836,10 @@ type Property struct {
 	// The property operator.
 	Operator *string `json:"operator,omitempty"`
 
-	// A property value.
+	// A property's value.
 	ExpectedValue interface{} `json:"expected_value,omitempty"`
 
-	// A property value.
+	// A property's value.
 	FoundValue interface{} `json:"found_value,omitempty"`
 }
 
@@ -3069,36 +2870,39 @@ func UnmarshalProperty(m map[string]json.RawMessage, result interface{}) (err er
 	return
 }
 
-// Report : A report.
+// Report : The report.
 type Report struct {
-	// The ID of this report.
+	// The ID of the report.
 	ID *string `json:"id,omitempty"`
 
-	// The group ID (combined profile, scope, and attachment IDs) associated to this report.
+	// The group ID that is associated with the report. The group ID combines profile, scope, and attachment IDs.
 	GroupID *string `json:"group_id,omitempty"`
 
-	// When the report was created.
-	CreatedOn *strfmt.DateTime `json:"created_on,omitempty"`
+	// The date when the report was created.
+	CreatedAt *string `json:"created_at,omitempty"`
 
-	// When the scan was run.
-	ScanTime *strfmt.DateTime `json:"scan_time,omitempty"`
+	// The date when the scan was run.
+	ScanTime *string `json:"scan_time,omitempty"`
 
 	// The type of the scan.
 	Type *string `json:"type,omitempty"`
 
-	// The COS object associated to this report.
+	// The Cloud Object Storage object that is associated with the report.
 	CosObject *string `json:"cos_object,omitempty"`
 
-	// The account associated to a report.
+	// Instance ID.
+	InstanceID *string `json:"instance_id,omitempty"`
+
+	// The account that is associated with a report.
 	Account *Account `json:"account,omitempty"`
 
-	// A profile.
+	// The profile.
 	Profile *Profile `json:"profile,omitempty"`
 
-	// A scope.
+	// The scope.
 	Scope *Scope `json:"scope,omitempty"`
 
-	// The attachment associated to a report.
+	// The attachment that is associated with a report.
 	Attachment *Attachment `json:"attachment,omitempty"`
 }
 
@@ -3113,7 +2917,7 @@ func UnmarshalReport(m map[string]json.RawMessage, result interface{}) (err erro
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "created_on", &obj.CreatedOn)
+	err = core.UnmarshalPrimitive(m, "created_at", &obj.CreatedAt)
 	if err != nil {
 		return
 	}
@@ -3126,6 +2930,10 @@ func UnmarshalReport(m map[string]json.RawMessage, result interface{}) (err erro
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "cos_object", &obj.CosObject)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "instance_id", &obj.InstanceID)
 	if err != nil {
 		return
 	}
@@ -3149,7 +2957,7 @@ func UnmarshalReport(m map[string]json.RawMessage, result interface{}) (err erro
 	return
 }
 
-// ReportPage : A page of reports.
+// ReportPage : The page of reports.
 type ReportPage struct {
 	// The total number of resources in the collection.
 	TotalCount *int64 `json:"total_count" validate:"required"`
@@ -3166,10 +2974,10 @@ type ReportPage struct {
 	// A page reference.
 	Next *PageHRef `json:"next,omitempty"`
 
-	// The id of the home account.
+	// The ID of the home account.
 	HomeAccountID *string `json:"home_account_id,omitempty"`
 
-	// The list of reports in this page.
+	// The list of reports that are on the page.
 	Reports []Report `json:"reports,omitempty"`
 }
 
@@ -3220,24 +3028,27 @@ func (resp *ReportPage) GetNextStart() (*string, error) {
 	return start, nil
 }
 
-// ReportSummary : A report summary.
+// ReportSummary : The report summary.
 type ReportSummary struct {
-	// The id of the report.
+	// The ID of the report.
 	ReportID *string `json:"report_id,omitempty"`
 
-	// The account associated to a report.
+	// Instance ID.
+	IsntanceID *string `json:"isntance_id,omitempty"`
+
+	// The account that is associated with a report.
 	Account *Account `json:"account,omitempty"`
 
-	// A compliance score.
+	// The compliance score.
 	Score *ComplianceScore `json:"score,omitempty"`
 
-	// Compliance stats.
+	// The compliance stats.
 	Controls *ComplianceStats `json:"controls,omitempty"`
 
-	// Evaluation stats.
+	// The evaluation stats.
 	Evaluations *EvalStats `json:"evaluations,omitempty"`
 
-	// A resource summary.
+	// The resource summary.
 	Resources *ResourceSummary `json:"resources,omitempty"`
 }
 
@@ -3245,6 +3056,10 @@ type ReportSummary struct {
 func UnmarshalReportSummary(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(ReportSummary)
 	err = core.UnmarshalPrimitive(m, "report_id", &obj.ReportID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "isntance_id", &obj.IsntanceID)
 	if err != nil {
 		return
 	}
@@ -3272,18 +3087,18 @@ func UnmarshalReportSummary(m map[string]json.RawMessage, result interface{}) (e
 	return
 }
 
-// ReportViolationDataPoint : A report violation data point.
+// ReportViolationDataPoint : The report violation data point.
 type ReportViolationDataPoint struct {
-	// The id of the report.
+	// The ID of the report.
 	ReportID *string `json:"report_id,omitempty"`
 
-	// The group ID (combined profile, scope, and attachment IDs) associated to this report.
+	// The group ID that is associated with the report. The group ID combines profile, scope, and attachment IDs.
 	ReportGroupID *string `json:"report_group_id,omitempty"`
 
-	// When the scan was run.
-	ScanTime *strfmt.DateTime `json:"scan_time,omitempty"`
+	// The date when the scan was run.
+	ScanTime *string `json:"scan_time,omitempty"`
 
-	// Compliance stats.
+	// The compliance stats.
 	Controls *ComplianceStats `json:"controls,omitempty"`
 }
 
@@ -3310,9 +3125,9 @@ func UnmarshalReportViolationDataPoint(m map[string]json.RawMessage, result inte
 	return
 }
 
-// Resource : A resource.
+// Resource : The resource.
 type Resource struct {
-	// The id of the report.
+	// The ID of the report.
 	ReportID *string `json:"report_id,omitempty"`
 
 	// The resource CRN.
@@ -3321,13 +3136,13 @@ type Resource struct {
 	// The resource name.
 	ResourceName *string `json:"resource_name,omitempty"`
 
-	// The id of the component.
+	// The ID of the component.
 	ComponentID *string `json:"component_id,omitempty"`
 
 	// The environment.
 	Environment *string `json:"environment,omitempty"`
 
-	// The account associated to a report.
+	// The account that is associated with a report.
 	Account *Account `json:"account,omitempty"`
 
 	// The allowed values of an aggregated status for controls, specifications, assessments, and resources.
@@ -3342,10 +3157,10 @@ type Resource struct {
 	// The number of failed evaluations.
 	FailureCount *int64 `json:"failure_count,omitempty"`
 
-	// The number of evaluations that ended with errors (started but not finished).
+	// The number of evaluations that started, but did not finish, and ended with errors.
 	ErrorCount *int64 `json:"error_count,omitempty"`
 
-	// The number of completed evaluations (passed and failed).
+	// The total number of completed evaluations.
 	CompletedCount *int64 `json:"completed_count,omitempty"`
 }
 
@@ -3413,7 +3228,7 @@ func UnmarshalResource(m map[string]json.RawMessage, result interface{}) (err er
 	return
 }
 
-// ResourcePage : A page of resource evaluation summaries.
+// ResourcePage : The page of resource evaluation summaries.
 type ResourcePage struct {
 	// The total number of resources in the collection.
 	TotalCount *int64 `json:"total_count" validate:"required"`
@@ -3436,7 +3251,7 @@ type ResourcePage struct {
 	// The id of the report.
 	ReportID *string `json:"report_id,omitempty"`
 
-	// The list of resource evaluation summaries in this page.
+	// The list of resource evaluation summaries that are on the page.
 	Resources []Resource `json:"resources,omitempty"`
 }
 
@@ -3491,7 +3306,7 @@ func (resp *ResourcePage) GetNextStart() (*string, error) {
 	return start, nil
 }
 
-// ResourceSummary : A resource summary.
+// ResourceSummary : The resource summary.
 type ResourceSummary struct {
 	// The allowed values of an aggregated status for controls, specifications, assessments, and resources.
 	Status *string `json:"status,omitempty"`
@@ -3502,16 +3317,16 @@ type ResourceSummary struct {
 	// The number of compliant checks.
 	CompliantCount *int64 `json:"compliant_count,omitempty"`
 
-	// The number of not compliant checks.
+	// The number of checks that are not compliant.
 	NotCompliantCount *int64 `json:"not_compliant_count,omitempty"`
 
-	// The number of checks unable to perform.
+	// The number of checks that are unable to perform.
 	UnableToPerformCount *int64 `json:"unable_to_perform_count,omitempty"`
 
-	// The number of checks requiring a user evaluation.
+	// The number of checks that require a user evaluation.
 	UserEvaluationRequiredCount *int64 `json:"user_evaluation_required_count,omitempty"`
 
-	// The top 10 resources with the most failures.
+	// The top 10 resources that have the most failures.
 	TopFailed []ResourceSummaryItem `json:"top_failed,omitempty"`
 }
 
@@ -3559,7 +3374,7 @@ func UnmarshalResourceSummary(m map[string]json.RawMessage, result interface{}) 
 	return
 }
 
-// ResourceSummaryItem : A resource summary item.
+// ResourceSummaryItem : The resource summary item.
 type ResourceSummaryItem struct {
 	// The resource name.
 	Name *string `json:"name,omitempty"`
@@ -3567,13 +3382,13 @@ type ResourceSummaryItem struct {
 	// The resource ID.
 	ID *string `json:"id,omitempty"`
 
-	// The service managing the resource.
+	// The service that is managing the resource.
 	Service *string `json:"service,omitempty"`
 
-	// The resource tags.
+	// The collection of different types of tags.
 	Tags *Tags `json:"tags,omitempty"`
 
-	// The account owning the resource.
+	// The account that owns the resource.
 	Account *string `json:"account,omitempty"`
 
 	// The allowed values of an aggregated status for controls, specifications, assessments, and resources.
@@ -3588,10 +3403,10 @@ type ResourceSummaryItem struct {
 	// The number of failed evaluations.
 	FailureCount *int64 `json:"failure_count,omitempty"`
 
-	// The number of evaluations that ended with errors (started but not finished).
+	// The number of evaluations that started, but did not finish, and ended with errors.
 	ErrorCount *int64 `json:"error_count,omitempty"`
 
-	// The number of completed evaluations (passed and failed).
+	// The total number of completed evaluations.
 	CompletedCount *int64 `json:"completed_count,omitempty"`
 }
 
@@ -3655,7 +3470,7 @@ func UnmarshalResourceSummaryItem(m map[string]json.RawMessage, result interface
 	return
 }
 
-// Rule : A rule.
+// Rule : The rule.
 type Rule struct {
 	// The rule ID.
 	ID *string `json:"id,omitempty"`
@@ -3672,17 +3487,17 @@ type Rule struct {
 	// The rule account ID.
 	AccountID *string `json:"account_id,omitempty"`
 
-	// The data the rule was created.
-	CreationDate *strfmt.DateTime `json:"creation_date,omitempty"`
+	// The date when the rule was created.
+	CreatedAt *string `json:"created_at,omitempty"`
 
-	// The ID of the user that created this rule.
+	// The ID of the user who created the rule.
 	CreatedBy *string `json:"created_by,omitempty"`
 
 	// The data the rule was modified.
-	ModificationDate *strfmt.DateTime `json:"modification_date,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 
-	// The ID of the user that modified this rule.
-	ModifiedBy *string `json:"modified_by,omitempty"`
+	// The ID of the user who modified the rule.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 
 	// The rule labels.
 	Labels []string `json:"labels,omitempty"`
@@ -3711,7 +3526,7 @@ func UnmarshalRule(m map[string]json.RawMessage, result interface{}) (err error)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "creation_date", &obj.CreationDate)
+	err = core.UnmarshalPrimitive(m, "created_at", &obj.CreatedAt)
 	if err != nil {
 		return
 	}
@@ -3719,11 +3534,11 @@ func UnmarshalRule(m map[string]json.RawMessage, result interface{}) (err error)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "modification_date", &obj.ModificationDate)
+	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "modified_by", &obj.ModifiedBy)
+	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
 	if err != nil {
 		return
 	}
@@ -3735,7 +3550,7 @@ func UnmarshalRule(m map[string]json.RawMessage, result interface{}) (err error)
 	return
 }
 
-// Scope : A scope.
+// Scope : The scope.
 type Scope struct {
 	// The scope ID.
 	ID *string `json:"id,omitempty"`
@@ -3759,15 +3574,15 @@ func UnmarshalScope(m map[string]json.RawMessage, result interface{}) (err error
 	return
 }
 
-// Tags : The resource tags.
+// Tags : The collection of different types of tags.
 type Tags struct {
-	// The user tags.
+	// The collection of user tags.
 	User []string `json:"user,omitempty"`
 
-	// The access tags.
+	// The collection of access tags.
 	Access []string `json:"access,omitempty"`
 
-	// The service tags.
+	// The collection of service tags.
 	Service []string `json:"service,omitempty"`
 }
 
@@ -3790,12 +3605,12 @@ func UnmarshalTags(m map[string]json.RawMessage, result interface{}) (err error)
 	return
 }
 
-// Target : An evaluation target.
+// Target : The evaluation target.
 type Target struct {
 	// The target ID.
 	ID *string `json:"id,omitempty"`
 
-	// The target account id.
+	// The target account ID.
 	AccountID *string `json:"account_id,omitempty"`
 
 	// The target resource CRN.
@@ -3839,14 +3654,14 @@ func UnmarshalTarget(m map[string]json.RawMessage, result interface{}) (err erro
 type ReportsPager struct {
 	hasNext     bool
 	options     *ListReportsOptions
-	client      *ResultsReportsApiV3
+	client      *ResultsV3
 	pageContext struct {
 		next *string
 	}
 }
 
 // NewReportsPager returns a new ReportsPager instance.
-func (resultsReportsApi *ResultsReportsApiV3) NewReportsPager(options *ListReportsOptions) (pager *ReportsPager, err error) {
+func (results *ResultsV3) NewReportsPager(options *ListReportsOptions) (pager *ReportsPager, err error) {
 	if options.Start != nil && *options.Start != "" {
 		err = fmt.Errorf("the 'options.Start' field should not be set")
 		return
@@ -3856,7 +3671,7 @@ func (resultsReportsApi *ResultsReportsApiV3) NewReportsPager(options *ListRepor
 	pager = &ReportsPager{
 		hasNext: true,
 		options: &optionsCopy,
-		client:  resultsReportsApi,
+		client:  results,
 	}
 	return
 }
@@ -3924,14 +3739,14 @@ func (pager *ReportsPager) GetAll() (allItems []Report, err error) {
 type ReportEvaluationsPager struct {
 	hasNext     bool
 	options     *ListReportEvaluationsOptions
-	client      *ResultsReportsApiV3
+	client      *ResultsV3
 	pageContext struct {
 		next *string
 	}
 }
 
 // NewReportEvaluationsPager returns a new ReportEvaluationsPager instance.
-func (resultsReportsApi *ResultsReportsApiV3) NewReportEvaluationsPager(options *ListReportEvaluationsOptions) (pager *ReportEvaluationsPager, err error) {
+func (results *ResultsV3) NewReportEvaluationsPager(options *ListReportEvaluationsOptions) (pager *ReportEvaluationsPager, err error) {
 	if options.Start != nil && *options.Start != "" {
 		err = fmt.Errorf("the 'options.Start' field should not be set")
 		return
@@ -3941,7 +3756,7 @@ func (resultsReportsApi *ResultsReportsApiV3) NewReportEvaluationsPager(options 
 	pager = &ReportEvaluationsPager{
 		hasNext: true,
 		options: &optionsCopy,
-		client:  resultsReportsApi,
+		client:  results,
 	}
 	return
 }
@@ -4009,14 +3824,14 @@ func (pager *ReportEvaluationsPager) GetAll() (allItems []Evaluation, err error)
 type ReportResourcesPager struct {
 	hasNext     bool
 	options     *ListReportResourcesOptions
-	client      *ResultsReportsApiV3
+	client      *ResultsV3
 	pageContext struct {
 		next *string
 	}
 }
 
 // NewReportResourcesPager returns a new ReportResourcesPager instance.
-func (resultsReportsApi *ResultsReportsApiV3) NewReportResourcesPager(options *ListReportResourcesOptions) (pager *ReportResourcesPager, err error) {
+func (results *ResultsV3) NewReportResourcesPager(options *ListReportResourcesOptions) (pager *ReportResourcesPager, err error) {
 	if options.Start != nil && *options.Start != "" {
 		err = fmt.Errorf("the 'options.Start' field should not be set")
 		return
@@ -4026,7 +3841,7 @@ func (resultsReportsApi *ResultsReportsApiV3) NewReportResourcesPager(options *L
 	pager = &ReportResourcesPager{
 		hasNext: true,
 		options: &optionsCopy,
-		client:  resultsReportsApi,
+		client:  results,
 	}
 	return
 }

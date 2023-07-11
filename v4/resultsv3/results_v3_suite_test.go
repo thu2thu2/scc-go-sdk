@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package resultsreportsapiv3_test
+package resultsv3_test
 
 import (
 	"testing"
@@ -23,7 +23,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestResultsReportsApiV3(t *testing.T) {
+func TestResultsV3(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ResultsReportsApiV3 Suite")
+	RunSpecs(t, "ResultsV3 Suite")
 }

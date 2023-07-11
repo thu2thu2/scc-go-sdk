@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.43.3-d49d4b21-20220104-223519
+ * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
  */
 
 // Package adminserviceapiv1 : Operations and models for the AdminServiceApiV1 service
@@ -29,8 +29,8 @@ import (
 	"reflect"
 	"time"
 
+	common "github.com/IBM/cloud-go-sdk/common"
 	"github.com/IBM/go-sdk-core/v5/core"
-	common "github.com/IBM/scc-go-sdk/v4/common"
 )
 
 // AdminServiceApiV1 : This is an API for the Admin Service
@@ -41,10 +41,17 @@ type AdminServiceApiV1 struct {
 }
 
 // DefaultServiceURL is the default URL to make service requests to.
-const DefaultServiceURL = "https://us.compliance.cloud.ibm.com"
+const DefaultServiceURL = "https://us-south.compliance.cloud.ibm.com/instances/instance_id/v3"
 
 // DefaultServiceName is the default key used to find external configuration information.
 const DefaultServiceName = "admin_service_api"
+
+const ParameterizedServiceURL = "https://{environment}.cloud.ibm.com/instances/{instance_id}/v3"
+
+var defaultUrlVariables = map[string]string{
+	"environment": "us-south.compliance",
+	"instance_id": "instance_id",
+}
 
 // AdminServiceApiV1Options : Service options
 type AdminServiceApiV1Options struct {
@@ -110,17 +117,7 @@ func NewAdminServiceApiV1(options *AdminServiceApiV1Options) (service *AdminServ
 
 // GetServiceURLForRegion returns the service URL to be used for the specified region
 func GetServiceURLForRegion(region string) (string, error) {
-	var endpoints = map[string]string{
-		"us-south": "https://us.compliance.cloud.ibm.com",
-		"us-east":  "https://us.compliance.cloud.ibm.com",
-		"eu-de":    "https://eu.compliance.cloud.ibm.com",
-		"eu-gb":    "https://uk.compliance.cloud.ibm.com",
-	}
-
-	if url, ok := endpoints[region]; ok {
-		return url, nil
-	}
-	return "", fmt.Errorf("service URL for region '%s' not found", region)
+	return "", fmt.Errorf("service does not support regional URLs")
 }
 
 // Clone makes a copy of "adminServiceApi" suitable for processing requests.
@@ -131,6 +128,11 @@ func (adminServiceApi *AdminServiceApiV1) Clone() *AdminServiceApiV1 {
 	clone := *adminServiceApi
 	clone.Service = adminServiceApi.Service.Clone()
 	return &clone
+}
+
+// ConstructServiceURL constructs a service URL from the parameterized URL.
+func ConstructServiceURL(providedUrlVariables map[string]string) (string, error) {
+	return core.ConstructServiceURL(ParameterizedServiceURL, defaultUrlVariables, providedUrlVariables)
 }
 
 // SetServiceURL sets the service URL
@@ -169,31 +171,23 @@ func (adminServiceApi *AdminServiceApiV1) DisableRetries() {
 	adminServiceApi.Service.DisableRetries()
 }
 
-// GetSettings : View account settings
-// View the current settings for a specific account.
-func (adminServiceApi *AdminServiceApiV1) GetSettings(getSettingsOptions *GetSettingsOptions) (result *AccountSettings, response *core.DetailedResponse, err error) {
+// GetSettings : Retrieves settings
+// Retrieves the settings of an instance.
+func (adminServiceApi *AdminServiceApiV1) GetSettings(getSettingsOptions *GetSettingsOptions) (result *Settings, response *core.DetailedResponse, err error) {
 	return adminServiceApi.GetSettingsWithContext(context.Background(), getSettingsOptions)
 }
 
 // GetSettingsWithContext is an alternate form of the GetSettings method which supports a Context parameter
-func (adminServiceApi *AdminServiceApiV1) GetSettingsWithContext(ctx context.Context, getSettingsOptions *GetSettingsOptions) (result *AccountSettings, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getSettingsOptions, "getSettingsOptions cannot be nil")
-	if err != nil {
-		return
-	}
+func (adminServiceApi *AdminServiceApiV1) GetSettingsWithContext(ctx context.Context, getSettingsOptions *GetSettingsOptions) (result *Settings, response *core.DetailedResponse, err error) {
 	err = core.ValidateStruct(getSettingsOptions, "getSettingsOptions")
 	if err != nil {
 		return
 	}
 
-	pathParamsMap := map[string]string{
-		"account_id": *getSettingsOptions.AccountID,
-	}
-
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = adminServiceApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(adminServiceApi.Service.Options.URL, `/admin/v1/accounts/{account_id}/settings`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(adminServiceApi.Service.Options.URL, `/settings`, nil)
 	if err != nil {
 		return
 	}
@@ -219,7 +213,7 @@ func (adminServiceApi *AdminServiceApiV1) GetSettingsWithContext(ctx context.Con
 		return
 	}
 	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAccountSettings)
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSettings)
 		if err != nil {
 			return
 		}
@@ -229,54 +223,43 @@ func (adminServiceApi *AdminServiceApiV1) GetSettingsWithContext(ctx context.Con
 	return
 }
 
-// PatchAccountSettings : Update account settings
-// Update the settings for a specific account.
-func (adminServiceApi *AdminServiceApiV1) PatchAccountSettings(patchAccountSettingsOptions *PatchAccountSettingsOptions) (result *AccountSettings, response *core.DetailedResponse, err error) {
-	return adminServiceApi.PatchAccountSettingsWithContext(context.Background(), patchAccountSettingsOptions)
+// UpdateSettings : Patch settings
+// Update settings.
+func (adminServiceApi *AdminServiceApiV1) UpdateSettings(updateSettingsOptions *UpdateSettingsOptions) (result *Settings, response *core.DetailedResponse, err error) {
+	return adminServiceApi.UpdateSettingsWithContext(context.Background(), updateSettingsOptions)
 }
 
-// PatchAccountSettingsWithContext is an alternate form of the PatchAccountSettings method which supports a Context parameter
-func (adminServiceApi *AdminServiceApiV1) PatchAccountSettingsWithContext(ctx context.Context, patchAccountSettingsOptions *PatchAccountSettingsOptions) (result *AccountSettings, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(patchAccountSettingsOptions, "patchAccountSettingsOptions cannot be nil")
+// UpdateSettingsWithContext is an alternate form of the UpdateSettings method which supports a Context parameter
+func (adminServiceApi *AdminServiceApiV1) UpdateSettingsWithContext(ctx context.Context, updateSettingsOptions *UpdateSettingsOptions) (result *Settings, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(updateSettingsOptions, "updateSettingsOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(patchAccountSettingsOptions, "patchAccountSettingsOptions")
+	err = core.ValidateStruct(updateSettingsOptions, "updateSettingsOptions")
 	if err != nil {
 		return
-	}
-
-	pathParamsMap := map[string]string{
-		"account_id": *patchAccountSettingsOptions.AccountID,
 	}
 
 	builder := core.NewRequestBuilder(core.PATCH)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = adminServiceApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(adminServiceApi.Service.Options.URL, `/admin/v1/accounts/{account_id}/settings`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(adminServiceApi.Service.Options.URL, `/settings`, nil)
 	if err != nil {
 		return
 	}
 
-	for headerName, headerValue := range patchAccountSettingsOptions.Headers {
+	for headerName, headerValue := range updateSettingsOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("admin_service_api", "V1", "PatchAccountSettings")
+	sdkHeaders := common.GetSdkHeaders("admin_service_api", "V1", "UpdateSettings")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
 	builder.AddHeader("Accept", "application/json")
-	builder.AddHeader("Content-Type", "application/json")
+	builder.AddHeader("Content-Type", "application/json-patch+json")
 
-	body := make(map[string]interface{})
-	if patchAccountSettingsOptions.Location != nil {
-		body["location"] = patchAccountSettingsOptions.Location
-	}
-	if patchAccountSettingsOptions.EventNotifications != nil {
-		body["event_notifications"] = patchAccountSettingsOptions.EventNotifications
-	}
-	_, err = builder.SetBodyContentJSON(body)
+	_, err = builder.SetBodyContentJSON(updateSettingsOptions.Body)
 	if err != nil {
 		return
 	}
@@ -292,7 +275,7 @@ func (adminServiceApi *AdminServiceApiV1) PatchAccountSettingsWithContext(ctx co
 		return
 	}
 	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAccountSettings)
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSettings)
 		if err != nil {
 			return
 		}
@@ -302,153 +285,32 @@ func (adminServiceApi *AdminServiceApiV1) PatchAccountSettingsWithContext(ctx co
 	return
 }
 
-// ListLocations : View available locations
-// View the available locations in which the data that is generated by the Security and Compliance Center can be
-// managed.
-func (adminServiceApi *AdminServiceApiV1) ListLocations(listLocationsOptions *ListLocationsOptions) (result *Locations, response *core.DetailedResponse, err error) {
-	return adminServiceApi.ListLocationsWithContext(context.Background(), listLocationsOptions)
-}
-
-// ListLocationsWithContext is an alternate form of the ListLocations method which supports a Context parameter
-func (adminServiceApi *AdminServiceApiV1) ListLocationsWithContext(ctx context.Context, listLocationsOptions *ListLocationsOptions) (result *Locations, response *core.DetailedResponse, err error) {
-	err = core.ValidateStruct(listLocationsOptions, "listLocationsOptions")
-	if err != nil {
-		return
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = adminServiceApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(adminServiceApi.Service.Options.URL, `/admin/v1/locations`, nil)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range listLocationsOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("admin_service_api", "V1", "ListLocations")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = adminServiceApi.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalLocations)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
-
-	return
-}
-
-// GetLocation : View the details of a location
-// View the endpoints and regions that are available for a specific region.
-func (adminServiceApi *AdminServiceApiV1) GetLocation(getLocationOptions *GetLocationOptions) (result *Location, response *core.DetailedResponse, err error) {
-	return adminServiceApi.GetLocationWithContext(context.Background(), getLocationOptions)
-}
-
-// GetLocationWithContext is an alternate form of the GetLocation method which supports a Context parameter
-func (adminServiceApi *AdminServiceApiV1) GetLocationWithContext(ctx context.Context, getLocationOptions *GetLocationOptions) (result *Location, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getLocationOptions, "getLocationOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(getLocationOptions, "getLocationOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"location_id": *getLocationOptions.LocationID,
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = adminServiceApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(adminServiceApi.Service.Options.URL, `/admin/v1/locations/{location_id}`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range getLocationOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("admin_service_api", "V1", "GetLocation")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = adminServiceApi.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalLocation)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
-
-	return
-}
-
-// SendTestEvent : Send test event
+// PostTestEvent : Send test event
 // Send a test event using your configured Event Notifications instance.
-func (adminServiceApi *AdminServiceApiV1) SendTestEvent(sendTestEventOptions *SendTestEventOptions) (result *TestEvent, response *core.DetailedResponse, err error) {
-	return adminServiceApi.SendTestEventWithContext(context.Background(), sendTestEventOptions)
+func (adminServiceApi *AdminServiceApiV1) PostTestEvent(postTestEventOptions *PostTestEventOptions) (result *TestEvent, response *core.DetailedResponse, err error) {
+	return adminServiceApi.PostTestEventWithContext(context.Background(), postTestEventOptions)
 }
 
-// SendTestEventWithContext is an alternate form of the SendTestEvent method which supports a Context parameter
-func (adminServiceApi *AdminServiceApiV1) SendTestEventWithContext(ctx context.Context, sendTestEventOptions *SendTestEventOptions) (result *TestEvent, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(sendTestEventOptions, "sendTestEventOptions cannot be nil")
+// PostTestEventWithContext is an alternate form of the PostTestEvent method which supports a Context parameter
+func (adminServiceApi *AdminServiceApiV1) PostTestEventWithContext(ctx context.Context, postTestEventOptions *PostTestEventOptions) (result *TestEvent, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(postTestEventOptions, "postTestEventOptions")
 	if err != nil {
 		return
-	}
-	err = core.ValidateStruct(sendTestEventOptions, "sendTestEventOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"account_id": *sendTestEventOptions.AccountID,
 	}
 
 	builder := core.NewRequestBuilder(core.POST)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = adminServiceApi.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(adminServiceApi.Service.Options.URL, `/admin/v1/accounts/{account_id}/test_event`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(adminServiceApi.Service.Options.URL, `/test_event`, nil)
 	if err != nil {
 		return
 	}
 
-	for headerName, headerValue := range sendTestEventOptions.Headers {
+	for headerName, headerValue := range postTestEventOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("admin_service_api", "V1", "SendTestEvent")
+	sdkHeaders := common.GetSdkHeaders("admin_service_api", "V1", "PostTestEvent")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -475,23 +337,30 @@ func (adminServiceApi *AdminServiceApiV1) SendTestEventWithContext(ctx context.C
 	return
 }
 
-// AccountSettings : Account settings.
-type AccountSettings struct {
-	// Location settings.
-	Location *LocationID `json:"location,omitempty"`
+// EventNotifications : Event Notifications settings.
+type EventNotifications struct {
+	// EN Instance CRN.
+	InstanceCrn *string `json:"instance_crn,omitempty"`
 
-	// The Event Notification settings to register.
-	EventNotifications *NotificationsRegistration `json:"event_notifications,omitempty"`
+	// Modified date in ISO8601 format.
+	Modified *string `json:"modified,omitempty"`
+
+	// Source.
+	SourceID *string `json:"source_id,omitempty"`
 }
 
-// UnmarshalAccountSettings unmarshals an instance of AccountSettings from the specified map of raw messages.
-func UnmarshalAccountSettings(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(AccountSettings)
-	err = core.UnmarshalModel(m, "location", &obj.Location, UnmarshalLocationID)
+// UnmarshalEventNotifications unmarshals an instance of EventNotifications from the specified map of raw messages.
+func UnmarshalEventNotifications(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(EventNotifications)
+	err = core.UnmarshalPrimitive(m, "instance_crn", &obj.InstanceCrn)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "event_notifications", &obj.EventNotifications, UnmarshalNotificationsRegistration)
+	err = core.UnmarshalPrimitive(m, "modified", &obj.Modified)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "source_id", &obj.SourceID)
 	if err != nil {
 		return
 	}
@@ -499,62 +368,16 @@ func UnmarshalAccountSettings(m map[string]json.RawMessage, result interface{}) 
 	return
 }
 
-// GetLocationOptions : The GetLocation options.
-type GetLocationOptions struct {
-	// The programatic ID of the location that you want to work in.
-	LocationID *string `json:"location_id" validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// Constants associated with the GetLocationOptions.LocationID property.
-// The programatic ID of the location that you want to work in.
-const (
-	GetLocationOptions_LocationID_Eu = "eu"
-	GetLocationOptions_LocationID_Uk = "uk"
-	GetLocationOptions_LocationID_Us = "us"
-)
-
-// NewGetLocationOptions : Instantiate GetLocationOptions
-func (*AdminServiceApiV1) NewGetLocationOptions(locationID string) *GetLocationOptions {
-	return &GetLocationOptions{
-		LocationID: core.StringPtr(locationID),
-	}
-}
-
-// SetLocationID : Allow user to set LocationID
-func (_options *GetLocationOptions) SetLocationID(locationID string) *GetLocationOptions {
-	_options.LocationID = core.StringPtr(locationID)
-	return _options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *GetLocationOptions) SetHeaders(param map[string]string) *GetLocationOptions {
-	options.Headers = param
-	return options
-}
-
 // GetSettingsOptions : The GetSettings options.
 type GetSettingsOptions struct {
-	// The ID of the managing account.
-	AccountID *string `json:"account_id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewGetSettingsOptions : Instantiate GetSettingsOptions
-func (*AdminServiceApiV1) NewGetSettingsOptions(accountID string) *GetSettingsOptions {
-	return &GetSettingsOptions{
-		AccountID: core.StringPtr(accountID),
-	}
-}
-
-// SetAccountID : Allow user to set AccountID
-func (_options *GetSettingsOptions) SetAccountID(accountID string) *GetSettingsOptions {
-	_options.AccountID = core.StringPtr(accountID)
-	return _options
+func (*AdminServiceApiV1) NewGetSettingsOptions() *GetSettingsOptions {
+	return &GetSettingsOptions{}
 }
 
 // SetHeaders : Allow user to set Headers
@@ -563,124 +386,58 @@ func (options *GetSettingsOptions) SetHeaders(param map[string]string) *GetSetti
 	return options
 }
 
-// ListLocationsOptions : The ListLocations options.
-type ListLocationsOptions struct {
+// JSONPatchOperation : This model represents an individual patch operation to be performed on a JSON document, as defined by RFC 6902.
+type JSONPatchOperation struct {
+	// The operation to be performed.
+	Op *string `json:"op" validate:"required"`
 
-	// Allows users to set headers on API requests
-	Headers map[string]string
+	// The JSON Pointer that identifies the field that is the target of the operation.
+	Path *string `json:"path" validate:"required"`
+
+	// The JSON Pointer that identifies the field that is the source of the operation.
+	From *string `json:"from,omitempty"`
+
+	// The value to be used within the operation.
+	Value interface{} `json:"value,omitempty"`
 }
 
-// NewListLocationsOptions : Instantiate ListLocationsOptions
-func (*AdminServiceApiV1) NewListLocationsOptions() *ListLocationsOptions {
-	return &ListLocationsOptions{}
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *ListLocationsOptions) SetHeaders(param map[string]string) *ListLocationsOptions {
-	options.Headers = param
-	return options
-}
-
-// Location : The location that your account is current set to use.
-type Location struct {
-	// The programatic ID of the location that you want to work in.
-	ID *string `json:"id,omitempty"`
-
-	// The base URL for the service.
-	MainEndpointURL *string `json:"main_endpoint_url,omitempty"`
-
-	// The endpoint that is used to call the Configuration Governance APIs.
-	GovernanceEndpointURL *string `json:"governance_endpoint_url,omitempty"`
-
-	// The endpoint that is used to get the results for the Configuration Governance component.
-	ResultsEndpointURL *string `json:"results_endpoint_url,omitempty"`
-
-	// The endpoint that is used to call the Posture Management APIs.
-	ComplianceEndpointURL *string `json:"compliance_endpoint_url,omitempty"`
-
-	// The endpoint that is used to generate analytics for the Posture Management component.
-	AnalyticsEndpointURL *string `json:"analytics_endpoint_url,omitempty"`
-
-	// The endpoint that is used to call the Security Insights APIs.
-	SiEndpointURL *string `json:"si_endpoint_url,omitempty"`
-
-	Regions []Region `json:"regions,omitempty"`
-}
-
-// Constants associated with the Location.ID property.
-// The programatic ID of the location that you want to work in.
+// Constants associated with the JSONPatchOperation.Op property.
+// The operation to be performed.
 const (
-	Location_ID_Eu = "eu"
-	Location_ID_Uk = "uk"
-	Location_ID_Us = "us"
+	JSONPatchOperation_Op_Add = "add"
+	JSONPatchOperation_Op_Copy = "copy"
+	JSONPatchOperation_Op_Move = "move"
+	JSONPatchOperation_Op_Remove = "remove"
+	JSONPatchOperation_Op_Replace = "replace"
+	JSONPatchOperation_Op_Test = "test"
 )
 
-// UnmarshalLocation unmarshals an instance of Location from the specified map of raw messages.
-func UnmarshalLocation(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(Location)
-	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "main_endpoint_url", &obj.MainEndpointURL)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "governance_endpoint_url", &obj.GovernanceEndpointURL)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "results_endpoint_url", &obj.ResultsEndpointURL)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "compliance_endpoint_url", &obj.ComplianceEndpointURL)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "analytics_endpoint_url", &obj.AnalyticsEndpointURL)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "si_endpoint_url", &obj.SiEndpointURL)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "regions", &obj.Regions, UnmarshalRegion)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// LocationID : Location settings.
-type LocationID struct {
-	// The programatic ID of the location that you want to work in.
-	ID *string `json:"id" validate:"required"`
-}
-
-// Constants associated with the LocationID.ID property.
-// The programatic ID of the location that you want to work in.
-const (
-	LocationID_ID_Eu = "eu"
-	LocationID_ID_Uk = "uk"
-	LocationID_ID_Us = "us"
-)
-
-// NewLocationID : Instantiate LocationID (Generic Model Constructor)
-func (*AdminServiceApiV1) NewLocationID(id string) (_model *LocationID, err error) {
-	_model = &LocationID{
-		ID: core.StringPtr(id),
+// NewJSONPatchOperation : Instantiate JSONPatchOperation (Generic Model Constructor)
+func (*AdminServiceApiV1) NewJSONPatchOperation(op string, path string) (_model *JSONPatchOperation, err error) {
+	_model = &JSONPatchOperation{
+		Op: core.StringPtr(op),
+		Path: core.StringPtr(path),
 	}
 	err = core.ValidateStruct(_model, "required parameters")
 	return
 }
 
-// UnmarshalLocationID unmarshals an instance of LocationID from the specified map of raw messages.
-func UnmarshalLocationID(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(LocationID)
-	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+// UnmarshalJSONPatchOperation unmarshals an instance of JSONPatchOperation from the specified map of raw messages.
+func UnmarshalJSONPatchOperation(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(JSONPatchOperation)
+	err = core.UnmarshalPrimitive(m, "op", &obj.Op)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "path", &obj.Path)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "from", &obj.From)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "value", &obj.Value)
 	if err != nil {
 		return
 	}
@@ -688,127 +445,44 @@ func UnmarshalLocationID(m map[string]json.RawMessage, result interface{}) (err 
 	return
 }
 
-// Locations : An array of available locations.
-type Locations struct {
-	Locations []Location `json:"locations" validate:"required"`
+// ObjectStorage : Object Storage settings.
+type ObjectStorage struct {
+	// EN Instance CRN.
+	InstanceCrn *string `json:"instance_crn,omitempty"`
+
+	// Bucket.
+	Bucket *string `json:"bucket,omitempty"`
+
+	// Bucket location.
+	BucketLocation *string `json:"bucket_location,omitempty"`
+
+	// Bucket endpoint.
+	BucketEndpoint *string `json:"bucket_endpoint,omitempty"`
+
+	// Modified date in ISO8601 format.
+	Modified *string `json:"modified,omitempty"`
 }
 
-// UnmarshalLocations unmarshals an instance of Locations from the specified map of raw messages.
-func UnmarshalLocations(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(Locations)
-	err = core.UnmarshalModel(m, "locations", &obj.Locations, UnmarshalLocation)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// NotificationsRegistration : The Event Notification settings to register.
-type NotificationsRegistration struct {
-	// The Cloud Resource Name (CRN) of the Event Notifications instance that you want to connect.
-	InstanceCrn *string `json:"instance_crn" validate:"required"`
-
-	// The name to register as a source in your Event Notifications instance.
-	SourceName *string `json:"source_name,omitempty"`
-
-	// An optional description for the source in your Event Notifications instance.
-	SourceDescription *string `json:"source_description,omitempty"`
-}
-
-// NewNotificationsRegistration : Instantiate NotificationsRegistration (Generic Model Constructor)
-func (*AdminServiceApiV1) NewNotificationsRegistration(instanceCrn string) (_model *NotificationsRegistration, err error) {
-	_model = &NotificationsRegistration{
-		InstanceCrn: core.StringPtr(instanceCrn),
-	}
-	err = core.ValidateStruct(_model, "required parameters")
-	return
-}
-
-// UnmarshalNotificationsRegistration unmarshals an instance of NotificationsRegistration from the specified map of raw messages.
-func UnmarshalNotificationsRegistration(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(NotificationsRegistration)
+// UnmarshalObjectStorage unmarshals an instance of ObjectStorage from the specified map of raw messages.
+func UnmarshalObjectStorage(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ObjectStorage)
 	err = core.UnmarshalPrimitive(m, "instance_crn", &obj.InstanceCrn)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "source_name", &obj.SourceName)
+	err = core.UnmarshalPrimitive(m, "bucket", &obj.Bucket)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "source_description", &obj.SourceDescription)
+	err = core.UnmarshalPrimitive(m, "bucket_location", &obj.BucketLocation)
 	if err != nil {
 		return
 	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// PatchAccountSettingsOptions : The PatchAccountSettings options.
-type PatchAccountSettingsOptions struct {
-	// The ID of the managing account.
-	AccountID *string `json:"account_id" validate:"required,ne="`
-
-	// Location settings.
-	Location *LocationID `json:"location,omitempty"`
-
-	// The Event Notification settings to register.
-	EventNotifications *NotificationsRegistration `json:"event_notifications,omitempty"`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewPatchAccountSettingsOptions : Instantiate PatchAccountSettingsOptions
-func (*AdminServiceApiV1) NewPatchAccountSettingsOptions(accountID string) *PatchAccountSettingsOptions {
-	return &PatchAccountSettingsOptions{
-		AccountID: core.StringPtr(accountID),
+	err = core.UnmarshalPrimitive(m, "bucket_endpoint", &obj.BucketEndpoint)
+	if err != nil {
+		return
 	}
-}
-
-// SetAccountID : Allow user to set AccountID
-func (_options *PatchAccountSettingsOptions) SetAccountID(accountID string) *PatchAccountSettingsOptions {
-	_options.AccountID = core.StringPtr(accountID)
-	return _options
-}
-
-// SetLocation : Allow user to set Location
-func (_options *PatchAccountSettingsOptions) SetLocation(location *LocationID) *PatchAccountSettingsOptions {
-	_options.Location = location
-	return _options
-}
-
-// SetEventNotifications : Allow user to set EventNotifications
-func (_options *PatchAccountSettingsOptions) SetEventNotifications(eventNotifications *NotificationsRegistration) *PatchAccountSettingsOptions {
-	_options.EventNotifications = eventNotifications
-	return _options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *PatchAccountSettingsOptions) SetHeaders(param map[string]string) *PatchAccountSettingsOptions {
-	options.Headers = param
-	return options
-}
-
-// Region : The region or regions that are available for each location. Be sure to use the correct region ID when making your API
-// call.
-type Region struct {
-	// The programatic ID of the available regions.
-	ID *string `json:"id" validate:"required"`
-}
-
-// Constants associated with the Region.ID property.
-// The programatic ID of the available regions.
-const (
-	Region_ID_Eu = "eu"
-	Region_ID_Uk = "uk"
-	Region_ID_Us = "us"
-)
-
-// UnmarshalRegion unmarshals an instance of Region from the specified map of raw messages.
-func UnmarshalRegion(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(Region)
-	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+	err = core.UnmarshalPrimitive(m, "modified", &obj.Modified)
 	if err != nil {
 		return
 	}
@@ -816,32 +490,64 @@ func UnmarshalRegion(m map[string]json.RawMessage, result interface{}) (err erro
 	return
 }
 
-// SendTestEventOptions : The SendTestEvent options.
-type SendTestEventOptions struct {
-	// The ID of the managing account.
-	AccountID *string `json:"account_id" validate:"required,ne="`
+// PostTestEventOptions : The PostTestEvent options.
+type PostTestEventOptions struct {
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
-// NewSendTestEventOptions : Instantiate SendTestEventOptions
-func (*AdminServiceApiV1) NewSendTestEventOptions(accountID string) *SendTestEventOptions {
-	return &SendTestEventOptions{
-		AccountID: core.StringPtr(accountID),
-	}
-}
-
-// SetAccountID : Allow user to set AccountID
-func (_options *SendTestEventOptions) SetAccountID(accountID string) *SendTestEventOptions {
-	_options.AccountID = core.StringPtr(accountID)
-	return _options
+// NewPostTestEventOptions : Instantiate PostTestEventOptions
+func (*AdminServiceApiV1) NewPostTestEventOptions() *PostTestEventOptions {
+	return &PostTestEventOptions{}
 }
 
 // SetHeaders : Allow user to set Headers
-func (options *SendTestEventOptions) SetHeaders(param map[string]string) *SendTestEventOptions {
+func (options *PostTestEventOptions) SetHeaders(param map[string]string) *PostTestEventOptions {
 	options.Headers = param
 	return options
+}
+
+// Settings : Settings.
+type Settings struct {
+	// Event Notifications settings.
+	EventNotifications *EventNotifications `json:"event_notifications,omitempty"`
+
+	// Object Storage settings.
+	ObjectStorage *ObjectStorage `json:"object_storage,omitempty"`
+}
+
+// UnmarshalSettings unmarshals an instance of Settings from the specified map of raw messages.
+func UnmarshalSettings(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(Settings)
+	err = core.UnmarshalModel(m, "event_notifications", &obj.EventNotifications, UnmarshalEventNotifications)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "object_storage", &obj.ObjectStorage, UnmarshalObjectStorage)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+func (*AdminServiceApiV1) NewSettingsPatch(settings *Settings) (_patch []JSONPatchOperation) {
+	if (settings.EventNotifications != nil) {
+		_patch = append(_patch, JSONPatchOperation{
+			Op: core.StringPtr(JSONPatchOperation_Op_Add),
+			Path: core.StringPtr("/event_notifications"),
+			Value: settings.EventNotifications,
+		})
+	}
+	if (settings.ObjectStorage != nil) {
+		_patch = append(_patch, JSONPatchOperation{
+			Op: core.StringPtr(JSONPatchOperation_Op_Add),
+			Path: core.StringPtr("/object_storage"),
+			Value: settings.ObjectStorage,
+		})
+	}
+	return
 }
 
 // TestEvent : The details of a test event response.
@@ -859,4 +565,32 @@ func UnmarshalTestEvent(m map[string]json.RawMessage, result interface{}) (err e
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
 	return
+}
+
+// UpdateSettingsOptions : The UpdateSettings options.
+type UpdateSettingsOptions struct {
+	// New settings.
+	Body []JSONPatchOperation `json:"body" validate:"required"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewUpdateSettingsOptions : Instantiate UpdateSettingsOptions
+func (*AdminServiceApiV1) NewUpdateSettingsOptions(body []JSONPatchOperation) *UpdateSettingsOptions {
+	return &UpdateSettingsOptions{
+		Body: body,
+	}
+}
+
+// SetBody : Allow user to set Body
+func (_options *UpdateSettingsOptions) SetBody(body []JSONPatchOperation) *UpdateSettingsOptions {
+	_options.Body = body
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *UpdateSettingsOptions) SetHeaders(param map[string]string) *UpdateSettingsOptions {
+	options.Headers = param
+	return options
 }
